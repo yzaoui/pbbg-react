@@ -1,5 +1,6 @@
 import React, { FormEventHandler } from "react";
 import "./common.css";
+import "./GuestNav.css";
 import { Link } from "react-router-dom";
 
 const GuestNav: React.FC = () => {
