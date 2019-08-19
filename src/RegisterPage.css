@@ -1,0 +1,23 @@
+.RegisterPage-form {
+    margin: 0 auto;
+    max-width: 330px;
+}
+
+.RegisterPage-form > * {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.RegisterPage-form > input {
+    padding: .375rem .75rem;
+}
+
+.RegisterPage-form > button {
+    padding: .5rem 1rem;
+}
+
+.RegisterPage-login-link {
+    margin: 0 auto;
+}
