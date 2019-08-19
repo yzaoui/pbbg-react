@@ -1,0 +1,49 @@
+body {
+    font-size: 16px;
+    /*background-image: url("/img/background.png");*/
+}
+
+a {
+    color: #0070ff;
+}
+
+img {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 992px;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    height: 660px;
+    max-height: 660px;
+    flex-shrink: 0;
+    flex-basis: 150px;
+    border: 1px solid black;
+    order: -1;
+    background: #e1e4ffcf;
+}
+
+.sidebar-guest > * {
+    text-align: center;
+    padding: 6px;
+}
+
+.sidebar > .username {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: grey 1px solid;
+    padding: 10px;
+}
