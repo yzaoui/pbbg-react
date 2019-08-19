@@ -1,23 +1,23 @@
-.RegisterPage-form {
+.LoginRegisterPage-form {
     margin: 0 auto;
-    max-width: 330px;
+    width: 330px;
 }
 
-.RegisterPage-form > * {
+.LoginRegisterPage-form > * {
     display: block;
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 10px;
 }
 
-.RegisterPage-form > input {
+.LoginRegisterPage-form > input {
     padding: .375rem .75rem;
 }
 
-.RegisterPage-form > button {
+.LoginRegisterPage-form > button {
     padding: .5rem 1rem;
 }
 
-.RegisterPage-login-link {
+.LoginRegisterPage-login-link {
     margin: 0 auto;
 }
