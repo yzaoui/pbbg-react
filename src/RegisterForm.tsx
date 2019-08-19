@@ -3,6 +3,7 @@ import "./LoginRegisterPage.css";
 
 interface Props {
     onSubmit: (username: string, password: string) => void;
+    submitting: boolean;
 }
 
 interface State {
@@ -19,9 +20,29 @@ class RegisterForm extends React.Component<Props, State> {
     render() {
         return <form onSubmit={this.handleSubmit} className="LoginRegisterPage-form">
             <h1>Register your account</h1>
-            <input type="text" required placeholder="Username" autoComplete="username" onChange={this.handleUsernameChange} value={this.state.username} />
-            <input type="password" required placeholder="Password" autoComplete="new-password" onChange={this.handlePasswordChange} value={this.state.password} />
-            <button type="submit">Register</button>
+            <input
+                type="text"
+                required
+                placeholder="Username"
+                autoComplete="username"
+                onChange={this.handleUsernameChange}
+                value={this.state.username}
+                disabled={this.props.submitting}
+            />
+            <input
+                type="password"
+                required
+                placeholder="Password"
+                autoComplete="new-password"
+                onChange={this.handlePasswordChange}
+                value={this.state.password}
+                disabled={this.props.submitting}
+            />
+            <button
+                type="submit"
+                disabled={this.props.submitting}>
+                Register
+            </button>
         </form>;
     }
 
