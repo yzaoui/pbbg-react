@@ -3,9 +3,9 @@ import "normalize.css"
 import "./common.css"
 import './App.css';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import IndexPage from "./IndexPage";
-import RegisterPage from "./RegisterPage";
-import LoginPage from "./LoginPage";
+import IndexPage from "./page/IndexPage";
+import RegisterPage from "./page/RegisterPage";
+import LoginPage from "./page/LoginPage";
 import GuestNav from "./GuestNav";
 
 const App: React.FC = () => {

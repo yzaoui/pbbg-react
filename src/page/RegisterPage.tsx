@@ -1,8 +1,8 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import "./LoginRegisterPage.css";
-import RegisterForm from "./RegisterForm";
-import authenticationService from "./authentication.service";
+import RegisterForm from "./../RegisterForm";
+import authenticationService from "./../authentication.service";
 
 interface State {
     submitting: boolean;
