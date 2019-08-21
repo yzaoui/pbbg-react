@@ -3,22 +3,41 @@ import "normalize.css"
 import "./common.css"
 import './App.css';
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import IndexPage from "./page/IndexPage";
+import IndexGuestPage from "./page/IndexGuestPage";
 import RegisterPage from "./page/RegisterPage";
 import LoginPage from "./page/LoginPage";
 import GuestNav from "./GuestNav";
+import authenticationService from "./authentication.service";
+import IndexMemberPage from "./page/IndexMemberPage";
+import GuestRoute from "./GuestRoute";
 
-const App: React.FC = () => {
-    return <Router>
-        <div className="container">
-            <GuestNav />
-            <main>
-                <Route path="/" exact component={IndexPage} />
-                <Route path="/register" component={RegisterPage} />
-                <Route path="/login" exact component={LoginPage} />
-            </main>
-        </div>
-    </Router>;
-};
+interface State {
+    currentUserToken: string | null;
+}
+
+class App extends React.Component<{}, State> {
+    readonly state: Readonly<State> = {
+        currentUserToken: null
+    };
+
+    componentDidMount() {
+        authenticationService.currentUser.subscribe(token => this.setState({ currentUserToken: token }));
+    }
+
+    render () {
+        const isLoggedIn = this.state.currentUserToken !== null;
+
+        return <Router>
+            <div className="container">
+                <GuestNav />
+                <main>
+                    <Route path="/" exact render={() => isLoggedIn ? <IndexMemberPage /> : <IndexGuestPage />} />
+                    <GuestRoute path="/register" component={RegisterPage} />
+                    <GuestRoute path="/login" component={LoginPage} />
+                </main>
+            </div>
+        </Router>;
+    }
+}
 
 export default App;
