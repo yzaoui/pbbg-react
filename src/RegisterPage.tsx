@@ -2,40 +2,38 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import "./LoginRegisterPage.css";
 import RegisterForm from "./RegisterForm";
+import authenticationService from "./authentication.service";
 
 interface State {
     submitting: boolean;
-    shouldRedirect: boolean;
+    error: boolean;
+    redirectToRoot: boolean;
 }
 
 class RegisterPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
         submitting: false,
-        shouldRedirect: false
+        error: false,
+        redirectToRoot: authenticationService.currentUserValue !== null
     };
 
     render() {
-        if (this.state.shouldRedirect) return <Redirect to="/" />;
+        if (this.state.redirectToRoot) return <Redirect to="/" />;
 
         return <>
-            <RegisterForm onSubmit={this.handleSubmit} submitting={this.state.submitting} />
+            <RegisterForm onSubmit={this.handleSubmit} submitting={this.state.submitting} error={this.state.error} />
             <Link to="/login" className="LoginRegisterPage-login-link">Existing user? Log in</Link>
         </>;
     }
 
     handleSubmit = (username: string, password: string) => {
-        const form = new FormData();
-        form.append("username", username);
-        form.append("password", password);
-
         this.setState({ submitting: true });
 
-        fetch("/register", {
-            method: "POST",
-            body: form
-        }).then(res =>
-            this.setState({ submitting: false, shouldRedirect: true })
-        );
+        authenticationService.register(username, password)
+            .then(
+                res => this.setState({ redirectToRoot: true }),
+                error => this.setState({ submitting: false, error: true })
+            );
     };
 }
 

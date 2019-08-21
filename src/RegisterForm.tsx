@@ -4,6 +4,7 @@ import "./LoginRegisterPage.css";
 interface Props {
     onSubmit: (username: string, password: string) => void;
     submitting: boolean;
+    error: boolean;
 }
 
 interface State {
@@ -20,6 +21,7 @@ class RegisterForm extends React.Component<Props, State> {
     render() {
         return <form onSubmit={this.handleSubmit} className="LoginRegisterPage-form">
             <h1>Register your account</h1>
+            {this.props.error && <div>ERROR</div>}
             <input
                 type="text"
                 required
