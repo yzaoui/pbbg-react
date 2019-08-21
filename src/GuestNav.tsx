@@ -47,6 +47,12 @@ class GuestNav extends React.Component<{}, State> {
         </nav>;
     }
 
+    componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<State>, snapshot?: any) {
+        if (prevState.submitting && !this.state.submitting) {
+            this.setState({ username: "", password: "" });
+        }
+    }
+
     handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
 
