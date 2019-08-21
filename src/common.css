@@ -92,6 +92,21 @@ a.current-site-section.sidebar-item:hover {
     background-color: #0487ec;
 }
 
+.sidebar-logout {
+    margin-top: auto;
+    margin-bottom: 0;
+}
+
+.sidebar-logout > button {
+    width: 100%;
+    padding: 6px
+}
+
+.sidebar-login-form > * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 a.btn {
     color: #fff;
     background-color: #007bff;
