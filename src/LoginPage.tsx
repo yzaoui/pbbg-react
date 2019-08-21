@@ -1,22 +1,40 @@
-import React, { FormEventHandler } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, Redirect } from "react-router-dom";
 import "./LoginRegisterPage.css";
+import authenticationService from "./authentication.service";
+import LoginForm from "./LoginForm";
 
-const LoginPage: React.FC = () => {
-    return <>
-        <form onSubmit={handleSubmit} className="LoginRegisterPage-form">
-            <h1>Log in to PBBG</h1>
-            <input type="text" required placeholder="Username" autoComplete="username" />
-            <input type="password" required placeholder="Password" autoComplete="current-password" />
-            <button type="submit">Log in</button>
-        </form>
-        <Link to="/register" className="LoginRegisterPage-login-link">New user? Register</Link>
-    </>;
-};
+interface State {
+    submitting: boolean;
+    error: boolean;
+    redirectToRoot: boolean;
+}
 
-const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-    console.log("submitted login form");
-};
+class LoginPage extends React.Component<{}, State> {
+    readonly state: Readonly<State> = {
+        submitting: false,
+        error: false,
+        redirectToRoot: authenticationService.currentUserValue !== null
+    };
+
+    render() {
+        if (this.state.redirectToRoot) return <Redirect to="/" />;
+
+        return <>
+            <LoginForm onSubmit={this.handleSubmit} submitting={this.state.submitting} error={this.state.error} />
+            <Link to="/register" className="LoginRegisterPage-login-link">New user? Register</Link>
+        </>;
+    }
+
+    handleSubmit = (username: string, password: string) => {
+        this.setState({ submitting: true });
+
+        authenticationService.login(username, password)
+            .then(
+                res => this.setState({ redirectToRoot: true }),
+                error => this.setState({ submitting: false, error: true })
+            );
+    };
+}
 
 export default LoginPage;
