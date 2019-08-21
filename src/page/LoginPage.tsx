@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps } from "react-router-dom";
 import "./LoginRegisterPage.css";
 import authenticationService from "./../authentication.service";
 import LoginForm from "./../LoginForm";
@@ -9,15 +9,17 @@ interface State {
     error: boolean;
 }
 
-class LoginPage extends React.Component<{}, State> {
+class LoginPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
         submitting: false,
         error: false
     };
 
     render() {
+        const error = (this.props.location.state && this.props.location.state.error) || this.state.error;
+
         return <>
-            <LoginForm onSubmit={this.handleSubmit} submitting={this.state.submitting} error={this.state.error} />
+            <LoginForm onSubmit={this.handleSubmit} submitting={this.state.submitting} error={error} />
             <Link to="/register" className="LoginRegisterPage-login-link">New user? Register</Link>
         </>;
     }
@@ -26,7 +28,13 @@ class LoginPage extends React.Component<{}, State> {
         this.setState({ submitting: true });
 
         authenticationService.login(username, password)
-            .catch(error => this.setState({ submitting: false, error: true }));
+            .then(
+                token => {
+                    const referrer = this.props.location.state && this.props.location.state.from;
+                    this.props.history.push(referrer || { pathname: "/" });
+                },
+                error => this.setState({ submitting: false, error: true })
+            );
     };
 }
 
