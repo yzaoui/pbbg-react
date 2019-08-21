@@ -25,6 +25,7 @@ class LoginForm extends React.Component<Props, State> {
             <input
                 type="text"
                 required
+                autoFocus
                 placeholder="Username"
                 autoComplete="username"
                 onChange={this.handleUsernameChange}
