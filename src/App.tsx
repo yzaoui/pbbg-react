@@ -2,7 +2,7 @@ import React from 'react';
 import "normalize.css"
 import "./common.css"
 import './App.css';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Router, Route } from "react-router-dom";
 import GuestRoute from "./GuestRoute";
 import IndexGuestPage from "./page/IndexGuestPage";
 import IndexMemberPage from "./page/IndexMemberPage";
@@ -11,6 +11,7 @@ import LoginPage from "./page/LoginPage";
 import GuestNav from "./GuestNav";
 import MemberNav from "./MemberNav";
 import authenticationService from "./authentication.service";
+import history from "./helper/history";
 
 interface State {
     currentUserToken: string | null;
@@ -28,7 +29,7 @@ class App extends React.Component<{}, State> {
     render () {
         const isLoggedIn = this.state.currentUserToken !== null;
 
-        return <Router>
+        return <Router history={history}>
             <div className="container">
                 {isLoggedIn ? <MemberNav /> : <GuestNav />}
                 <main>
