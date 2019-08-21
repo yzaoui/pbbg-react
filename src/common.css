@@ -60,6 +60,38 @@ main {
     padding: 10px;
 }
 
+.navigation {
+    display: flex;
+    flex-direction: column;
+}
+
+a.sidebar-item {
+    position: relative;
+    text-decoration: none;
+    padding: 10px 10px 10px 40px;
+}
+
+a.sidebar-item:hover {
+    background-color: #0390f9;
+    color: white;
+}
+
+span.sidebar-item-icon {
+    position: absolute;
+    font-size: 20px;
+    top: 8px;
+    left: 10px;
+}
+
+a.current-site-section {
+    background-color: #0370c4;
+    color: white;
+}
+
+a.current-site-section.sidebar-item:hover {
+    background-color: #0487ec;
+}
+
 a.btn {
     color: #fff;
     background-color: #007bff;
@@ -77,4 +109,23 @@ a.btn:hover {
 
 a.btn:focus {
     box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        margin: 0;
+    }
+
+    .sidebar {
+        width: unset;
+        height: unset;
+        max-height: unset;
+        flex-basis: unset;
+    }
+
+    .navigation {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
 }
