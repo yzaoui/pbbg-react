@@ -4,46 +4,57 @@ import "./GuestNav.css";
 import { Link } from "react-router-dom";
 import authenticationService from "./authentication.service";
 import history from "./helper/history";
+import * as LoginForm from "./LoginForm";
 
 interface State {
     submitting: boolean;
     username: string;
     password: string;
+    hideLogin: boolean;
 }
 
 class GuestNav extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
         submitting: false,
         username: "",
-        password: ""
+        password: "",
+        hideLogin: false
     };
+
+    componentDidMount() {
+        history.listen((location) => {
+            this.setState({ hideLogin: (location.pathname === "/login" || location.pathname === "/register") });
+        });
+    }
 
     render() {
         return <nav className="sidebar sidebar-guest">
             <Link to="/">Index</Link>
-            <form className="sidebar-login-form" onSubmit={this.handleSubmit}>
-                <input
-                    type="text"
-                    name="username"
-                    required
-                    placeholder="Username"
-                    autoComplete="username"
-                    onChange={this.handleUsernameChange}
-                    value={this.state.username}
-                    disabled={this.state.submitting}
-                />
-                <input
-                    type="password"
-                    name="password"
-                    required
-                    placeholder="Password"
-                    autoComplete="current-password"
-                    onChange={this.handlePasswordChange}
-                    value={this.state.password}
-                    disabled={this.state.submitting}
-                />
-                <button type="submit" disabled={this.state.submitting}>Log in</button>
-            </form>
+            {!this.state.hideLogin &&
+                <form className="sidebar-login-form" onSubmit={this.handleSubmit}>
+                    <input
+                        type="text"
+                        name="username"
+                        required
+                        placeholder="Username"
+                        autoComplete="username"
+                        onChange={this.handleUsernameChange}
+                        value={this.state.username}
+                        disabled={this.state.submitting}
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        required
+                        placeholder="Password"
+                        autoComplete="current-password"
+                        onChange={this.handlePasswordChange}
+                        value={this.state.password}
+                        disabled={this.state.submitting}
+                    />
+                    <button type="submit" disabled={this.state.submitting}>Log in</button>
+                </form>
+            }
         </nav>;
     }
 
@@ -56,12 +67,14 @@ class GuestNav extends React.Component<{}, State> {
     handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
 
+        const { username, password } = this.state;
+
         this.setState({ submitting: true });
 
-        authenticationService.login(this.state.username, this.state.password)
+        authenticationService.login(username, password)
             .catch(error => {
                 this.setState({ submitting: false });
-                history.push({ pathname: "/login", state: { error: true } });
+                history.push({ pathname: "/login", state: { error: new LoginForm.IncorrectCredentialsError(username) } });
             });
     };
 

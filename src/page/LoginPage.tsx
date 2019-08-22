@@ -2,21 +2,20 @@ import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import "./LoginRegisterPage.css";
 import authenticationService from "./../authentication.service";
-import LoginForm from "./../LoginForm";
+import LoginForm, { IncorrectCredentialsError } from "./../LoginForm";
 
 interface State {
     submitting: boolean;
-    error: boolean;
+    error?: IncorrectCredentialsError;
 }
 
 class LoginPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
-        submitting: false,
-        error: false
+        submitting: false
     };
 
     render() {
-        const error = (this.props.location.state && this.props.location.state.error) || this.state.error;
+        const error = this.state.error || (this.props.location.state && this.props.location.state.error);
 
         return <>
             <LoginForm onSubmit={this.handleSubmit} submitting={this.state.submitting} error={error} />
@@ -33,7 +32,7 @@ class LoginPage extends React.Component<RouteComponentProps, State> {
                     const referrer = this.props.location.state && this.props.location.state.from;
                     this.props.history.push(referrer || { pathname: "/" });
                 },
-                error => this.setState({ submitting: false, error: true })
+                error => this.setState({ submitting: false, error: new IncorrectCredentialsError(username) })
             );
     };
 }

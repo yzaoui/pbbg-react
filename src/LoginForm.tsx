@@ -4,7 +4,7 @@ import "./page/LoginRegisterPage.css";
 interface Props {
     onSubmit: (username: string, password: string) => void;
     submitting: boolean;
-    error: boolean;
+    error?: IncorrectCredentialsError;
 }
 
 interface State {
@@ -14,7 +14,7 @@ interface State {
 
 class LoginForm extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
-        username: "",
+        username: (this.props.error && this.props.error.username) || "",
         password: ""
     };
 
@@ -50,7 +50,7 @@ class LoginForm extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
-        if (!prevProps.error && this.props.error) this.setState({ password: "" });
+        if (prevProps.error !== this.props.error) this.setState({ username: this.props.error!!.username, password: "" });
     }
 
     handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
@@ -65,6 +65,14 @@ class LoginForm extends React.Component<Props, State> {
     handlePasswordChange: ChangeEventHandler<HTMLInputElement> = (event) => {
         this.setState({ password: event.target.value });
     };
+}
+
+export class IncorrectCredentialsError {
+    username: string;
+
+    constructor(username: string) {
+        this.username = username;
+    }
 }
 
 export default LoginForm;
