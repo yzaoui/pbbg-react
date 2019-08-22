@@ -1,9 +1,11 @@
 import React from "react";
 
-const IndexMemberPage: React.FC = () => {
-    return <>
-        <div>Logged in!</div>
-    </>;
-};
+class IndexMemberPage extends React.Component {
+    render() {
+        return <>
+            <div>Logged in!</div>
+        </>;
+    }
+}
 
 export default IndexMemberPage;
