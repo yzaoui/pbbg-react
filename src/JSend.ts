@@ -1,6 +1,6 @@
-export interface Success {
+export interface Success<T> {
     status: "success";
-    data: any;
+    data: T;
 }
 
 export interface Fail {
@@ -15,8 +15,8 @@ export interface Error {
     data?: any;
 }
 
-export type Response = Success | Fail | Error;
+export type Response<T> = Success<T> | Fail | Error;
 
-export const isSuccess = (res: Response): res is Success => res.status === "success";
-export const isFail = (res: Response): res is Fail => res.status === "fail";
-export const isError = (res: Response): res is Error => res.status === "error";
+export const isSuccess = <T> (res: Response<T>): res is Success<T> => res.status === "success";
+export const isFail = <T> (res: Response<T>): res is Fail => res.status === "fail";
+export const isError = <T> (res: Response<T>): res is Error => res.status === "error";

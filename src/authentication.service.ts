@@ -1,13 +1,14 @@
 import { BehaviorSubject } from "rxjs";
 import handleResponse from "./helper/handle-response";
+import * as LoginRegisterEndpoint from "./backend/loginregister";
 
 const CURRENT_USER_KEY = "currentUser";
 
 const currentUserSubject = new BehaviorSubject(localStorage.getItem(CURRENT_USER_KEY));
 
 const authenticationService = {
-    register: (username: string, password: string): Promise<string> => fetchRegisterLogin("register", username, password),
-    login: (username: string, password: string): Promise<string> => fetchRegisterLogin("login", username, password),
+    register: (username: string, password: string): Promise<string> => fetchRegisterLogin("register", { username, password }),
+    login: (username: string, password: string): Promise<string> => fetchRegisterLogin("login", { username, password }),
     logout: () => {
         localStorage.removeItem(CURRENT_USER_KEY);
         currentUserSubject.next(null);
@@ -18,12 +19,12 @@ const authenticationService = {
     }
 };
 
-const fetchRegisterLogin = (route: "register" | "login", username: string, password: string) => fetch(`/api/${route}`, {
+const fetchRegisterLogin = (route: "register" | "login", req: LoginRegisterEndpoint.Request) => fetch(`/api/${route}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
+    body: JSON.stringify(req)
 }).then(
-    handleResponse
+    res => handleResponse<LoginRegisterEndpoint.Response>(res)
 ).then(tokenRes => {
     const token = tokenRes.data.token;
 
