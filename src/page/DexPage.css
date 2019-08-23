@@ -27,3 +27,26 @@ div.dex-categories > a:first-child {
 div.dex-categories > a:last-child {
     border-radius: 0 0 10px 10px;
 }
+
+a.dex-return {
+    width: 120px;
+    padding: 8px;
+    border: 1px solid black;
+    border-radius: 10px;
+    text-decoration: none;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+a.dex-return:hover {
+    color: white;
+    background-color: #0390f9;
+}
+
+div.dex-container {
+    padding: 4px;
+    background-color: #c4ceff;
+    border: 1px solid #7aa2f9;
+    border-radius: 10px;
+    text-align: center;
+}

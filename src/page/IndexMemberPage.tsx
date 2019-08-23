@@ -3,7 +3,7 @@ import * as UserEndpoint from "../backend/user";
 import userService from "../backend/user.service";
 import { Subscription } from "rxjs";
 
-type UserDetails = UserEndpoint.Response
+type UserDetails = UserEndpoint.Response;
 
 interface State {
     state: "loading" | "error" | UserDetails
