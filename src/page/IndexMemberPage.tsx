@@ -1,6 +1,7 @@
 import React from "react";
 import * as UserEndpoint from "../backend/user";
 import userService from "../backend/user.service";
+import { Subscription } from "rxjs";
 
 type UserDetails = UserEndpoint.Response
 
@@ -13,12 +14,18 @@ class IndexMemberPage extends React.Component<{}, State> {
         state: "loading"
     };
 
+    request?: Subscription;
+
     componentDidMount() {
-        userService.get()
-            .then(
+        this.request = userService.get()
+            .subscribe(
                 res => this.setState({ state: res.data }),
                 error => this.setState({ state: "error" })
             )
+    }
+
+    componentWillUnmount() {
+        this.request && this.request.unsubscribe();
     }
 
     render() {
