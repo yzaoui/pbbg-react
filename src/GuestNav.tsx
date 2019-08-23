@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import authenticationService from "./authentication.service";
 import history from "./helper/history";
 import * as LoginForm from "./LoginForm";
+import { UnregisterCallback } from "history";
 
 interface State {
     submitting: boolean;
@@ -21,10 +22,16 @@ class GuestNav extends React.Component<{}, State> {
         hideLogin: false
     };
 
+    unlistenHistory?: UnregisterCallback;
+
     componentDidMount() {
-        history.listen((location) => {
+        this.unlistenHistory = history.listen((location) => {
             this.setState({ hideLogin: (location.pathname === "/login" || location.pathname === "/register") });
         });
+    }
+
+    componentWillUnmount() {
+        this.unlistenHistory && this.unlistenHistory();
     }
 
     render() {
