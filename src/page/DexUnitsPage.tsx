@@ -35,9 +35,8 @@ class DexUnitsPage extends React.Component<RouteComponentProps> {
     render() {
         return <>
             <Link to="/dex" className="dex-return">⬅️ Return to Dex</Link>
-            <div className="dex-container">
-                {this.renderContainer()}
-            </div>
+            <div className="dex-header"><h1>Unit Dex</h1></div>
+            <div className="dex-container">{this.renderContainer()}</div>
         </>;
     }
 

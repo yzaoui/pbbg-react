@@ -43,12 +43,28 @@ a.dex-return:hover {
     background-color: #0390f9;
 }
 
+div.dex-header {
+    padding: 4px;
+    background-color: #c4ceff;
+    border: 1px solid #7aa2f9;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: none;
+}
+
+div.dex-header > h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
 div.dex-container {
     padding: 4px;
     background-color: #c4ceff;
     border: 1px solid #7aa2f9;
-    border-radius: 10px;
     text-align: center;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 /***************************
