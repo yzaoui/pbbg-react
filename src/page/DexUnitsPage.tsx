@@ -7,13 +7,13 @@ import { Subscription } from "rxjs";
 import dexService from "../backend/dex.service";
 import DexUnitEntry from "../DexUnitEntry";
 
-type DexUnits = DexEndpoint.Response;
+type DexUnits = DexEndpoint.UnitsResponse;
 
 interface State {
     state: "loading" | "error" | DexUnits;
 }
 
-class DexUnitsPage extends React.Component<RouteComponentProps> {
+class DexUnitsPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
         state: "loading"
     };
@@ -48,7 +48,7 @@ class DexUnitsPage extends React.Component<RouteComponentProps> {
 
         let lastDiscoveredId = -1;
 
-        return <ol className="dex">
+        return <ol className="dex units">
             {Object.entries(discoveredUnits)
                 .map(([id, unit]) => <DexUnitEntry key={id} id={id} unit={unit} />)}
         </ol>;

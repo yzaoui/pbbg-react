@@ -9,7 +9,15 @@ const dexService = {
             method: "GET",
             headers: authHeader()
         }).then(
-            res => handleResponse<DexEndpoint.Response>(res)
+            res => handleResponse<DexEndpoint.UnitsResponse>(res)
+        )
+    ),
+    getItems: () => RxJS.from(
+        fetch("/api/dex/items", {
+            method: "GET",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<DexEndpoint.ItemsResponse>(res)
         )
     )
 };

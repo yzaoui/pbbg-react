@@ -108,6 +108,8 @@ ol.dex > li > a > * {
 
 ol.dex > li > a > img {
     position: relative;
+    width: 32px;
+    height: 32px;
 }
 
 ol.dex > li > a:hover {
@@ -115,7 +117,7 @@ ol.dex > li > a:hover {
     border-color: #2248d3;
 }
 
-ol.dex > li > a:hover > img {
+ol.dex.units > li > a:hover > img {
     animation-name: unit-icon-hover;
     animation-duration: 350ms;
     animation-iteration-count: infinite;

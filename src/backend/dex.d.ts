@@ -2,12 +2,14 @@
  * For /dex API.
  */
 
-export interface Request {
-}
-
-export interface Response {
+export interface UnitsResponse {
     discoveredUnits: Record<number, MyUnitEnum>;
     lastUnitIsDiscovered: boolean;
+}
+
+export interface ItemsResponse {
+    discoveredItems: Record<number, ItemEnum>;
+    lastItemIsDiscovered: boolean;
 }
 
 interface MyUnitEnum {
@@ -16,4 +18,10 @@ interface MyUnitEnum {
     description: string;
     iconURL: string;
     fullURL: string;
+}
+
+interface ItemEnum {
+    friendlyName: string;
+    imgURL: string;
+    description: string;
 }
