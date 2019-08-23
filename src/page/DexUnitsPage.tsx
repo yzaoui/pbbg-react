@@ -5,6 +5,7 @@ import "./DexPage.css";
 import LoadingSpinner from "../LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../backend/dex.service";
+import DexUnitEntry from "../DexUnitEntry";
 
 type DexUnits = DexEndpoint.Response;
 
@@ -46,7 +47,12 @@ class DexUnitsPage extends React.Component<RouteComponentProps> {
 
         const { discoveredUnits, lastUnitIsDiscovered } = this.state.state;
 
-        return "[WIP] Loaded successfully.";
+        let lastDiscoveredId = -1;
+
+        return <ol className="dex">
+            {Object.entries(discoveredUnits)
+                .map(([id, unit]) => <DexUnitEntry key={id} id={id} unit={unit} />)}
+        </ol>;
     };
 }
 
