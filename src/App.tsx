@@ -2,14 +2,16 @@ import React from 'react';
 import "normalize.css"
 import "./common.css"
 import './App.css';
-import { Router, Route } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
+import GuestNav from "./GuestNav";
+import MemberNav from "./MemberNav";
 import GuestRoute from "./GuestRoute";
+import MemberRoute from "./MemberRoute";
 import IndexGuestPage from "./page/IndexGuestPage";
 import IndexMemberPage from "./page/IndexMemberPage";
 import RegisterPage from "./page/RegisterPage";
 import LoginPage from "./page/LoginPage";
-import GuestNav from "./GuestNav";
-import MemberNav from "./MemberNav";
+import DexPage from "./page/DexPage";
 import authenticationService from "./authentication.service";
 import history from "./helper/history";
 
@@ -36,6 +38,7 @@ class App extends React.Component<{}, State> {
                     <Route path="/" exact render={() => isLoggedIn ? <IndexMemberPage /> : <IndexGuestPage />} />
                     <GuestRoute path="/register" component={RegisterPage} />
                     <GuestRoute path="/login" component={LoginPage} />
+                    <MemberRoute path="/dex" component={DexPage} />
                 </main>
             </div>
         </Router>;
