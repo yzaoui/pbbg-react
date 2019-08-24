@@ -1,9 +1,9 @@
 import React from "react";
-import "./common.css";
+import "../common.css";
 import { NavLink } from "react-router-dom";
-import authenticationService from "./authentication.service";
+import authenticationService from "./../authentication.service";
 import { Subscription } from "rxjs";
-import userService from "./backend/user.service";
+import userService from "./../backend/user.service";
 import LoadingSpinner from "./LoadingSpinner";
 
 const navItems = [

@@ -1,12 +1,12 @@
 import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.css";
-import LoadingSpinner from "../../LoadingSpinner";
+import LoadingSpinner from "../../component/LoadingSpinner";
 import * as DexEndpoint from "../../backend/dex";
-import DexItemEntry from "../../DexItemEntry";
+import DexItemEntry from "../../component/dex/DexItemEntry";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
-import DexUnknownEntry from "../../DexUnknownEntry";
+import DexUnknownEntry from "../../component/dex/DexUnknownEntry";
 import { ItemEnum } from "../../backend/dex";
 
 type DexItems = DexEndpoint.ItemsResponse;

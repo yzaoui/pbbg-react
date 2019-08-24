@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./LoginRegisterPage.css";
-import RegisterForm from "./../RegisterForm";
+import RegisterForm from "../component/RegisterForm";
 import authenticationService from "./../authentication.service";
 
 interface State {

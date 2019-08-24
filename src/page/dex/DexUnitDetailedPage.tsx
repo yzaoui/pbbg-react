@@ -3,7 +3,7 @@ import { MyUnitEnum } from "../../backend/dex";
 import { Link, RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.css";
 import "./DexUnitDetailedPage.css";
-import LoadingSpinner from "../../LoadingSpinner";
+import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 

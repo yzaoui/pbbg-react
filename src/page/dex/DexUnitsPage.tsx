@@ -2,10 +2,10 @@ import React from "react";
 import * as DexEndpoint from "../../backend/dex";
 import { Link, Route, RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.css";
-import LoadingSpinner from "../../LoadingSpinner";
+import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
-import DexUnitEntry from "../../DexUnitEntry";
+import DexUnitEntry from "../../component/dex/DexUnitEntry";
 import DexUnitDetailedPage from "./DexUnitDetailedPage";
 
 type DexUnits = DexEndpoint.UnitsResponse;

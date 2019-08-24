@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ItemEnum } from "./backend/dex";
+import { ItemEnum } from "../../backend/dex";
 import "./DexEntry.css"
 
 interface Props {

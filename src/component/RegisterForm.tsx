@@ -1,10 +1,10 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
-import "./page/LoginRegisterPage.css";
+import "../page/LoginRegisterPage.css";
 
 interface Props {
     onSubmit: (username: string, password: string) => void;
     submitting: boolean;
-    error?: IncorrectCredentialsError;
+    error: boolean;
 }
 
 interface State {
@@ -12,20 +12,19 @@ interface State {
     password: string;
 }
 
-class LoginForm extends React.Component<Props, State> {
+class RegisterForm extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
-        username: (this.props.error && this.props.error.username) || "",
+        username: "",
         password: ""
     };
 
     render() {
         return <form onSubmit={this.handleSubmit} className="LoginRegisterPage-form">
-            <h1>Log in to PBBG</h1>
+            <h1>Register your account</h1>
             {this.props.error && <div>ERROR</div>}
             <input
                 type="text"
                 required
-                autoFocus
                 placeholder="Username"
                 autoComplete="username"
                 onChange={this.handleUsernameChange}
@@ -36,7 +35,7 @@ class LoginForm extends React.Component<Props, State> {
                 type="password"
                 required
                 placeholder="Password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 onChange={this.handlePasswordChange}
                 value={this.state.password}
                 disabled={this.props.submitting}
@@ -44,13 +43,9 @@ class LoginForm extends React.Component<Props, State> {
             <button
                 type="submit"
                 disabled={this.props.submitting}>
-                Log in
+                Register
             </button>
         </form>;
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
-        if (prevProps.error !== this.props.error) this.setState({ username: this.props.error!!.username, password: "" });
     }
 
     handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
@@ -67,12 +62,4 @@ class LoginForm extends React.Component<Props, State> {
     };
 }
 
-export class IncorrectCredentialsError {
-    username: string;
-
-    constructor(username: string) {
-        this.username = username;
-    }
-}
-
-export default LoginForm;
+export default RegisterForm;

@@ -1,10 +1,10 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
-import "./common.css";
+import "../common.css";
 import "./GuestNav.css";
 import { Link } from "react-router-dom";
-import authenticationService from "./authentication.service";
-import history from "./helper/history";
-import * as LoginForm from "./LoginForm";
+import authenticationService from "./../authentication.service";
+import history from "./../helper/history";
+import * as LoginForm from "./../component/LoginForm";
 import { UnregisterCallback } from "history";
 
 interface State {

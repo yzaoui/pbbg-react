@@ -2,7 +2,7 @@ import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
 import "./LoginRegisterPage.css";
 import authenticationService from "./../authentication.service";
-import LoginForm, { IncorrectCredentialsError } from "./../LoginForm";
+import LoginForm, { IncorrectCredentialsError } from "../component/LoginForm";
 
 interface State {
     submitting: boolean;

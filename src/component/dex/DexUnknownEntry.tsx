@@ -1,6 +1,6 @@
 import React from "react";
-import "./page/dex/DexSubpage.css"
-import unknownImg from "./img/dex-unknown.png";
+import "../../page/dex/DexSubpage.css"
+import unknownImg from "./../../img/dex-unknown.png";
 
 interface Props {
     id: string;

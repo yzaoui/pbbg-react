@@ -3,8 +3,8 @@ import "normalize.css"
 import "./common.css"
 import './App.css';
 import { Route, Router } from "react-router-dom";
-import GuestNav from "./GuestNav";
-import MemberNav from "./MemberNav";
+import GuestNav from "./component/GuestNav";
+import MemberNav from "./component/MemberNav";
 import GuestRoute from "./GuestRoute";
 import MemberRoute from "./MemberRoute";
 import IndexGuestPage from "./page/IndexGuestPage";
