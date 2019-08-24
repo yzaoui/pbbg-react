@@ -6,6 +6,7 @@ import "./DexUnitDetailedPage.css";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
+import DexReturnLink from "../../component/dex/DexReturnLink";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
@@ -34,7 +35,7 @@ class DexUnitDetailedPage extends React.Component<Props, State> {
 
     render() {
         return <>
-            <Link to="/dex/units" className="dex-return"><span role="img" aria-label="Back">⬅</span> Return to Units</Link>
+            <DexReturnLink to="/dex/units" label="Return to Unit Dex" />
             <div className="detailed-unit-dex">{this.renderContainer()}</div>
         </>;
     }

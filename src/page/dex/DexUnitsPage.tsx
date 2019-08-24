@@ -1,12 +1,13 @@
 import React from "react";
 import * as DexEndpoint from "../../backend/dex";
-import { Link, Route, RouteComponentProps } from "react-router-dom";
+import { Route, RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.css";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 import DexUnitEntry from "../../component/dex/DexUnitEntry";
 import DexUnitDetailedPage from "./DexUnitDetailedPage";
+import DexReturnLink from "../../component/dex/DexReturnLink";
 
 type DexUnits = DexEndpoint.UnitsResponse;
 
@@ -40,7 +41,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
     render() {
         return <>
-            <Link to="/dex" className="dex-return"><span role="img" aria-label="Back">⬅</span> Return to Dex</Link>
+            <DexReturnLink to="/dex" label="Return to Dex" />
             <div className="dex-header"><h1>Unit Dex</h1></div>
             <div className="dex-container">{this.renderContainer()}</div>
         </>;
