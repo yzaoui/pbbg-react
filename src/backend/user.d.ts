@@ -1,11 +1,8 @@
 /**
  * For /user API.
  */
-
-export interface Request {
-}
-
 export interface Response {
+    username: string;
     mining: LevelProgress;
 }
 
