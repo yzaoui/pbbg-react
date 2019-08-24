@@ -1,11 +1,11 @@
 import React from "react";
-import { MyUnitEnum } from "../backend/dex";
+import { MyUnitEnum } from "../../backend/dex";
 import { Link, RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.css";
 import "./DexUnitDetailedPage.css";
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../../LoadingSpinner";
 import { Subscription } from "rxjs";
-import dexService from "../backend/dex.service";
+import dexService from "../../backend/dex.service";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
