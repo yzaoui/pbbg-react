@@ -34,7 +34,7 @@ class SquadPage extends React.Component<{}, State> {
 
         return <>
             <button className="fancy" style={{ alignSelf: "center" }}>Heal Squad</button>
-            {this.state.state.units.map(unit => <PBBGUnit key={unit.id} unit={unit} />)}
+            {this.state.state.units.map(unit => <PBBGUnit key={unit.id} unit={unit} style={{ margin: "4px" }} />)}
         </>;
     }
 }
