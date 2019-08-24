@@ -7,7 +7,7 @@ import DexItemsPage from "./DexItemsPage";
 const DexPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={Index} />
     <Route path={match.url + "/items"} exact component={DexItemsPage} />
-    <Route path={match.url + "/units"} exact component={DexUnitsPage} />
+    <Route path={match.url + "/units"} component={DexUnitsPage} />
 </>;
 
 const Index: React.FC<RouteComponentProps> = ({ match }) =>

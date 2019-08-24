@@ -2,11 +2,22 @@
  * For /dex API.
  */
 
+/**
+ * /dex/units
+ */
 export interface UnitsResponse {
     discoveredUnits: Record<number, MyUnitEnum>;
     lastUnitIsDiscovered: boolean;
 }
 
+/**
+ * /dex/units/:id
+ */
+type UnitIndividualResponse = MyUnitEnum
+
+/**
+ * /dex/items
+ */
 export interface ItemsResponse {
     discoveredItems: {[id: number]: ItemEnum};
     lastItemIsDiscovered: boolean;

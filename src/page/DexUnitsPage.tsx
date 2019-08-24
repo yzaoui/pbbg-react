@@ -1,19 +1,25 @@
 import React from "react";
 import * as DexEndpoint from "../backend/dex";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { Link, Route, RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.css";
 import LoadingSpinner from "../LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../backend/dex.service";
 import DexUnitEntry from "../DexUnitEntry";
+import DexUnitDetailedPage from "./DexUnitDetailedPage";
 
 type DexUnits = DexEndpoint.UnitsResponse;
+
+const DexUnitsPage: React.FC<RouteComponentProps> = ({ match }) => <>
+    <Route path={match.url + "/"} exact component={IndexPage} />
+    <Route path={match.url + "/:id"} component={DexUnitDetailedPage} />
+</>;
 
 interface State {
     state: "loading" | "error" | DexUnits;
 }
 
-class DexUnitsPage extends React.Component<RouteComponentProps, State> {
+class IndexPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
         state: "loading"
     };
