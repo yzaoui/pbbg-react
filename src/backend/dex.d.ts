@@ -1,8 +1,4 @@
 /**
- * For /dex API.
- */
-
-/**
  * /dex/units
  */
 export interface UnitsResponse {
