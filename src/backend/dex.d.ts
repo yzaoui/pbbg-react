@@ -8,7 +8,7 @@ export interface UnitsResponse {
 }
 
 export interface ItemsResponse {
-    discoveredItems: Record<number, ItemEnum>;
+    discoveredItems: {[id: number]: ItemEnum};
     lastItemIsDiscovered: boolean;
 }
 

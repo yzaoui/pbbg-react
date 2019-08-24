@@ -6,6 +6,8 @@ import * as DexEndpoint from "../backend/dex";
 import DexItemEntry from "../DexItemEntry";
 import { Subscription } from "rxjs";
 import dexService from "../backend/dex.service";
+import DexUnknownEntry from "../DexUnknownEntry";
+import { ItemEnum } from "../backend/dex";
 
 type DexItems = DexEndpoint.ItemsResponse;
 
@@ -46,11 +48,19 @@ class DexItemsPage extends React.Component<RouteComponentProps, State> {
 
         const { discoveredItems, lastItemIsDiscovered } = this.state.state;
 
-        let lastDiscoveredId = -1;
+        if (Object.entries(discoveredItems).length === 0) return "No items discovered yet.";
+
+        const lastId = parseInt(Object.keys(discoveredItems).slice(-1).pop()!!);
+
+        const allEntries: Record<number, ItemEnum | null> = {};
+        for (let i = 0; i <= lastId; i++) {
+            allEntries[i] = discoveredItems[i] || null;
+        }
 
         return <ol className="dex">
-            {Object.entries(discoveredItems)
-                .map(([id, item]) => <DexItemEntry key={id} id={id} item={item} />)}
+            {Object.entries(allEntries)
+                .map(([id, item]) => (item !== null) ? <DexItemEntry key={id} id={id} item={item} /> : <DexUnknownEntry key={id} id={id} />)
+            }
         </ol>;
     };
 }
