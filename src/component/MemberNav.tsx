@@ -8,6 +8,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 const navItems = [
     { to: "/", emoji: "🏠", label: "Home", exact: true},
+    { to: "/squad", emoji: "👥", label: "Squad", exact: true},
     { to: "/dex", emoji: "📚", label: "Dex", exact: false}
 ];
 

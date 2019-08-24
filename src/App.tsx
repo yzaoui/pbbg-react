@@ -11,6 +11,7 @@ import IndexGuestPage from "./page/IndexGuestPage";
 import IndexMemberPage from "./page/IndexMemberPage";
 import RegisterPage from "./page/RegisterPage";
 import LoginPage from "./page/LoginPage";
+import SquadPage from "./page/SquadPage";
 import DexPage from "./page/dex/DexPage";
 import authenticationService from "./authentication.service";
 import history from "./helper/history";
@@ -38,6 +39,7 @@ class App extends React.Component<{}, State> {
                     <Route path="/" exact render={() => isLoggedIn ? <IndexMemberPage /> : <IndexGuestPage />} />
                     <GuestRoute path="/register" component={RegisterPage} />
                     <GuestRoute path="/login" component={LoginPage} />
+                    <MemberRoute path="/squad" component={SquadPage} />
                     <MemberRoute path="/dex" component={DexPage} />
                 </main>
             </div>
