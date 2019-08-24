@@ -3,6 +3,7 @@ import { Squad } from "../backend/squad";
 import squadService from "../backend/squad.service";
 import { Subscription } from "rxjs";
 import LoadingSpinner from "../component/LoadingSpinner";
+import PBBGUnit from "../component/PBBGUnit";
 
 interface State {
     state: "loading" | "error" | Squad;
@@ -33,6 +34,7 @@ class SquadPage extends React.Component<{}, State> {
 
         return <>
             <button className="fancy" style={{ alignSelf: "center" }}>Heal Squad</button>
+            {this.state.state.units.map(unit => <PBBGUnit key={unit.id} unit={unit} />)}
         </>;
     }
 }

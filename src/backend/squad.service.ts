@@ -5,7 +5,7 @@ import * as RxJS from "rxjs";
 
 const squadService = {
     getSquad: () => RxJS.from(
-        fetch("/api/dex/units", {
+        fetch("/api/squad", {
             method: "GET",
             headers: authHeader()
         }).then(
