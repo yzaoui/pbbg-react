@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
-import "./DexPage.css";
+import "./DexSubpage.css";
 import LoadingSpinner from "../LoadingSpinner";
 import * as DexEndpoint from "../backend/dex";
 import DexItemEntry from "../DexItemEntry";

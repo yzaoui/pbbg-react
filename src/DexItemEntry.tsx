@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ItemEnum } from "./backend/dex";
-import "./page/DexPage.css"
 
 interface Props {
     id: string;
