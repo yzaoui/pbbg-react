@@ -34,7 +34,7 @@ class DexItemsPage extends React.Component<RouteComponentProps, State> {
 
     render() {
         return <>
-            <Link to="/dex" className="dex-return">⬅️ Return to Dex</Link>
+            <Link to="/dex" className="dex-return"><span role="img" aria-label="Back">⬅</span> Return to Dex</Link>
             <div className="dex-header"><h1>Item Dex</h1></div>
             <div className="dex-container">{this.renderContainer()}</div>
         </>;
