@@ -17,11 +17,10 @@ class SquadPage extends React.Component<{}, State> {
     request?: Subscription;
 
     componentDidMount() {
-        this.request = squadService.getSquad()
-            .subscribe(
-                res => this.setState({ state: res.data }),
-                error => this.setState({ state: "error" })
-            )
+        this.request = squadService.getSquad().subscribe(
+            res => this.setState({ state: res.data }),
+            error => this.setState({ state: "error" })
+        );
     }
 
     componentWillUnmount() {
@@ -33,10 +32,17 @@ class SquadPage extends React.Component<{}, State> {
         else if (this.state.state === "error") return "ERROR";
 
         return <>
-            <button className="fancy" style={{ alignSelf: "center" }}>Heal Squad</button>
+            <button className="fancy" style={{ alignSelf: "center" }} onClick={this.handleHealClick}>Heal Squad</button>
             {this.state.state.units.map(unit => <PBBGUnit key={unit.id} unit={unit} style={{ margin: "4px" }} />)}
         </>;
     }
+
+    handleHealClick = () => {
+        this.request = squadService.healSquad().subscribe(
+            res => this.setState({ state: res.data }),
+            error => this.setState({ state: "error" })
+        );
+    };
 }
 
 export default SquadPage;
