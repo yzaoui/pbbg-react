@@ -1,5 +1,6 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
 import "../page/LoginRegisterPage.css";
+import { USERNAME_REGEX, PASSWORD_REGEX } from "../helper/const";
 
 interface Props {
     onSubmit: (username: string, password: string) => void;
@@ -30,6 +31,8 @@ class RegisterForm extends React.Component<Props, State> {
                 onChange={this.handleUsernameChange}
                 value={this.state.username}
                 disabled={this.props.submitting}
+                pattern={USERNAME_REGEX.pattern}
+                title={USERNAME_REGEX.description}
             />
             <input
                 type="password"
@@ -39,6 +42,8 @@ class RegisterForm extends React.Component<Props, State> {
                 onChange={this.handlePasswordChange}
                 value={this.state.password}
                 disabled={this.props.submitting}
+                pattern={PASSWORD_REGEX.pattern}
+                title={PASSWORD_REGEX.description}
             />
             <button
                 type="submit"
