@@ -12,6 +12,7 @@ import IndexMemberPage from "./page/IndexMemberPage";
 import RegisterPage from "./page/RegisterPage";
 import LoginPage from "./page/LoginPage";
 import SquadPage from "./page/SquadPage";
+import InventoryPage from "./page/InventoryPage";
 import DexPage from "./page/dex/DexPage";
 import SettingsPage from "./page/SettingsPage";
 import authenticationService from "./authentication.service";
@@ -41,6 +42,7 @@ class App extends React.Component<{}, State> {
                     <GuestRoute path="/register" component={RegisterPage} />
                     <GuestRoute path="/login" component={LoginPage} />
                     <MemberRoute path="/squad" component={SquadPage} />
+                    <MemberRoute path="/inventory" component={InventoryPage} />
                     <MemberRoute path="/dex" component={DexPage} />
                     <MemberRoute path="/settings" component={SettingsPage} />
                 </main>
