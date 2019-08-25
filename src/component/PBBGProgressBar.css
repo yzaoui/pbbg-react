@@ -1,0 +1,17 @@
+.pbbg-progress-bar {
+    display: inline-block;
+    width: 5em;
+    height: 1em;
+}
+
+.pbbg-progress-bar .outer {
+    height: 100%;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+.pbbg-progress-bar .inner {
+    height: 100%;
+    background: var(--bar-background-color, linear-gradient(#6de1ff, #00789c));
+    transition: width 0.8s cubic-bezier(.8,0,.2,1);
+}
