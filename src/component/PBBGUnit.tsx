@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from "react";
 import { MyUnit } from "../backend/squad";
 import "./PBBGUnit.css"
+import PBBGLevelProgress from "./PBBGLevelProgress";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     unit: MyUnit;
@@ -23,7 +24,7 @@ const PBBGUnit: React.FC<Props> = ({ unit, ...rest }) => <div className="pbbg-un
         </div>
         <div>
             <span>Level {unit.levelProgress.level}</span>
-            {/*pbbg-progress-bar*/}
+            <PBBGLevelProgress className="exp-bar" level={unit.levelProgress.level} value={unit.levelProgress.relativeExp} max={unit.levelProgress.relativeExpToNextLevel} />
             <span>{unit.levelProgress.relativeExp} / {unit.levelProgress.relativeExpToNextLevel}</span>
         </div>
     </div>
