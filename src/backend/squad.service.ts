@@ -11,6 +11,14 @@ const squadService = {
         }).then(
             res => handleResponse<SquadEndpoint.SquadResponse>(res)
         )
+    ),
+    healSquad: () => RxJS.from(
+        fetch("/api/squad/heal", {
+            method: "POST",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<SquadEndpoint.SquadResponse>(res)
+        )
     )
 };
 
