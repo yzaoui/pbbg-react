@@ -5,6 +5,11 @@ import { Subscription } from "rxjs";
 import LoadingSpinner from "../component/LoadingSpinner";
 import PBBGUnit from "../component/PBBGUnit";
 import classNames from "classnames";
+import { Howl } from "howler";
+// @ts-ignore
+import healingEffectMP3 from "../audio/healing_effect.mp3";
+// @ts-ignore
+import healingEffectOGG from "../audio/healing_effect.ogg";
 
 interface State {
     state: "loading" | "error" | Squad;
@@ -18,6 +23,11 @@ class SquadPage extends React.Component<{}, State> {
     };
 
     request?: Subscription;
+
+    healingSound = new Howl({
+        src: [healingEffectMP3, healingEffectOGG],
+        preload: true
+    });
 
     componentDidMount() {
         this.request = squadService.getSquad().subscribe(
@@ -51,7 +61,10 @@ class SquadPage extends React.Component<{}, State> {
         this.setState({ healing: true });
 
         this.request = squadService.healSquad().subscribe(
-            res => this.setState({ healing: false, state: res.data }),
+            res => {
+                this.setState({ healing: false, state: res.data });
+                this.healingSound.play();
+            },
             error => this.setState({ healing: false, state: "error" })
         );
     };
