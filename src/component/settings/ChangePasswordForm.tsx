@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
 import "./ChangePasswordForm.css"
-import { USERNAME_REGEX, PASSWORD_REGEX } from "../helper/const";
+import { USERNAME_REGEX, PASSWORD_REGEX } from "../../helper/const";
 
 interface State {
     currentPassword: string;
