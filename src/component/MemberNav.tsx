@@ -9,7 +9,8 @@ import LoadingSpinner from "./LoadingSpinner";
 const navItems = [
     { to: "/", emoji: "🏠", label: "Home", exact: true},
     { to: "/squad", emoji: "👥", label: "Squad", exact: true},
-    { to: "/dex", emoji: "📚", label: "Dex", exact: false}
+    { to: "/dex", emoji: "📚", label: "Dex", exact: false},
+    { to: "/settings", emoji: "⚙", label: "Settings", exact: true}
 ];
 
 interface State {

@@ -13,6 +13,7 @@ import RegisterPage from "./page/RegisterPage";
 import LoginPage from "./page/LoginPage";
 import SquadPage from "./page/SquadPage";
 import DexPage from "./page/dex/DexPage";
+import SettingsPage from "./page/SettingsPage";
 import authenticationService from "./authentication.service";
 import history from "./helper/history";
 
@@ -41,6 +42,7 @@ class App extends React.Component<{}, State> {
                     <GuestRoute path="/login" component={LoginPage} />
                     <MemberRoute path="/squad" component={SquadPage} />
                     <MemberRoute path="/dex" component={DexPage} />
+                    <MemberRoute path="/settings" component={SettingsPage} />
                 </main>
             </div>
         </Router>;
