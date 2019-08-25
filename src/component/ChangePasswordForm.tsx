@@ -1,5 +1,6 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
 import "./ChangePasswordForm.css"
+import { USERNAME_REGEX, PASSWORD_REGEX } from "../helper/const";
 
 interface State {
     currentPassword: string;
@@ -20,15 +21,35 @@ class ChangePasswordForm extends React.Component<{}, State> {
                 <legend>Change Password</legend>
                 <div>
                     <label htmlFor="current-password">Current Password:</label>
-                    <input type="password" id="current-password" onChange={this.handleCurrentPasswordChange} value={this.state.currentPassword} required />
+                    <input
+                        type="password"
+                        id="current-password"
+                        onChange={this.handleCurrentPasswordChange}
+                        value={this.state.currentPassword}
+                        required
+                    />
                 </div>
                 <div>
                     <label htmlFor="new-password">New Password:</label>
-                    <input type="password" id="new-password" onChange={this.handleNewPasswordChange} value={this.state.newPassword} required />
+                    <input
+                        type="password"
+                        id="new-password"
+                        onChange={this.handleNewPasswordChange}
+                        value={this.state.newPassword}
+                        pattern={PASSWORD_REGEX.pattern}
+                        title={PASSWORD_REGEX.description}
+                        required
+                    />
                 </div>
                 <div>
                     <label htmlFor="confirm-new-password">Confirm New Password:</label>
-                    <input type="password" id="confirm-new-password" onChange={this.handleConfirmNewPasswordChange} value={this.state.confirmNewPassword} required />
+                    <input
+                        type="password"
+                        id="confirm-new-password"
+                        onChange={this.handleConfirmNewPasswordChange}
+                        value={this.state.confirmNewPassword}
+                        required
+                    />
                 </div>
                 <button className="fancy" type="submit" disabled={!this.readyToSubmit()}>Save</button>
             </fieldset>
