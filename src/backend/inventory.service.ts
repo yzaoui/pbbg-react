@@ -1,4 +1,5 @@
 import authHeader from "../helper/auth-header";
+import jsonHeader from "../helper/json-header";
 import handleResponse from "../helper/handle-response";
 import * as InventoryEndpoint from "../backend/inventory";
 import * as RxJS from "rxjs";
@@ -15,7 +16,7 @@ const inventoryService = {
     equipUnequip: (action: "equip" | "unequip", req: InventoryEndpoint.EquipUnequipRequest) => RxJS.from(
         fetch(`/api/inventory/equipment?action=${action}`, {
             method: "POST",
-            headers: { "Content-Type": "application/json", ...authHeader() },
+            headers: { ...jsonHeader(), ...authHeader() },
             body: JSON.stringify(req)
         }).then(
             res => handleResponse<InventoryEndpoint.InventoryResponse>(res)
