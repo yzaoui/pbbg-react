@@ -1,14 +1,16 @@
 import React from "react";
 import { isEquippable, isStackable, Item } from "../../backend/inventory";
 import "./InventoryItemTooltip.css";
+import "../../common.css";
 
 interface Props {
     item: Item;
     equip?: () => void;
     unequip?: () => void;
+    equipDisabled?: boolean;
 }
 
-const InventoryItemTooltip: React.FC<Props> = ({ item, equip, unequip }) => <div className="InventoryItemTooltip">
+const InventoryItemTooltip: React.FC<Props> = ({ item, equip, unequip, equipDisabled }) => <div className="InventoryItemTooltip">
     <div>{item.baseItem.friendlyName}</div>
     {isStackable(item) && <>
         <hr />
@@ -16,7 +18,7 @@ const InventoryItemTooltip: React.FC<Props> = ({ item, equip, unequip }) => <div
     </>}
     {isEquippable(item) && <>
         <hr />
-        <button onClick={item.equipped ? unequip : equip}>
+        <button className="fancy" onClick={item.equipped ? unequip : equip} disabled={equipDisabled}>
             {item.equipped ? "Unequip" : "Equip"}
         </button>
     </>}

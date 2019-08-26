@@ -17,11 +17,13 @@ import equipOGG from "../audio/equip_effect.ogg";
 
 interface State {
     state: "loading" | "error" | Inventory;
+    equipmentChanging: boolean;
 }
 
 class InventoryPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        state: "loading",
+        equipmentChanging: false
     };
 
     request?: Subscription;
@@ -47,20 +49,23 @@ class InventoryPage extends React.Component<{}, State> {
         if (this.state.state === "error") return "ERROR";
         else if (this.state.state === "loading") return <LoadingSpinner />;
 
+        const inventory = this.state.state;
+
         return <>
             <div className="player-equipment">
                 <img className="player-portrait" src={player} alt="Player portrait" />
-                <EquipmentSlot item={this.state.state.equipment.pickaxe} style={{ top: "100px", left: "90px" }}>
+                <EquipmentSlot item={inventory.equipment.pickaxe} style={{ top: "100px", left: "90px" }}>
                     <img src={noPickaxe} alt={"No pickaxe equipped"} />
                 </EquipmentSlot>
             </div>
             <ul className="inventory-container">
-                {this.state.state.items.map(({ id, item }) => <li key={id}>
+                {inventory.items.map(({ id, item }) => <li key={id}>
                     <InventoryItem item={item} />
                     <InventoryItemTooltip
                         item={item}
                         equip={isEquippable(item) && !item.equipped ? () => this.handleEquipUnequip(id, "equip") : undefined}
                         unequip={isEquippable(item) && item.equipped ? () => this.handleEquipUnequip(id, "unequip") : undefined}
+                        equipDisabled={this.state.equipmentChanging}
                     />
                 </li>)}
             </ul>
@@ -68,11 +73,13 @@ class InventoryPage extends React.Component<{}, State> {
     }
 
     handleEquipUnequip = (inventoryItemId: number, action: "equip" | "unequip") => {
+        this.setState({ equipmentChanging: true });
+
         this.request = inventoryService.equipUnequip(action, { inventoryItemId })
             .subscribe(
                 res => {
                     this.equipSound.play();
-                    this.setState({ state: res.data });
+                    this.setState({ state: res.data, equipmentChanging: false });
                 },
                 error => this.setState({ state: "error" })
             );
