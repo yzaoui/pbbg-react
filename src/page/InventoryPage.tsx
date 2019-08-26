@@ -7,6 +7,8 @@ import InventoryItem from "../component/inventory/InventoryItem";
 import { Subscription } from "rxjs";
 import inventoryService from "../backend/inventory.service";
 import InventoryItemTooltip from "../component/inventory/InventoryItemTooltip";
+import EquipmentSlot from "../component/inventory/EquipmentSlot";
+import noPickaxe from "../img/no-pickaxe.png";
 
 interface State {
     state: "loading" | "error" | Inventory;
@@ -38,6 +40,9 @@ class InventoryPage extends React.Component<{}, State> {
         return <>
             <div className="player-equipment">
                 <img className="player-portrait" src={player} alt="Player portrait" />
+                <EquipmentSlot item={this.state.state.equipment.pickaxe} style={{ top: "100px", left: "90px" }}>
+                    <img src={noPickaxe} alt={"No pickaxe equipped"} />
+                </EquipmentSlot>
             </div>
             <ul className="inventory-container">
                 {this.state.state.items.map(({ id, item }) => <li key={id}>
