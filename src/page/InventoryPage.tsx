@@ -9,6 +9,11 @@ import inventoryService from "../backend/inventory.service";
 import InventoryItemTooltip from "../component/inventory/InventoryItemTooltip";
 import EquipmentSlot from "../component/inventory/EquipmentSlot";
 import noPickaxe from "../img/no-pickaxe.png";
+import { Howl } from "howler";
+// @ts-ignore
+import equipMP3 from "../audio/equip_effect.mp3";
+// @ts-ignore
+import equipOGG from "../audio/equip_effect.ogg";
 
 interface State {
     state: "loading" | "error" | Inventory;
@@ -20,6 +25,11 @@ class InventoryPage extends React.Component<{}, State> {
     };
 
     request?: Subscription;
+
+    equipSound = new Howl({
+        src: [equipMP3, equipOGG],
+        preload: true
+    });
 
     componentDidMount() {
         this.request = inventoryService.getInventory()
@@ -60,7 +70,10 @@ class InventoryPage extends React.Component<{}, State> {
     handleEquipUnequip = (inventoryItemId: number, action: "equip" | "unequip") => {
         this.request = inventoryService.equipUnequip(action, { inventoryItemId })
             .subscribe(
-                res => this.setState({ state: res.data }),
+                res => {
+                    this.equipSound.play();
+                    this.setState({ state: res.data });
+                },
                 error => this.setState({ state: "error" })
             );
     }
