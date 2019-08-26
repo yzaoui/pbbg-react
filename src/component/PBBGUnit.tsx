@@ -9,7 +9,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 const PBBGUnit: React.FC<Props> = ({ unit, ...rest }) => <div className="pbbg-unit" {...rest}>
-    <img src={unit.idleAnimationURL} className="sprite" />
+    <img src={unit.idleAnimationURL} className="sprite" alt={unit.name + " sprite"} />
     <div>
         <div>
             <span className="name">{unit.name}</span>

@@ -1,6 +1,6 @@
 import React from "react";
 import { MyUnitEnum } from "../../backend/dex";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.css";
 import "./DexUnitDetailedPage.css";
 import LoadingSpinner from "../../component/LoadingSpinner";
