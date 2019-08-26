@@ -35,6 +35,6 @@ export interface Point {
     y: number;
 }
 
-export const isStackable = (item: any): item is Stackable => item.hasOwnProperty("quantity");
-export const isEquippable = (item: any): item is Equippable => item.hasOwnProperty("equipped");
-export const isGridPreviewable = (item: any): item is GridPreviewable => item.hasOwnProperty("grid");
+export const isStackable = (item: any): item is Stackable => item.hasOwnProperty("quantity") && typeof item["quantity"] === "number";
+export const isEquippable = (item: any): item is Equippable => item.hasOwnProperty("equipped") && typeof item["equipped"] === "boolean";
+export const isGridPreviewable = (item: any): item is GridPreviewable => item.hasOwnProperty("grid") && typeof item["grid"] === "object";
