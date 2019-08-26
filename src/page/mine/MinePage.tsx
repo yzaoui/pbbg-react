@@ -1,14 +1,9 @@
 import React from "react";
 import { Route, RouteComponentProps } from "react-router";
-
-interface State {
-
-}
+import IndexPage from "./IndexPage";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
-    <Route path={match.url + "/"} exact component={Index} />
+    <Route path={match.url + "/"} exact component={IndexPage} />
 </>;
-
-const Index: React.FC = () => <>Mine Page</>;
 
 export default MinePage;

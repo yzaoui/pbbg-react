@@ -12,7 +12,7 @@ const navItems = [
     { to: "/inventory", emoji: "🎒", label: "Inventory", exact: true },
     { to: "/mine", emoji: "⛏️", label: "Mine", exact: false },
     { to: "/dex", emoji: "📚", label: "Dex", exact: false },
-    { to: "/settings", emoji: "⚙", label: "Settings", exact: true }
+    { to: "/settings", emoji: "⚙️", label: "Settings", exact: true }
 ];
 
 interface State {
