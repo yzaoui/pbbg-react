@@ -3,10 +3,18 @@ import { ItemEnum } from "./dex";
 /**
  * /dex/inventory
  */
+export interface EquipUnequipRequest {
+    inventoryItemId: number;
+}
 export type InventoryResponse = Inventory
 
 export interface Inventory {
     items: InventoryItem[];
+    equipment: Equipment;
+}
+
+export interface Equipment {
+    pickaxe?: Item;
 }
 
 export interface InventoryItem {

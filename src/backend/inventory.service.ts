@@ -12,17 +12,15 @@ const inventoryService = {
             res => handleResponse<InventoryEndpoint.InventoryResponse>(res)
         )
     ),
-    equip: (inventoryItemId: number) => equipUnequip(inventoryItemId, "equip"),
-    unequip: (inventoryItemId: number) => equipUnequip(inventoryItemId, "unequip")
-};
-
-const equipUnequip = (inventoryItemId: number, action: "equip" | "unequip") => RxJS.from(
-    fetch("/api/inventory/equipment?action=" + action, {
-        method: "POST",
-        headers: authHeader()
-    }).then(
-        res => handleResponse<string>(res)
+    equipUnequip: (action: "equip" | "unequip", req: InventoryEndpoint.EquipUnequipRequest) => RxJS.from(
+        fetch(`/api/inventory/equipment?action=${action}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", ...authHeader() },
+            body: JSON.stringify(req)
+        }).then(
+            res => handleResponse<InventoryEndpoint.InventoryResponse>(res)
+        )
     )
-);
+};
 
 export default inventoryService;
