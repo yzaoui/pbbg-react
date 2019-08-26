@@ -20,13 +20,11 @@ const MineList: React.FC<Props> = ({ state, onEnterMine }) => <table className="
     </thead>
     <tbody>
     {(() => {
-        if (state === "loading") return <tr>
+        if (state === "loading" || state === "error") return <tr>
             <td colSpan={3}>
-                <div style={{ display: "flex", justifyContent: "center" }}><LoadingSpinner /></div>
+                <div style={{ display: "flex", justifyContent: "center" }}>{state === "loading" ? <LoadingSpinner /> : "ERROR"}</div>
             </td>
         </tr>;
-
-        else if (state === "error") return "ERROR";
 
         return <>
             {state.types.map(mineType => <MineListRow key={mineType.id} mineType={mineType} onEnterMineClick={() => onEnterMine(mineType.id)} />)}

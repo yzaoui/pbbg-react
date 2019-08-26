@@ -1,4 +1,5 @@
 import React from "react";
+import { RouteComponentProps } from "react-router-dom";
 import MineList from "../../component/mine/MineList";
 import { MineTypeList } from "../../backend/mine";
 import { Subscription } from "rxjs";
@@ -8,7 +9,7 @@ interface State {
     state: "loading" | "error" | MineTypeList;
 }
 
-class IndexPage extends React.Component<{}, State> {
+class MineListPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
         state: "loading"
     };
@@ -32,8 +33,12 @@ class IndexPage extends React.Component<{}, State> {
     }
 
     handleEnterMine = (mineTypeId: number) => {
-        // TODO: Implement
+        this.request = mineService.enterMine({ mineTypeId })
+            .subscribe(
+                res => this.props.history.push({ pathname: "/mine", state: { mine: res.data } }),
+                error => this.setState({ state: "error" })
+            )
     };
 }
 
-export default IndexPage;
+export default MineListPage;
