@@ -10,6 +10,10 @@
     margin: 2px;
 }
 
+.inventory-container > li:not(:hover) > .InventoryItemTooltip {
+    display: none;
+}
+
 .player-equipment {
     position: relative;
     align-self: center;
