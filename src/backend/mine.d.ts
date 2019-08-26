@@ -16,6 +16,11 @@ export type MineEnterRequest = {
 };
 export type MineEnterResponse = Mine;
 
+/**
+ * /mine/exit
+ */
+export type MineExitResponse = Mine;
+
 export interface Mine {
     width: number;
     height: number;

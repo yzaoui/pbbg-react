@@ -12,7 +12,7 @@ const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
 </>;
 
 interface State {
-    state: "loading" | "error" | Mine;
+    state: "loading" | "error" | Mine | "exited";
 }
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
@@ -50,11 +50,21 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
         if (state === "loading") return <LoadingSpinner />;
         else if (state === "error") return "ERROR";
+        else if (state === "exited") return "Exited";
 
         return <>
+            <button className="fancy" style={{ alignSelf: "center" }} onClick={this.handleExitMineClick}>Exit mine</button>
             <div>In mine!</div>
         </>;
     }
+
+    handleExitMineClick = () => {
+        this.request = mineService.exitMine()
+            .subscribe(
+                res => this.setState({ state: "exited" }),
+                error => this.setState({ state: "error" })
+            )
+    };
 }
 
 export default MinePage;
