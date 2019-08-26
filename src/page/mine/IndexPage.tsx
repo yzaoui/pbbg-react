@@ -28,8 +28,12 @@ class IndexPage extends React.Component<{}, State> {
     }
 
     render() {
-        return <MineList state={this.state.state} />;
+        return <MineList state={this.state.state} onEnterMine={this.handleEnterMine} />;
     }
+
+    handleEnterMine = (mineTypeId: number) => {
+        // TODO: Implement
+    };
 }
 
 export default IndexPage;

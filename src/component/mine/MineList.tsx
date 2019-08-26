@@ -7,9 +7,10 @@ import MineListUnknownRow from "./MineListUnknownRow";
 
 interface Props {
     state: "loading" | "error" | MineTypeList;
+    onEnterMine: (mineTypeId: number) => void;
 }
 
-const MineList: React.FC<Props> = ({ state }) => <table className="MineList">
+const MineList: React.FC<Props> = ({ state, onEnterMine }) => <table className="MineList">
     <thead>
         <tr>
             <th>Mine name</th>
@@ -28,7 +29,7 @@ const MineList: React.FC<Props> = ({ state }) => <table className="MineList">
         else if (state === "error") return "ERROR";
 
         return <>
-            {state.types.map(mineType => <MineListRow mineType={mineType} />)}
+            {state.types.map(mineType => <MineListRow key={mineType.id} mineType={mineType} onEnterMineClick={() => onEnterMine(mineType.id)} />)}
             {state.nextUnlockLevel !== undefined && <MineListUnknownRow nextUnlockLevel={state.nextUnlockLevel} />}
         </>;
     })()}
