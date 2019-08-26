@@ -1,0 +1,25 @@
+.MineList {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.MineList > thead {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.MineList > thead th {
+    padding: 12px 8px;
+    background-color: #7924da;
+    color: white;
+}
+
+.MineList > thead th, .MineList > tbody td {
+    border: 1px solid #909090;
+}
+
+.MineList > tbody td {
+    padding: 8px;
+}
