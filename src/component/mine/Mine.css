@@ -1,0 +1,27 @@
+.Mine {
+    overflow: auto;
+}
+
+.Mine > table {
+    table-layout: fixed;
+    border-spacing: 0;
+    border: 1px solid black;
+    margin: 4px auto 0;
+}
+
+.Mine tr {
+    height: 18px;
+}
+
+.Mine td {
+    padding: 0;
+    min-width: 18px;
+    min-height: 18px;
+}
+
+.Mine img {
+    display: block;
+    margin: auto;
+    width: 16px;
+    height: 16px;
+}

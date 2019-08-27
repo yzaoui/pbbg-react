@@ -3,8 +3,9 @@ import { Route, RouteComponentProps } from "react-router";
 import MineListPage from "./MineListPage";
 import { Subscription } from "rxjs";
 import mineService from "../../backend/mine.service";
-import { Mine } from "../../backend/mine";
+import { Mine as MineData } from "../../backend/mine";
 import LoadingSpinner from "../../component/LoadingSpinner";
+import Mine from "../../component/mine/Mine";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -12,7 +13,7 @@ const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
 </>;
 
 interface State {
-    state: "loading" | "error" | Mine | "exited";
+    state: "loading" | "error" | MineData | "exited";
 }
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
@@ -54,7 +55,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
         return <>
             <button className="fancy" style={{ alignSelf: "center" }} onClick={this.handleExitMineClick}>Exit mine</button>
-            <div>In mine!</div>
+            <Mine mine={state} />
         </>;
     }
 

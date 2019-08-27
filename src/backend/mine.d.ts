@@ -24,7 +24,11 @@ export type MineExitResponse = Mine;
 export interface Mine {
     width: number;
     height: number;
-    // cells
+    cells: MineCell[][];
+}
+
+export interface MineCell {
+    imageURL: string;
 }
 
 export interface MineTypeList {
