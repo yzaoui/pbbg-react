@@ -2,8 +2,7 @@ import React from "react";
 import * as UserEndpoint from "../backend/user";
 import userService from "../backend/user.service";
 import { Subscription } from "rxjs";
-import PBBGLevelProgress from "../component/PBBGLevelProgress";
-import "./IndexMemberPage.css"
+import LevelInfo from "../component/LevelInfo";
 
 type UserDetails = UserEndpoint.Response;
 
@@ -36,13 +35,7 @@ class IndexMemberPage extends React.Component<{}, State> {
 
         const { mining } = this.state.state;
 
-        return <>
-            Mining:
-            <div className="level-info">
-                <PBBGLevelProgress level={mining.level} value={mining.relativeExp} max={mining.relativeExpToNextLevel} />
-                <span>Lv. {mining.level} — {mining.relativeExp} / {mining.relativeExpToNextLevel}</span>
-            </div>
-        </>;
+        return <>Mining: <LevelInfo levelProgress={mining} /></>;
     }
 }
 
