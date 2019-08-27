@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Route, RouteComponentProps } from "react-router";
 import MineListPage from "./MineListPage";
 import { Subscription } from "rxjs";
@@ -6,6 +6,10 @@ import mineService from "../../backend/mine.service";
 import { Mine as MineData } from "../../backend/mine";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import Mine from "../../component/mine/Mine";
+import userService from "../../backend/user.service";
+import { LevelProgress } from "../../backend/user";
+import PBBGLevelProgress from "../../component/PBBGLevelProgress";
+import LevelInfo from "../../component/LevelInfo";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -13,7 +17,7 @@ const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
 </>;
 
 interface State {
-    state: "loading" | "error" | MineData | "exited";
+    state: "loading" | "error" | (MineData & { miningLvl: "loading" | LevelProgress }) | "exited";
 }
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
@@ -22,6 +26,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     request?: Subscription;
+    userRequest?: Subscription;
 
     componentDidMount() {
         const locationState = this.props.location.state;
@@ -36,7 +41,9 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                 res => {
                     if (res.data === null) return this.props.history.push("/mine/list");
 
-                    this.setState({ state: res.data })
+                    this.setState({ state: { ...res.data, miningLvl: "loading" } });
+                    // Start loading mining level
+                    this.getUser();
                 },
                 error => this.setState({ state: "error" })
             )
@@ -44,6 +51,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
     componentWillUnmount() {
         this.request && this.request.unsubscribe();
+        this.userRequest && this.userRequest.unsubscribe();
     }
 
     render() {
@@ -54,8 +62,9 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         else if (state === "exited") return "Exited";
 
         return <>
-            <button className="fancy" style={{ alignSelf: "center" }} onClick={this.handleExitMineClick}>Exit mine</button>
-            <Mine mine={state} />
+            <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
+            <Mine mine={state} style={style} />
+            {state.miningLvl === "loading" ? <LoadingSpinner style={style} /> : <LevelInfo levelProgress={state.miningLvl} style={style} />}
         </>;
     }
 
@@ -66,6 +75,24 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                 error => this.setState({ state: "error" })
             )
     };
+
+    getUser = () => {
+        this.userRequest = userService.get()
+            .subscribe(
+                res => {
+                    const miningLvl = res.data.mining;
+                    const state = this.state.state as MineData;
+
+                    this.setState({ state: { ...state, miningLvl } })
+                },
+                error => this.setState({ state: "error" })
+            )
+    };
 }
+
+const style: CSSProperties = {
+    marginBottom: "4px",
+    alignSelf: "center"
+};
 
 export default MinePage;
