@@ -1,13 +1,13 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import PBBGLevelProgress from "./PBBGLevelProgress";
 import "./LevelInfo.css";
 import { LevelProgress } from "../backend/user";
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLDivElement> {
     levelProgress: LevelProgress;
 }
 
-const LevelInfo: React.FC<Props> = ({ levelProgress: { level, relativeExp, relativeExpToNextLevel } }) => <div className="LevelInfo">
+const LevelInfo: React.FC<Props> = ({ levelProgress: { level, relativeExp, relativeExpToNextLevel }, ...rest }) => <div className="LevelInfo" {...rest}>
     <PBBGLevelProgress level={level} value={relativeExp} max={relativeExpToNextLevel} />
     <span>Lv. {level} — {relativeExp} / {relativeExpToNextLevel}</span>
 </div>;
