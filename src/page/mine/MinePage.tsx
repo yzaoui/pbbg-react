@@ -10,6 +10,7 @@ import userService from "../../backend/user.service";
 import { LevelProgress } from "../../backend/user";
 import PBBGLevelProgress from "../../component/PBBGLevelProgress";
 import LevelInfo from "../../component/LevelInfo";
+import MineLog from "../../component/mine/MineLog";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -65,6 +66,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
             <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
             <Mine mine={state} style={style} />
             {state.miningLvl === "loading" ? <LoadingSpinner style={style} /> : <LevelInfo levelProgress={state.miningLvl} style={style} />}
+            <MineLog />
         </>;
     }
 

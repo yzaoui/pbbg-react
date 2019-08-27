@@ -1,0 +1,11 @@
+.MineLog {
+    font-size: 13px;
+    min-height: 140px;
+    max-height: 140px;
+    overflow-y: scroll;
+    flex: 1;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: #c8cadacf;
+}
