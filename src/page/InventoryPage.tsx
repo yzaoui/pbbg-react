@@ -59,12 +59,12 @@ class InventoryPage extends React.Component<{}, State> {
                 </EquipmentSlot>
             </div>
             <ul className="inventory-container">
-                {inventory.items.map(({ id, item }) => <li key={id}>
-                    <InventoryItem item={item} />
+                {inventory.items.map(entry => <li key={entry.id}>
+                    <InventoryItem inventoryEntry={entry} />
                     <InventoryItemTooltip
-                        item={item}
-                        equip={isEquippable(item) && !item.equipped ? () => this.handleEquipUnequip(id, "equip") : undefined}
-                        unequip={isEquippable(item) && item.equipped ? () => this.handleEquipUnequip(id, "unequip") : undefined}
+                        inventoryEntry={entry}
+                        equip={isEquippable(entry) && !entry.equipped ? () => this.handleEquipUnequip(entry.id, "equip") : undefined}
+                        unequip={isEquippable(entry) && entry.equipped ? () => this.handleEquipUnequip(entry.id, "unequip") : undefined}
                         equipDisabled={this.state.equipmentChanging}
                     />
                 </li>)}

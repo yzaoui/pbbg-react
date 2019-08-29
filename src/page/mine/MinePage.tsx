@@ -8,7 +8,6 @@ import LoadingSpinner from "../../component/LoadingSpinner";
 import Mine from "../../component/mine/Mine";
 import userService from "../../backend/user.service";
 import { LevelProgress } from "../../backend/user";
-import PBBGLevelProgress from "../../component/PBBGLevelProgress";
 import LevelInfo from "../../component/LevelInfo";
 import MineLog from "../../component/mine/MineLog";
 
@@ -18,8 +17,10 @@ const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
 </>;
 
 interface State {
-    state: "loading" | "error" | (MineData & { miningLvl: "loading" | LevelProgress }) | "exited";
+    state: "loading" | "error" | MineLoaded | "exited";
 }
+
+type MineLoaded = MineData & { miningLvl: "loading" | LevelProgress };
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
@@ -34,7 +35,10 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
         if (locationState && locationState.mine) {
             this.props.history.replace({ pathname: this.props.location.pathname });
-            return this.setState({ state: locationState.mine });
+            this.setState({ state: { ...locationState.mine, miningLvl: "loading" } });
+            this.getUser();
+
+            return;
         }
 
         this.request = mineService.getMine()
@@ -83,7 +87,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
             .subscribe(
                 res => {
                     const miningLvl = res.data.mining;
-                    const state = this.state.state as MineData;
+                    const state = this.state.state as MineLoaded;
 
                     this.setState({ state: { ...state, miningLvl } })
                 },

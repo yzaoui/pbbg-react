@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.css";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import * as DexEndpoint from "../../backend/dex";
-import { ItemEnum } from "../../backend/dex";
+import { BaseItem } from "../../backend/dex";
 import DexItemEntry from "../../component/dex/DexItemEntry";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
@@ -53,7 +53,7 @@ class DexItemsPage extends React.Component<RouteComponentProps, State> {
 
         const lastId = parseInt(Object.keys(discoveredItems).slice(-1).pop()!!);
 
-        const allEntries: Record<number, ItemEnum | null> = {};
+        const allEntries: Record<number, BaseItem | null> = {};
         for (let i = 0; i <= lastId; i++) {
             allEntries[i] = discoveredItems[i] || null;
         }

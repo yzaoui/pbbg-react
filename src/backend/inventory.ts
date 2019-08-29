@@ -1,4 +1,4 @@
-import { ItemEnum } from "./dex";
+import { BaseItem } from "./dex";
 
 /**
  * /dex/inventory
@@ -9,21 +9,21 @@ export interface EquipUnequipRequest {
 export type InventoryResponse = Inventory
 
 export interface Inventory {
-    items: InventoryItem[];
+    items: InventoryEntry[];
     equipment: Equipment;
 }
 
 export interface Equipment {
-    pickaxe?: Item;
+    pickaxe?: InventoryEntry;
 }
 
-export interface InventoryItem {
+export interface InventoryEntry {
     id: number;
-    item: Item;
+    item: MaterializedItem;
 }
 
-export interface Item {
-    baseItem: ItemEnum;
+export interface MaterializedItem {
+    baseItem: BaseItem;
 }
 
 export interface Stackable {
@@ -43,6 +43,6 @@ export interface Point {
     y: number;
 }
 
-export const isStackable = (item: any): item is Stackable => item.hasOwnProperty("quantity") && typeof item["quantity"] === "number";
-export const isEquippable = (item: any): item is Equippable => item.hasOwnProperty("equipped") && typeof item["equipped"] === "boolean";
-export const isGridPreviewable = (item: any): item is GridPreviewable => item.hasOwnProperty("grid") && typeof item["grid"] === "object";
+export const isStackable = (item: MaterializedItem): item is MaterializedItem & Stackable => "quantity" in item && typeof(item["quantity"]) === "number";
+export const isEquippable = (item: InventoryEntry): item is InventoryEntry & Equippable => "equipped" in item && typeof(item["equipped"]) === "boolean";
+export const isGridPreviewable = (item: any): item is GridPreviewable => "grid" in item && typeof(item["grid"]) === "object" && item["grid"] !== null;

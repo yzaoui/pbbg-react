@@ -1,3 +1,5 @@
+import { Point } from "./inventory";
+
 /**
  * /dex/units
  */
@@ -15,7 +17,7 @@ type UnitIndividualResponse = MyUnitEnum
  * /dex/items
  */
 export interface ItemsResponse {
-    discoveredItems: {[id: number]: ItemEnum};
+    discoveredItems: {[id: number]: BaseItem};
     lastItemIsDiscovered: boolean;
 }
 
@@ -27,8 +29,9 @@ interface MyUnitEnum {
     fullURL: string;
 }
 
-interface ItemEnum {
+interface BaseItem {
     friendlyName: string;
     imgURL: string;
     description: string;
+    grid?: Point[];
 }

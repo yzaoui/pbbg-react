@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ItemEnum } from "../../backend/dex";
+import { BaseItem } from "../../backend/dex";
 import "./DexEntry.css"
 
 interface Props {
     id: string;
-    item: ItemEnum;
+    item: BaseItem;
 }
 
 const DexItemEntry: React.FC<Props> = ({ id, item }) => <li className="entry-li">

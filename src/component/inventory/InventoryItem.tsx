@@ -1,17 +1,17 @@
 import React from "react";
 import "./InventoryItem.css";
-import { isEquippable, isStackable, Item } from "../../backend/inventory";
+import { InventoryEntry, isEquippable, isStackable } from "../../backend/inventory";
 
 interface Props {
-    item: Item;
+    inventoryEntry: InventoryEntry;
 }
 
-const InventoryItem: React.FC<Props> = ({ item }) => <div className="InventoryItem">
-    <img src={item.baseItem.imgURL} alt={item.baseItem.friendlyName + " sprite"} />
-    {isStackable(item) &&
-        <span className="quantity">{item.quantity}</span>
+const InventoryItem: React.FC<Props> = ({ inventoryEntry }) => <div className="InventoryItem">
+    <img src={inventoryEntry.item.baseItem.imgURL} alt={inventoryEntry.item.baseItem.friendlyName + " sprite"} />
+    {isStackable(inventoryEntry.item) &&
+        <span className="quantity">{inventoryEntry.item.quantity}</span>
     }
-    {isEquippable(item) && item.equipped &&
+    {isEquippable(inventoryEntry) && inventoryEntry.equipped &&
         <span className="equipped" title="Currently equipped">E</span>
     }
 </div>;
