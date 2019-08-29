@@ -1,7 +1,6 @@
 .MineLog {
     font-size: 13px;
     min-height: 140px;
-    max-height: 140px;
     overflow-y: scroll;
     flex: 1;
     list-style: none;

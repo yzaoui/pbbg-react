@@ -28,6 +28,7 @@ export interface Mine {
 }
 
 export interface MineCell {
+    name: string;
     imageURL: string;
 }
 

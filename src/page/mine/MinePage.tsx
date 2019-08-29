@@ -10,6 +10,9 @@ import userService from "../../backend/user.service";
 import { LevelProgress } from "../../backend/user";
 import LevelInfo from "../../component/LevelInfo";
 import MineLog from "../../component/mine/MineLog";
+import inventoryService from "../../backend/inventory.service";
+import { InventoryEntry } from "../../backend/inventory";
+import InventoryItem from "../../component/inventory/InventoryItem";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -20,7 +23,10 @@ interface State {
     state: "loading" | "error" | MineLoaded | "exited";
 }
 
-type MineLoaded = MineData & { miningLvl: "loading" | LevelProgress };
+type MineLoaded = MineData & {
+    miningLvl: "loading" | LevelProgress;
+    pickaxe: "loading" | InventoryEntry | null;
+};
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
@@ -35,8 +41,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
         if (locationState && locationState.mine) {
             this.props.history.replace({ pathname: this.props.location.pathname });
-            this.setState({ state: { ...locationState.mine, miningLvl: "loading" } });
-            this.getUser();
+            this.setMineStateAndStartLoadingOtherState(locationState.mine);
 
             return;
         }
@@ -46,9 +51,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                 res => {
                     if (res.data === null) return this.props.history.push("/mine/list");
 
-                    this.setState({ state: { ...res.data, miningLvl: "loading" } });
-                    // Start loading mining level
-                    this.getUser();
+                    this.setMineStateAndStartLoadingOtherState(res.data)
                 },
                 error => this.setState({ state: "error" })
             )
@@ -66,10 +69,30 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         else if (state === "error") return "ERROR";
         else if (state === "exited") return "Exited";
 
+        /* Mining level */
+        let miningLvlComponent;
+        if (state.miningLvl === "loading") miningLvlComponent = <LoadingSpinner style={style} />;
+        else miningLvlComponent = <LevelInfo levelProgress={state.miningLvl} style={style} />;
+
+        /* Pickaxe */
+        let pickaxeComponent;
+        let pickaxe;
+        if (state.pickaxe === "loading") {
+            pickaxeComponent = <LoadingSpinner style={style} />;
+            pickaxe = null;
+        } else if (state.pickaxe === null) {
+            pickaxeComponent = <>No pickaxe equipped</>;
+            pickaxe = null;
+        } else {
+            pickaxeComponent = <InventoryItem inventoryEntry={state.pickaxe} style={style} />;
+            pickaxe = state.pickaxe
+        }
+
         return <>
             <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
-            <Mine mine={state} style={style} />
-            {state.miningLvl === "loading" ? <LoadingSpinner style={style} /> : <LevelInfo levelProgress={state.miningLvl} style={style} />}
+            <Mine mine={state} style={style} pickaxe={pickaxe} />
+            {miningLvlComponent}
+            {pickaxeComponent}
             <MineLog />
         </>;
     }
@@ -82,14 +105,35 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
             )
     };
 
-    getUser = () => {
+    setMineStateAndStartLoadingOtherState = (mineData: MineData) => {
+        this.setState({ state: { ...mineData, miningLvl: "loading", pickaxe: "loading" } });
+        this.loadMiningLevel();
+        this.loadPickaxe()
+    };
+
+    loadMiningLevel = () => {
         this.userRequest = userService.get()
             .subscribe(
                 res => {
-                    const miningLvl = res.data.mining;
                     const state = this.state.state as MineLoaded;
+                    const miningLvl = res.data.mining;
 
                     this.setState({ state: { ...state, miningLvl } })
+                },
+                error => this.setState({ state: "error" })
+            )
+    };
+
+    loadPickaxe = () => {
+        this.userRequest = inventoryService.getInventory()
+            .subscribe(
+                res => {
+                    const state = this.state.state as MineLoaded;
+                    const pickaxe = res.data.equipment.pickaxe;
+
+                    if (pickaxe === undefined) return this.setState({ state: { ...state, pickaxe: null } });
+
+                    this.setState({ state: { ...state, pickaxe } })
                 },
                 error => this.setState({ state: "error" })
             )
