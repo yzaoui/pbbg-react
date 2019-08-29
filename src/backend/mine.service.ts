@@ -33,9 +33,18 @@ const mineService = {
     exitMine: () => RxJS.from(
         fetch("/api/mine/exit", {
             method: "POST",
-            headers: { ...jsonHeader(), ...authHeader() },
+            headers: { ...jsonHeader(), ...authHeader() }
         }).then(
             res => handleResponse<MineEndpoint.MineExitResponse>(res)
+        )
+    ),
+    performMineAction: (req: MineEndpoint.MineActionRequest) => RxJS.from(
+        fetch("/api/mine/perform", {
+            method: "POST",
+            headers: { ...jsonHeader(), ...authHeader() },
+            body: JSON.stringify(req)
+        }).then(
+            res => handleResponse<MineEndpoint.MineActionResponse>(res)
         )
     )
 };
