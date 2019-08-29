@@ -11,7 +11,7 @@ export interface UnitsResponse {
 /**
  * /dex/units/:id
  */
-type UnitIndividualResponse = MyUnitEnum
+export type UnitIndividualResponse = MyUnitEnum
 
 /**
  * /dex/items
@@ -21,7 +21,7 @@ export interface ItemsResponse {
     lastItemIsDiscovered: boolean;
 }
 
-interface MyUnitEnum {
+export interface MyUnitEnum {
     id: number;
     friendlyName: string;
     description: string;
@@ -29,9 +29,14 @@ interface MyUnitEnum {
     fullURL: string;
 }
 
-interface BaseItem {
+export interface BaseItem {
     friendlyName: string;
     imgURL: string;
     description: string;
-    grid?: Point[];
 }
+
+export interface GridPreviewable {
+    grid: Point[];
+}
+
+export const isGridPreviewable = (item: BaseItem): item is BaseItem & GridPreviewable => "grid" in item && typeof(item["grid"]) === "object" && item["grid"] !== null;

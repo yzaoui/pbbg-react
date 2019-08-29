@@ -2,6 +2,8 @@ import React from "react";
 import { InventoryEntry, isEquippable, isStackable } from "../../backend/inventory";
 import "./InventoryItemTooltip.css";
 import "../../common.css";
+import GridPreview from "../GridPreview";
+import { isGridPreviewable } from "../../backend/dex";
 
 interface Props {
     inventoryEntry: InventoryEntry;
@@ -21,6 +23,10 @@ const InventoryItemTooltip: React.FC<Props> = ({ inventoryEntry, equip, unequip,
         <button className="fancy" onClick={inventoryEntry.equipped ? unequip : equip} disabled={equipDisabled}>
             {inventoryEntry.equipped ? "Unequip" : "Equip"}
         </button>
+    </>}
+    {isGridPreviewable(inventoryEntry.item.baseItem) && <>
+        <hr />
+        <GridPreview grid={inventoryEntry.item.baseItem.grid} center={{ x: 1, y: 1 }} />
     </>}
     <hr />
     <div><i>{inventoryEntry.item.baseItem.description}</i></div>

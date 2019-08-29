@@ -1,6 +1,6 @@
 import authHeader from "../helper/auth-header";
 import handleResponse from "../helper/handle-response";
-import * as DexEndpoint from "../backend/dex";
+import * as DexEndpoint from "./dex";
 import * as RxJS from "rxjs";
 
 const dexService = {

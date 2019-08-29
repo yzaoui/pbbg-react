@@ -34,10 +34,6 @@ export interface Equippable {
     equipped: boolean;
 }
 
-export interface GridPreviewable {
-    grid: Point[];
-}
-
 export interface Point {
     x: number;
     y: number;
@@ -45,4 +41,3 @@ export interface Point {
 
 export const isStackable = (item: MaterializedItem): item is MaterializedItem & Stackable => "quantity" in item && typeof(item["quantity"]) === "number";
 export const isEquippable = (item: InventoryEntry): item is InventoryEntry & Equippable => "equipped" in item && typeof(item["equipped"]) === "boolean";
-export const isGridPreviewable = (item: any): item is GridPreviewable => "grid" in item && typeof(item["grid"]) === "object" && item["grid"] !== null;
