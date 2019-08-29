@@ -3,7 +3,7 @@ import { Route, RouteComponentProps } from "react-router";
 import MineListPage from "./MineListPage";
 import { Subscription } from "rxjs";
 import mineService from "../../backend/mine.service";
-import { Mine as MineData } from "../../backend/mine";
+import { Mine as MineData, MineActionResult } from "../../backend/mine";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import Mine from "../../component/mine/Mine";
 import userService from "../../backend/user.service";
@@ -26,6 +26,7 @@ interface State {
 type MineLoaded = MineData & {
     miningLvl: "loading" | LevelProgress;
     pickaxe: "loading" | InventoryEntry | null;
+    results: MineActionResult[];
 };
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
@@ -33,8 +34,9 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         state: "loading"
     };
 
-    request?: Subscription;
+    mineRequest?: Subscription;
     userRequest?: Subscription;
+    inventoryRequest?: Subscription;
 
     componentDidMount() {
         const locationState = this.props.location.state;
@@ -46,20 +48,13 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
             return;
         }
 
-        this.request = mineService.getMine()
-            .subscribe(
-                res => {
-                    if (res.data === null) return this.props.history.push("/mine/list");
-
-                    this.setMineStateAndStartLoadingOtherState(res.data)
-                },
-                error => this.setState({ state: "error" })
-            )
+        this.loadMine();
     }
 
     componentWillUnmount() {
-        this.request && this.request.unsubscribe();
+        this.mineRequest && this.mineRequest.unsubscribe();
         this.userRequest && this.userRequest.unsubscribe();
+        this.inventoryRequest && this.inventoryRequest.unsubscribe();
     }
 
     render() {
@@ -90,25 +85,41 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
         return <>
             <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
-            <Mine mine={state} style={style} pickaxe={pickaxe} />
+            <Mine mine={state} style={style} pickaxe={pickaxe} onMineAction={this.handleMineAction} />
             {miningLvlComponent}
             {pickaxeComponent}
-            <MineLog />
+            <MineLog results={state.results} />
         </>;
     }
 
     handleExitMineClick = () => {
-        this.request = mineService.exitMine()
+        this.mineRequest = mineService.exitMine()
             .subscribe(
                 res => this.setState({ state: "exited" }),
                 error => this.setState({ state: "error" })
             )
     };
 
+    handleMineAction = (x: number, y: number) => {
+        this.performMineAction(x, y);
+    };
+
     setMineStateAndStartLoadingOtherState = (mineData: MineData) => {
-        this.setState({ state: { ...mineData, miningLvl: "loading", pickaxe: "loading" } });
+        this.setState({ state: { ...mineData, miningLvl: "loading", pickaxe: "loading", results: [] } });
         this.loadMiningLevel();
         this.loadPickaxe()
+    };
+
+    loadMine = () => {
+        this.mineRequest = mineService.getMine()
+            .subscribe(
+                res => {
+                    if (res.data === null) return this.props.history.push("/mine/list");
+
+                    this.setMineStateAndStartLoadingOtherState(res.data)
+                },
+                error => this.setState({ state: "error" })
+            )
     };
 
     loadMiningLevel = () => {
@@ -125,7 +136,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     loadPickaxe = () => {
-        this.userRequest = inventoryService.getInventory()
+        this.inventoryRequest = inventoryService.getInventory()
             .subscribe(
                 res => {
                     const state = this.state.state as MineLoaded;
@@ -134,6 +145,18 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                     if (pickaxe === undefined) return this.setState({ state: { ...state, pickaxe: null } });
 
                     this.setState({ state: { ...state, pickaxe } })
+                },
+                error => this.setState({ state: "error" })
+            )
+    };
+
+    performMineAction = (x: number, y: number) => {
+        this.mineRequest = mineService.performMineAction({ x, y })
+            .subscribe(
+                res => {
+                    const state = this.state.state as MineLoaded;
+
+                    this.setState({ state: { ...state, results: state.results.concat(res.data) } });
                 },
                 error => this.setState({ state: "error" })
             )

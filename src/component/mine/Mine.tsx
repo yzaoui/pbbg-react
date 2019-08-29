@@ -7,6 +7,7 @@ import { isGridPreviewable } from "../../backend/dex";
 interface Props extends HTMLAttributes<HTMLDivElement> {
     mine: MineData;
     pickaxe: InventoryEntry | null;
+    onMineAction: (x: number, y: number) => void;
 }
 
 class Mine extends React.Component<Props> {
@@ -19,7 +20,7 @@ class Mine extends React.Component<Props> {
     }
 
     render() {
-        const { mine, pickaxe, ...rest } = this.props;
+        const { mine, pickaxe, onMineAction, ...rest } = this.props;
         const pickaxeLoaded = pickaxe !== null;
 
         return <div className="Mine" {...rest}>
@@ -30,7 +31,7 @@ class Mine extends React.Component<Props> {
                         {row.map((cell, x) =>
                             <td key={x}
                                 ref={this.tdRefs[y][x]}
-                                {...(pickaxeLoaded ? { onMouseEnter: this.handleCellMouseEnter } : {})}
+                                {...(pickaxeLoaded ? { onMouseEnter: this.handleCellMouseEnter, onClick: this.handleCellClick } : {})}
                                 title={cell && cell.name}
                                 data-x={x}
                                 data-y={y}
@@ -45,9 +46,7 @@ class Mine extends React.Component<Props> {
         </div>;
     }
 
-    handleCellMouseEnter: MouseEventHandler<HTMLTableDataCellElement> = (event) => {
-        const td = event.currentTarget;
-
+    handleCellMouseEnter: MouseEventHandler<HTMLTableDataCellElement> = ({ currentTarget: td }) => {
         const x = parseInt(td.getAttribute("data-x")!!);
         const y = parseInt(td.getAttribute("data-y")!!);
 
@@ -70,6 +69,13 @@ class Mine extends React.Component<Props> {
 
     handleMineMouseLeave: MouseEventHandler<HTMLTableElement> = (event) => {
         this.clearInRangeFromAllCells();
+    };
+
+    handleCellClick: MouseEventHandler<HTMLTableDataCellElement> = ({ currentTarget: td }) => {
+        const x = parseInt(td.getAttribute("data-x")!!);
+        const y = parseInt(td.getAttribute("data-y")!!);
+
+        this.props.onMineAction(x, y);
     };
 
     clearInRangeFromAllCells = () => this.tdRefs.forEach(row => row.forEach(cell => cell.current!!.removeAttribute("data-in-range")));
