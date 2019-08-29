@@ -59,7 +59,7 @@ class InventoryPage extends React.Component<{}, State> {
                 </EquipmentSlot>
             </div>
             <ul className="inventory-container">
-                {inventory.items.map(entry => <li key={entry.id}>
+                {inventory.items.sort((a, b) => a.id - b.id).map(entry => <li key={entry.id}>
                     <InventoryItem inventoryEntry={entry} />
                     <InventoryItemTooltip
                         inventoryEntry={entry}
