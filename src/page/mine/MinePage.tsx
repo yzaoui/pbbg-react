@@ -19,19 +19,23 @@ const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/list"} exact component={MineListPage} />
 </>;
 
-interface State {
-    state: "loading" | "error" | MineLoaded | "exited";
-}
-
-type MineLoaded = MineData & {
+type State = {
+    status: "loading"
+} | {
+    status: "error"
+} | {
+    status: "loaded"
+    mine: MineData;
     miningLvl: "loading" | LevelProgress;
     pickaxe: "loading" | InventoryEntry | null;
     results: MineActionResult[];
+} | {
+    status: "exited"
 };
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        status: "loading"
     };
 
     mineRequest?: Subscription;
@@ -58,45 +62,43 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     }
 
     render() {
-        const state = this.state.state;
-
-        if (state === "loading") return <LoadingSpinner />;
-        else if (state === "error") return "ERROR";
-        else if (state === "exited") return "Exited";
+        if (this.state.status === "loading") return <LoadingSpinner />;
+        else if (this.state.status === "error") return <>ERROR</>;
+        else if (this.state.status === "exited") return <>Exited</>;
 
         /* Mining level */
         let miningLvlComponent;
-        if (state.miningLvl === "loading") miningLvlComponent = <LoadingSpinner style={style} />;
-        else miningLvlComponent = <LevelInfo levelProgress={state.miningLvl} style={style} />;
+        if (this.state.miningLvl === "loading") miningLvlComponent = <LoadingSpinner style={style} />;
+        else miningLvlComponent = <LevelInfo levelProgress={this.state.miningLvl} style={style} />;
 
         /* Pickaxe */
         let pickaxeComponent;
         let pickaxe;
-        if (state.pickaxe === "loading") {
+        if (this.state.pickaxe === "loading") {
             pickaxeComponent = <LoadingSpinner style={style} />;
             pickaxe = null;
-        } else if (state.pickaxe === null) {
+        } else if (this.state.pickaxe === null) {
             pickaxeComponent = <>No pickaxe equipped</>;
             pickaxe = null;
         } else {
-            pickaxeComponent = <InventoryItem inventoryEntry={state.pickaxe} style={style} />;
-            pickaxe = state.pickaxe
+            pickaxeComponent = <InventoryItem inventoryEntry={this.state.pickaxe} style={style} />;
+            pickaxe = this.state.pickaxe
         }
 
         return <>
             <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
-            <Mine mine={state} style={style} pickaxe={pickaxe} onMineAction={this.handleMineAction} />
+            <Mine mine={this.state.mine} style={style} pickaxe={pickaxe} onMineAction={this.handleMineAction} />
             {miningLvlComponent}
             {pickaxeComponent}
-            <MineLog results={state.results} />
+            <MineLog results={this.state.results} />
         </>;
     }
 
     handleExitMineClick = () => {
         this.mineRequest = mineService.exitMine()
             .subscribe(
-                res => this.setState({ state: "exited" }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "exited" }),
+                error => this.setState({ status: "error" })
             )
     };
 
@@ -105,7 +107,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     setMineStateAndStartLoadingOtherState = (mineData: MineData) => {
-        this.setState({ state: { ...mineData, miningLvl: "loading", pickaxe: "loading", results: [] } });
+        this.setState({ status: "loaded", mine: mineData, miningLvl: "loading", pickaxe: "loading", results: [] });
         this.loadMiningLevel();
         this.loadPickaxe()
     };
@@ -118,7 +120,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
                     this.setMineStateAndStartLoadingOtherState(res.data)
                 },
-                error => this.setState({ state: "error" })
+                error => this.setState({ status: "error" })
             )
     };
 
@@ -126,12 +128,12 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         this.userRequest = userService.get()
             .subscribe(
                 res => {
-                    const state = this.state.state as MineLoaded;
+                    if (this.state.status !== "loaded") throw Error();
                     const miningLvl = res.data.mining;
 
-                    this.setState({ state: { ...state, miningLvl } })
+                    this.setState({ ...this.state, miningLvl });
                 },
-                error => this.setState({ state: "error" })
+                error => this.setState({ status: "error" })
             )
     };
 
@@ -139,14 +141,12 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         this.inventoryRequest = inventoryService.getInventory()
             .subscribe(
                 res => {
-                    const state = this.state.state as MineLoaded;
+                    if (this.state.status !== "loaded") throw Error();
                     const pickaxe = res.data.equipment.pickaxe;
 
-                    if (pickaxe === undefined) return this.setState({ state: { ...state, pickaxe: null } });
-
-                    this.setState({ state: { ...state, pickaxe } })
+                    this.setState({ ...this.state, pickaxe });
                 },
-                error => this.setState({ state: "error" })
+                error => this.setState({ status: "error" })
             )
     };
 
@@ -154,11 +154,11 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         this.mineRequest = mineService.performMineAction({ x, y })
             .subscribe(
                 res => {
-                    const state = this.state.state as MineLoaded;
+                    if (this.state.status !== "loaded") throw Error();
 
-                    this.setState({ state: { ...state, results: state.results.concat(res.data) } });
+                    this.setState({ ...this.state, results: this.state.results.concat(res.data) });
                 },
-                error => this.setState({ state: "error" })
+                error => this.setState({ status: "error" })
             )
     };
 }

@@ -14,7 +14,7 @@ export interface Inventory {
 }
 
 export interface Equipment {
-    pickaxe?: InventoryEntry;
+    pickaxe: InventoryEntry | null;
 }
 
 export interface InventoryEntry {

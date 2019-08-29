@@ -4,7 +4,7 @@ import { InventoryEntry } from "../../backend/inventory";
 import classNames from "classnames";
 
 interface Props {
-    item?: InventoryEntry;
+    item: InventoryEntry | null;
     style?: CSSProperties
 }
 
