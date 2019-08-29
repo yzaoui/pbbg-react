@@ -9,6 +9,10 @@
     margin: auto;
 }
 
+.Mine > table[data-can-mine] {
+    cursor: pointer;
+}
+
 .Mine tr {
     height: 18px;
 }
@@ -24,4 +28,8 @@
     margin: auto;
     width: 16px;
     height: 16px;
+}
+
+.Mine td[data-in-range] {
+    background-color: limegreen;
 }
