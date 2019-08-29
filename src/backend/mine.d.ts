@@ -45,7 +45,7 @@ export interface MineCell {
 
 export interface MineTypeList {
     types: MineType[];
-    nextUnlockLevel?: number;
+    nextUnlockLevel: number | null;
 }
 
 export interface MineType {

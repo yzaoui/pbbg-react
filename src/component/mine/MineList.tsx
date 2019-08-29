@@ -28,7 +28,7 @@ const MineList: React.FC<Props> = ({ state, onEnterMine }) => <table className="
 
         return <>
             {state.types.map(mineType => <MineListRow key={mineType.id} mineType={mineType} onEnterMineClick={() => onEnterMine(mineType.id)} />)}
-            {state.nextUnlockLevel !== undefined && <MineListUnknownRow nextUnlockLevel={state.nextUnlockLevel} />}
+            {state.nextUnlockLevel !== null && <MineListUnknownRow nextUnlockLevel={state.nextUnlockLevel} />}
         </>;
     })()}
     </tbody>
