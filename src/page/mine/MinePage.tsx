@@ -22,6 +22,7 @@ import pickaxeOGG from "../../audio/pickaxe.ogg";
 import exitMineMP3 from "../../audio/enter_mine.mp3";
 // @ts-ignore
 import exitMineOGG from "../../audio/enter_mine.ogg";
+import { Link } from "react-router-dom";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -108,7 +109,11 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         }
 
         return <>
-            <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
+            {this.state.status === "loaded" ?
+                <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
+                :
+                <Link to={"/mine/list"} className="fancy" style={style}>Return to mine list</Link>
+            }
             {this.state.status === "loaded" &&
                 <Mine mine={this.state.mine} style={style} pickaxe={pickaxe} submittingAction={this.state.submittingAction} onMineAction={this.handleMineAction} />
             }
