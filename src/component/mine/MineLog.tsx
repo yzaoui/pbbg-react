@@ -7,9 +7,15 @@ interface Props {
     results: (MinedItemResult | LevelUpData)[];
 }
 
-const MineLog: React.FC<Props> = ({ results }) => <ul className="MineLog">
-    {results.map((result, i) => isMinedItemResult(result) ? <ItemResult key={i} {...result} /> : <LevelUp key={i} {...result} />)}
-</ul>;
+class MineLog extends React.Component<Props> {
+    render() {
+        return <ul className="MineLog">
+            {this.props.results.map((result, i) => this.isMinedItemResult(result) ? <ItemResult key={i} {...result} /> : <LevelUp key={i} {...result} />)}
+        </ul>;
+    }
+
+    isMinedItemResult = (result: MinedItemResult | LevelUpData): result is MinedItemResult => "item" in result;
+}
 
 const ItemResult: React.FC<MinedItemResult> = ({ item, expPerIndividualItem }) => <li className="ItemResult">
     {isStackable(item) ?
@@ -22,7 +28,5 @@ const ItemResult: React.FC<MinedItemResult> = ({ item, expPerIndividualItem }) =
 const LevelUp: React.FC<LevelUpData> = ({ newLevel, additionalMessage }) => <li className="LevelUp">
     <>Mining level increased to level {newLevel}!{additionalMessage !== null ? ` ${additionalMessage}` : ""}</>
 </li>;
-
-const isMinedItemResult =  (result: MinedItemResult | LevelUpData): result is MinedItemResult => "item" in result;
 
 export default MineLog;
