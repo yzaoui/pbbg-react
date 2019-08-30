@@ -13,6 +13,11 @@ import MineLog from "../../component/mine/MineLog";
 import inventoryService from "../../backend/inventory.service";
 import { InventoryEntry, Point } from "../../backend/inventory";
 import InventoryItem from "../../component/inventory/InventoryItem";
+import { Howl } from "howler";
+// @ts-ignore
+import pickaxeMP3 from "../../audio/pickaxe.mp3";
+// @ts-ignore
+import pickaxeOGG from "../../audio/pickaxe.ogg";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -42,6 +47,11 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     mineRequest?: Subscription;
     userRequest?: Subscription;
     inventoryRequest?: Subscription;
+
+    pickaxeSound = new Howl({
+        src: [pickaxeMP3, pickaxeOGG],
+        preload: true
+    });
 
     componentDidMount() {
         const locationState = this.props.location.state;
@@ -158,6 +168,8 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
             .subscribe(
                 res => {
                     if (this.state.status !== "loaded") throw Error();
+
+                    this.pickaxeSound.play();
 
                     this.setState({
                         ...this.state,
