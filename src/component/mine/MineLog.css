@@ -1,10 +1,27 @@
 .MineLog {
     font-size: 13px;
     min-height: 140px;
+    max-height: 176px;
     overflow-y: scroll;
     flex: 1;
     list-style: none;
     margin: 0;
     padding: 0;
     background-color: #c8cadacf;
+}
+
+.MineLog > .ItemResult, .MineLog > .LevelUp {
+    height: 26px;
+    padding: 4px;
+    box-sizing: border-box;
+}
+
+.MineLog > .ItemResult > img {
+    max-height: 100%;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+
+.MineLog > .LevelUp {
+    color: #04b104;
 }
