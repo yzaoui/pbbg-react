@@ -18,6 +18,10 @@ import { Howl } from "howler";
 import pickaxeMP3 from "../../audio/pickaxe.mp3";
 // @ts-ignore
 import pickaxeOGG from "../../audio/pickaxe.ogg";
+// @ts-ignore
+import exitMineMP3 from "../../audio/enter_mine.mp3";
+// @ts-ignore
+import exitMineOGG from "../../audio/enter_mine.ogg";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -50,6 +54,11 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
     pickaxeSound = new Howl({
         src: [pickaxeMP3, pickaxeOGG],
+        preload: true
+    });
+
+    exitSound = new Howl({
+        src: [exitMineMP3, exitMineOGG],
         preload: true
     });
 
@@ -108,7 +117,10 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     handleExitMineClick = () => {
         this.mineRequest = mineService.exitMine()
             .subscribe(
-                res => this.setState({ status: "exited" }),
+                res => {
+                    this.exitSound.play();
+                    this.setState({ status: "exited" });
+                },
                 error => this.setState({ status: "error" })
             )
     };
