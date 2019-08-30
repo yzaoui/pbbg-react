@@ -31,16 +31,17 @@ class Mine extends React.Component<Props> {
         const pickaxeLoaded = pickaxe !== null;
         const isSubmittingAction = submittingAction !== null;
 
-        return <div className="Mine" {...rest}>
-            <table {...(pickaxeLoaded && !isSubmittingAction ? { "data-can-mine": "", onMouseLeave: this.handleMineMouseLeave } :
-                isSubmittingAction ? { "data-submitting": "" } : {})}>
+        return <div className="Mine" {...(pickaxeLoaded && !isSubmittingAction ? { "data-can-mine": "", onMouseLeave: this.handleMineMouseLeave } :
+            isSubmittingAction ? { "data-submitting": "" } : {})} {...rest}>
+            <table>
                 <tbody>
                 {mine.cells.map((row, y) =>
                     <tr key={y}>
                         {row.map((cell, x) =>
                             <td key={x}
                                 ref={this.tdRefs[y][x]}
-                                {...(pickaxeLoaded && !isSubmittingAction ? { onMouseEnter: this.handleCellMouseEnter, onClick: this.handleCellClick } : {})}
+                                {...(pickaxeLoaded ? { onMouseEnter: this.handleCellMouseEnter } : {})}
+                                {...(pickaxeLoaded && !isSubmittingAction ? { onClick: this.handleCellClick } : {})}
                                 title={cell && cell.name}
                                 data-x={x}
                                 data-y={y}

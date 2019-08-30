@@ -9,11 +9,11 @@
     margin: auto;
 }
 
-.Mine > table[data-can-mine] {
+.Mine[data-can-mine] > table {
     cursor: pointer;
 }
 
-.Mine > table[data-submitting] {
+.Mine[data-submitting] > table {
     cursor: wait;
 }
 
@@ -34,7 +34,7 @@
     height: 16px;
 }
 
-.Mine td[data-in-range] {
+.Mine:not([data-submitting]) td[data-in-range] {
     background-color: limegreen;
 }
 
