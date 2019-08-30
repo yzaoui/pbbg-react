@@ -1,17 +1,14 @@
 import React from "react";
 import "./MineLog.css";
-import { LevelUp as LevelUpData, MineActionResult, MinedItemResult } from "../../backend/mine";
+import { LevelUp as LevelUpData, MinedItemResult } from "../../backend/mine";
 import { isStackable } from "../../backend/inventory";
 
 interface Props {
-    results: MineActionResult[];
+    results: (MinedItemResult | LevelUpData)[];
 }
 
 const MineLog: React.FC<Props> = ({ results }) => <ul className="MineLog">
-    {results.map((result, i) => <React.Fragment key={i}>
-        {result.minedItemResults.map((itemRes, j) => <ItemResult key={`${i}-i${j}`} {...itemRes} />)}
-        {result.levelUps.map((lvlUp, j) => <LevelUp key={`${i}-l${j}`} {...lvlUp} />)}
-    </React.Fragment>)}
+    {results.map((result, i) => isMinedItemResult(result) ? <ItemResult key={i} {...result} /> : <LevelUp key={i} {...result} />)}
 </ul>;
 
 const ItemResult: React.FC<MinedItemResult> = ({ item, expPerIndividualItem }) => <li className="ItemResult">
@@ -25,5 +22,7 @@ const ItemResult: React.FC<MinedItemResult> = ({ item, expPerIndividualItem }) =
 const LevelUp: React.FC<LevelUpData> = ({ newLevel, additionalMessage }) => <li className="LevelUp">
     <>Mining level increased to level {newLevel}!{additionalMessage !== null ? ` ${additionalMessage}` : ""}</>
 </li>;
+
+const isMinedItemResult =  (result: MinedItemResult | LevelUpData): result is MinedItemResult => "item" in result;
 
 export default MineLog;

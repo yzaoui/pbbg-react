@@ -3,7 +3,7 @@ import { Route, RouteComponentProps } from "react-router";
 import MineListPage from "./MineListPage";
 import { Subscription } from "rxjs";
 import mineService from "../../backend/mine.service";
-import { Mine as MineData, MineActionResult } from "../../backend/mine";
+import { LevelUp, Mine as MineData, MinedItemResult } from "../../backend/mine";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import Mine from "../../component/mine/Mine";
 import userService from "../../backend/user.service";
@@ -11,7 +11,7 @@ import { LevelProgress } from "../../backend/user";
 import LevelInfo from "../../component/LevelInfo";
 import MineLog from "../../component/mine/MineLog";
 import inventoryService from "../../backend/inventory.service";
-import { InventoryEntry } from "../../backend/inventory";
+import { InventoryEntry, Point } from "../../backend/inventory";
 import InventoryItem from "../../component/inventory/InventoryItem";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
@@ -28,7 +28,8 @@ type State = {
     mine: MineData;
     miningLvl: "loading" | LevelProgress;
     pickaxe: "loading" | InventoryEntry | null;
-    results: MineActionResult[];
+    submittingAction: Point | null;
+    results: (MinedItemResult | LevelUp)[];
 } | {
     status: "exited"
 };
@@ -87,7 +88,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
         return <>
             <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
-            <Mine mine={this.state.mine} style={style} pickaxe={pickaxe} onMineAction={this.handleMineAction} />
+            <Mine mine={this.state.mine} style={style} pickaxe={pickaxe} submittingAction={this.state.submittingAction} onMineAction={this.handleMineAction} />
             {miningLvlComponent}
             {pickaxeComponent}
             <MineLog results={this.state.results} />
@@ -107,7 +108,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     setMineStateAndStartLoadingOtherState = (mineData: MineData) => {
-        this.setState({ status: "loaded", mine: mineData, miningLvl: "loading", pickaxe: "loading", results: [] });
+        this.setState({ status: "loaded", mine: mineData, miningLvl: "loading", pickaxe: "loading", submittingAction: null, results: [] });
         this.loadMiningLevel();
         this.loadPickaxe()
     };
@@ -151,12 +152,20 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     performMineAction = (x: number, y: number) => {
+        this.setState({ ...this.state, submittingAction: { x, y } });
+
         this.mineRequest = mineService.performMineAction({ x, y })
             .subscribe(
                 res => {
                     if (this.state.status !== "loaded") throw Error();
 
-                    this.setState({ ...this.state, results: this.state.results.concat(res.data) });
+                    this.setState({
+                        ...this.state,
+                        mine: res.data.mine,
+                        miningLvl: res.data.miningLvl,
+                        submittingAction: null,
+                        results: this.state.results.concat(res.data.minedItemResults).concat(res.data.levelUps)
+                    });
                 },
                 error => this.setState({ status: "error" })
             )

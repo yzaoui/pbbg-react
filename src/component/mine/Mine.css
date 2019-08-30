@@ -13,6 +13,10 @@
     cursor: pointer;
 }
 
+.Mine > table[data-submitting] {
+    cursor: wait;
+}
+
 .Mine tr {
     height: 18px;
 }
@@ -32,4 +36,23 @@
 
 .Mine td[data-in-range] {
     background-color: limegreen;
+}
+
+.Mine td[data-submitting] {
+    animation: submitting-cell-anim 1.5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes submitting-cell-anim {
+    0% {
+        background-color: #258b25;
+    }
+
+    50% {
+        background-color: #9d9d9d;
+    }
+
+    100% {
+        background-color: #258b25;
+    }
 }

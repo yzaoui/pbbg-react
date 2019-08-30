@@ -2,6 +2,7 @@
  * /mine
  */
 import { MaterializedItem } from "./inventory";
+import { LevelProgress } from "./user";
 
 export type MineResponse = Mine | null;
 
@@ -56,7 +57,9 @@ export interface MineType {
 
 export interface MineActionResult {
     minedItemResults: MinedItemResult[];
-    levelUps: LevelUp[]
+    levelUps: LevelUp[];
+    mine: Mine;
+    miningLvl: LevelProgress;
 }
 
 export interface MinedItemResult {
