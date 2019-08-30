@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import "./MineLog.css";
 import { LevelUp as LevelUpData, MinedItemResult } from "../../backend/mine";
 import { isStackable } from "../../backend/inventory";
@@ -8,10 +8,24 @@ interface Props {
 }
 
 class MineLog extends React.Component<Props> {
+    ulRef: RefObject<HTMLUListElement>;
+
+    constructor(props: Props) {
+        super(props);
+
+        this.ulRef = React.createRef();
+    }
+
     render() {
-        return <ul className="MineLog">
+        return <ul className="MineLog" ref={this.ulRef}>
             {this.props.results.map((result, i) => this.isMinedItemResult(result) ? <ItemResult key={i} {...result} /> : <LevelUp key={i} {...result} />)}
         </ul>;
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
+        if (prevProps.results.length !== this.props.results.length) {
+            this.ulRef.current!!.scrollTop = this.ulRef.current!!.scrollHeight;
+        }
     }
 
     isMinedItemResult = (result: MinedItemResult | LevelUpData): result is MinedItemResult => "item" in result;

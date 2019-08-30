@@ -7,7 +7,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    background-color: #c8cadacf;
+    background-color: #d6d9f7cf;
 }
 
 .MineLog > .ItemResult, .MineLog > .LevelUp {
@@ -24,4 +24,8 @@
 
 .MineLog > .LevelUp {
     color: #04b104;
+}
+
+.MineLog > *:nth-child(even) {
+    background-color: #edf1ffcf;
 }
