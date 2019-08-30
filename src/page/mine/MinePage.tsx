@@ -29,18 +29,21 @@ const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
 </>;
 
 type State = {
-    status: "loading"
+    status: "loading";
 } | {
-    status: "error"
+    status: "error";
 } | {
-    status: "loaded"
+    status: "loaded";
     mine: MineData;
     miningLvl: "loading" | LevelProgress;
     pickaxe: "loading" | InventoryEntry | null;
     submittingAction: Point | null;
     results: (MinedItemResult | LevelUp)[];
 } | {
-    status: "exited"
+    status: "exited";
+    miningLvl: "loading" | LevelProgress;
+    pickaxe: "loading" | InventoryEntry | null;
+    results: (MinedItemResult | LevelUp)[];
 };
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
@@ -84,7 +87,6 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     render() {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return <>ERROR</>;
-        else if (this.state.status === "exited") return <>Exited</>;
 
         /* Mining level */
         let miningLvlComponent;
@@ -107,22 +109,17 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
         return <>
             <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
-            <Mine mine={this.state.mine} style={style} pickaxe={pickaxe} submittingAction={this.state.submittingAction} onMineAction={this.handleMineAction} />
+            {this.state.status === "loaded" &&
+                <Mine mine={this.state.mine} style={style} pickaxe={pickaxe} submittingAction={this.state.submittingAction} onMineAction={this.handleMineAction} />
+            }
             {miningLvlComponent}
             {pickaxeComponent}
-            <MineLog results={this.state.results} />
+            <MineLog results={this.state.results} expanded={this.state.status === "exited"} />
         </>;
     }
 
     handleExitMineClick = () => {
-        this.mineRequest = mineService.exitMine()
-            .subscribe(
-                res => {
-                    this.exitSound.play();
-                    this.setState({ status: "exited" });
-                },
-                error => this.setState({ status: "error" })
-            )
+        this.exitMine();
     };
 
     handleMineAction = (x: number, y: number) => {
@@ -190,6 +187,17 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                         submittingAction: null,
                         results: this.state.results.concat(res.data.minedItemResults).concat(res.data.levelUps)
                     });
+                },
+                error => this.setState({ status: "error" })
+            )
+    };
+
+    exitMine = () => {
+        this.mineRequest = mineService.exitMine()
+            .subscribe(
+                res => {
+                    this.exitSound.play();
+                    this.setState({ status: "exited" });
                 },
                 error => this.setState({ status: "error" })
             )

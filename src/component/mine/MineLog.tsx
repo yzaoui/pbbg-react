@@ -2,9 +2,11 @@ import React, { RefObject } from "react";
 import "./MineLog.css";
 import { LevelUp as LevelUpData, MinedItemResult } from "../../backend/mine";
 import { isStackable } from "../../backend/inventory";
+import classNames from "classnames";
 
 interface Props {
     results: (MinedItemResult | LevelUpData)[];
+    expanded?: boolean;
 }
 
 class MineLog extends React.Component<Props> {
@@ -17,7 +19,7 @@ class MineLog extends React.Component<Props> {
     }
 
     render() {
-        return <ul className="MineLog" ref={this.ulRef}>
+        return <ul className={classNames("MineLog", { "expanded": this.props.expanded })} ref={this.ulRef}>
             {this.props.results.map((result, i) => this.isMinedItemResult(result) ? <ItemResult key={i} {...result} /> : <LevelUp key={i} {...result} />)}
         </ul>;
     }
