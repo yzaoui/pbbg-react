@@ -53,6 +53,7 @@ export interface MineType {
     id: number;
     name: string;
     minLevel: number;
+    bgURL: string;
 }
 
 export interface MineActionResult {

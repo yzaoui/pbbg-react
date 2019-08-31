@@ -2,6 +2,7 @@
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+    table-layout: fixed;
 }
 
 .MineList > thead {
@@ -18,6 +19,15 @@
 
 .MineList > thead th, .MineList > tbody td {
     border: 1px solid #909090;
+    text-align: center;
+}
+
+.MineList > thead th:nth-child(2) {
+    width: 125px;
+}
+
+.MineList > thead th:nth-child(3) {
+    width: 200px;
 }
 
 .MineList > tbody td {
