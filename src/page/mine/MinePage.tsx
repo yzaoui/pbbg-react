@@ -19,6 +19,10 @@ import pickaxeMP3 from "../../audio/pickaxe.mp3";
 // @ts-ignore
 import pickaxeOGG from "../../audio/pickaxe.ogg";
 // @ts-ignore
+import levelUpMP3 from "../../audio/level-up.mp3";
+// @ts-ignore
+import levelUpOGG from "../../audio/level-up.ogg";
+// @ts-ignore
 import exitMineMP3 from "../../audio/enter_mine.mp3";
 // @ts-ignore
 import exitMineOGG from "../../audio/enter_mine.ogg";
@@ -58,6 +62,11 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
     pickaxeSound = new Howl({
         src: [pickaxeMP3, pickaxeOGG],
+        preload: true
+    });
+
+    levelUpSound = new Howl({
+        src: [levelUpMP3, levelUpOGG],
         preload: true
     });
 
@@ -184,6 +193,10 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                     if (this.state.status !== "loaded") throw Error();
 
                     this.pickaxeSound.play();
+
+                    if (res.data.levelUps.length > 0) {
+                        this.levelUpSound.play();
+                    }
 
                     this.setState({
                         ...this.state,
