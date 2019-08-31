@@ -24,6 +24,7 @@ class ChangePasswordForm extends React.Component<{}, State> {
                     <input
                         type="password"
                         id="current-password"
+                        autoComplete="current-password"
                         onChange={this.handleCurrentPasswordChange}
                         value={this.state.currentPassword}
                         required
@@ -34,6 +35,7 @@ class ChangePasswordForm extends React.Component<{}, State> {
                     <input
                         type="password"
                         id="new-password"
+                        autoComplete="new-password"
                         onChange={this.handleNewPasswordChange}
                         value={this.state.newPassword}
                         pattern={PASSWORD_REGEX.pattern}
@@ -46,6 +48,7 @@ class ChangePasswordForm extends React.Component<{}, State> {
                     <input
                         type="password"
                         id="confirm-new-password"
+                        autoComplete="new-password"
                         onChange={this.handleConfirmNewPasswordChange}
                         value={this.state.confirmNewPassword}
                         required
