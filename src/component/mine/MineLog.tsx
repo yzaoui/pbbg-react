@@ -35,7 +35,7 @@ class MineLog extends React.Component<Props> {
 
 const ItemResult: React.FC<MinedItemResult> = ({ item, expPerIndividualItem }) => <li className="ItemResult">
     {isStackable(item) ?
-        <>Obtained <img src={item.baseItem.imgURL} alt={item.baseItem.friendlyName + " sprite"} />[{item.baseItem.friendlyName}] ×{item.quantity} (+{expPerIndividualItem * item.quantity} exp)</>
+        <>Obtained <b>{item.quantity}</b>× <img src={item.baseItem.imgURL} alt={item.baseItem.friendlyName + " sprite"} /><b>{item.baseItem.friendlyName}</b> (+{expPerIndividualItem * item.quantity} exp)</>
         :
         <>Obtained {item.baseItem.friendlyName} (+{expPerIndividualItem} exp)</>
     }
