@@ -28,6 +28,14 @@ const dexService = {
         }).then(
             res => handleResponse<DexEndpoint.ItemsResponse>(res)
         )
+    ),
+    getItem: (id: string) => RxJS.from(
+        fetch(`${API_ROOT}/api/dex/items/${id}`, {
+            method: "GET",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<DexEndpoint.ItemIndividualResponse>(res)
+        )
     )
 };
 

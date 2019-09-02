@@ -11,12 +11,19 @@ export interface UnitsResponse {
 /**
  * /dex/units/:id
  */
-export type UnitIndividualResponse = MyUnitEnum
+export type UnitIndividualResponse = MyUnitEnum;
 
 /**
  * /dex/items
  */
-export interface ItemsResponse {
+export type ItemsResponse = DexItems;
+
+/**
+ * /dex/items/:id
+ */
+export type ItemIndividualResponse = BaseItem;
+
+export interface DexItems {
     discoveredItems: {[id: number]: BaseItem};
     lastItemIsDiscovered: boolean;
 }
