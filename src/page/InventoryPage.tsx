@@ -54,30 +54,34 @@ class InventoryPage extends React.Component<{}, State> {
 
     render() {
         if (this.state.status === "error") return "ERROR";
-        else if (this.state.status === "loading") return <LoadingSpinner />;
-
-        const { inventory, equipmentChanging } = this.state;
 
         return <>
             <div className="player-equipment">
                 <img className="player-portrait" src={player} alt="Player portrait" />
-                <EquipmentSlot item={inventory.equipment.pickaxe} style={{ top: "100px", left: "90px" }}>
+                <EquipmentSlot item={this.state.status === "loaded" ? this.state.inventory.equipment.pickaxe : "loading"} style={{ top: "100px", left: "90px" }}>
                     <img src={noPickaxe} alt={"No pickaxe equipped"} />
                 </EquipmentSlot>
             </div>
             <ul className="inventory-container">
-                {inventory.items.sort((a, b) => a.id - b.id).map(entry => <li key={entry.id}>
-                    <InventoryItem inventoryEntry={entry} />
-                    <InventoryItemTooltip
-                        inventoryEntry={entry}
-                        equip={isEquippable(entry) && !entry.equipped ? () => this.handleEquipUnequip(entry.id, "equip") : undefined}
-                        unequip={isEquippable(entry) && entry.equipped ? () => this.handleEquipUnequip(entry.id, "unequip") : undefined}
-                        equipDisabled={equipmentChanging}
-                    />
-                </li>)}
+                {this.state.status === "loaded" ?
+                    this.inventoryContents(this.state)
+                : this.state.status === "loading" ?
+                    <LoadingSpinner />
+                : {}}
             </ul>
         </>;
     }
+
+    inventoryContents = ({ inventory, equipmentChanging }: { inventory: Inventory, equipmentChanging: boolean }) =>
+        inventory.items.sort((a, b) => a.id - b.id).map(entry => <li key={entry.id}>
+            <InventoryItem inventoryEntry={entry} />
+            <InventoryItemTooltip
+                inventoryEntry={entry}
+                equip={isEquippable(entry) && !entry.equipped ? () => this.handleEquipUnequip(entry.id, "equip") : undefined}
+                unequip={isEquippable(entry) && entry.equipped ? () => this.handleEquipUnequip(entry.id, "unequip") : undefined}
+                equipDisabled={equipmentChanging}
+            />
+        </li>);
 
     handleEquipUnequip = (inventoryItemId: number, action: "equip" | "unequip") => {
         if (this.state.status !== "loaded") throw Error();

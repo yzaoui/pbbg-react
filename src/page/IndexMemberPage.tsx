@@ -54,9 +54,9 @@ class IndexMemberPage extends React.Component<{}, State> {
 }
 
 const loadingStyle: CSSProperties = {
-    width: "8px",
-    height: "8px",
-    borderWidth: "5px"
+    width: "18px",
+    height: "18px",
+    borderWidth: "4px"
 };
 
 export default IndexMemberPage;

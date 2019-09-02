@@ -10,6 +10,10 @@
     background-color: white;
 }
 
+.EquipmentSlot.loading {
+    background: #8f8f8f80;
+}
+
 .EquipmentSlot > img {
     width: 100%;
     height: 100%;
