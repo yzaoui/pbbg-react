@@ -11,15 +11,19 @@ import healingEffectMP3 from "../audio/healing_effect.mp3";
 // @ts-ignore
 import healingEffectOGG from "../audio/healing_effect.ogg";
 
-interface State {
-    state: "loading" | "error" | Squad;
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    squad: Squad;
     healing: boolean;
 }
 
 class SquadPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        state: "loading",
-        healing: false
+        status: "loading",
     };
 
     request?: Subscription;
@@ -33,8 +37,8 @@ class SquadPage extends React.Component<{}, State> {
         document.title = "Squad - PBBG";
 
         this.request = squadService.getSquad().subscribe(
-            res => this.setState({ state: res.data }),
-            error => this.setState({ state: "error" })
+            res => this.setState({ status: "loaded", squad: res.data, healing: false }),
+            error => this.setState({ status: "error" })
         );
     }
 
@@ -43,8 +47,8 @@ class SquadPage extends React.Component<{}, State> {
     }
 
     render() {
-        if (this.state.state === "loading") return <LoadingSpinner />;
-        else if (this.state.state === "error") return "ERROR";
+        if (this.state.status === "loading") return <LoadingSpinner />;
+        else if (this.state.status === "error") return "ERROR";
 
         return <>
             <button
@@ -55,19 +59,22 @@ class SquadPage extends React.Component<{}, State> {
             >
                 Heal Squad{this.state.healing ? " (Loading…)" : ""}
             </button>
-            {this.state.state.units.map(unit => <PBBGUnit key={unit.id} unit={unit} style={{ margin: "4px" }} />)}
+            {this.state.squad.units.map(unit => <PBBGUnit key={unit.id} unit={unit} style={{ margin: "4px" }} />)}
         </>;
     }
 
     handleHealClick = () => {
-        this.setState({ healing: true });
+        if (this.state.status !== "loaded") throw Error();
+        this.setState({ ...this.state, healing: true });
 
         this.request = squadService.healSquad().subscribe(
             res => {
-                this.setState({ healing: false, state: res.data });
+                if (this.state.status !== "loaded") throw Error();
+
+                this.setState({ ...this.state, healing: false, squad: res.data });
                 this.healingSound.play();
             },
-            error => this.setState({ healing: false, state: "error" })
+            error => this.setState({ status: "error" })
         );
     };
 }
