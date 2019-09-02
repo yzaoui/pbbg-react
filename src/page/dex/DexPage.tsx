@@ -10,10 +10,19 @@ const DexPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/units"} component={DexUnitsPage} />
 </>;
 
-const Index: React.FC<RouteComponentProps> = ({ match }) =>
-    <div className="dex-categories">
-        <Link to={match.url + "/items"}>Items</Link>
-        <Link to={match.url + "/units"}>Units</Link>
-    </div>;
+class Index extends React.Component<RouteComponentProps> {
+    componentDidMount() {
+        document.title = "Dex - PBBG";
+    }
+
+    render() {
+        const { match } = this.props;
+
+        return <div className="dex-categories">
+            <Link to={match.url + "/items"}>Items</Link>
+            <Link to={match.url + "/units"}>Units</Link>
+        </div>;
+    }
+}
 
 export default DexPage;

@@ -27,6 +27,8 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     request?: Subscription;
 
     componentDidMount() {
+        document.title = "Items - Dex - PBBG";
+
         this.request = dexService.getItems()
             .subscribe(
                 res => this.setState({ state: res.data }),

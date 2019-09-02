@@ -141,6 +141,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     setMineStateAndStartLoadingOtherState = (mineData: MineData) => {
+        document.title = `${mineData.type.name} - PBBG`;
         this.setState({ status: "loaded", mine: mineData, miningLvl: "loading", pickaxe: "loading", submittingAction: null, results: [] });
         this.loadMiningLevel();
         this.loadPickaxe()

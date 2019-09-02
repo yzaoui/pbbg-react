@@ -30,6 +30,8 @@ class SquadPage extends React.Component<{}, State> {
     });
 
     componentDidMount() {
+        document.title = "Squad - PBBG";
+
         this.request = squadService.getSquad().subscribe(
             res => this.setState({ state: res.data }),
             error => this.setState({ state: "error" })

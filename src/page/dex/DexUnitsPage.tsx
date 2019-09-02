@@ -28,6 +28,8 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     request?: Subscription;
 
     componentDidMount() {
+        document.title = "Units - Dex - PBBG";
+
         this.request = dexService.getUnits()
             .subscribe(
                 res => this.setState({ state: res.data }),

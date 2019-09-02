@@ -34,6 +34,8 @@ class InventoryPage extends React.Component<{}, State> {
     });
 
     componentDidMount() {
+        document.title = "Inventory - PBBG";
+
         this.request = inventoryService.getInventory()
             .subscribe(
                 res => this.setState({ state: res.data }),

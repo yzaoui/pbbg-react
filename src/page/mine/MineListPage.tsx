@@ -27,6 +27,8 @@ class MineListPage extends React.Component<RouteComponentProps, State> {
     });
 
     componentDidMount() {
+        document.title = "Mine List - PBBG";
+
         this.request = mineService.getMineTypes()
             .subscribe(
                 res => this.setState({ state: res.data }),

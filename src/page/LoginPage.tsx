@@ -14,6 +14,10 @@ class LoginPage extends React.Component<RouteComponentProps, State> {
         submitting: false
     };
 
+    componentDidMount() {
+        document.title = "Log in - PBBG";
+    }
+
     render() {
         const error = this.state.error || (this.props.location.state && this.props.location.state.error);
 

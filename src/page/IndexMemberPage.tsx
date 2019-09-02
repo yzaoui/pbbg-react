@@ -18,6 +18,8 @@ class IndexMemberPage extends React.Component<{}, State> {
     request?: Subscription;
 
     componentDidMount() {
+        document.title = "Home - PBBG";
+
         this.request = userService.get()
             .subscribe(
                 res => this.setState({ state: res.data }),

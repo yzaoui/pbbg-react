@@ -15,6 +15,10 @@ class RegisterPage extends React.Component<{}, State> {
         error: false
     };
 
+    componentDidMount() {
+        document.title = "Register - PBBG";
+    }
+
     render() {
         return <>
             <RegisterForm onSubmit={this.handleSubmit} submitting={this.state.submitting} error={this.state.error} />
