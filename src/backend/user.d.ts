@@ -1,12 +1,15 @@
 /**
  * For /user API.
  */
-export interface Response {
+export type UserStatsResponse = UserStats;
+
+export interface UserStats {
     username: string;
+    gold: number;
     mining: LevelProgress;
 }
 
-interface LevelProgress {
+export interface LevelProgress {
     level: number;
     relativeExp: number;
     relativeExpToNextLevel: number;

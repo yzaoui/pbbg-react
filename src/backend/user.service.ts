@@ -10,7 +10,7 @@ const userService = {
             method: "GET",
             headers: authHeader()
         }).then(
-            res => handleResponse<UserEndpoint.Response>(res)
+            res => handleResponse<UserEndpoint.UserStatsResponse>(res)
         )
     )
 };

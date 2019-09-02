@@ -1,13 +1,13 @@
 import React from "react";
-import * as UserEndpoint from "../backend/user";
+import { UserStats } from "../backend/user";
 import userService from "../backend/user.service";
 import { Subscription } from "rxjs";
 import LevelInfo from "../component/LevelInfo";
-
-type UserDetails = UserEndpoint.Response;
+import goldSrc from "../img/gold.png";
+import pickaxeSrc from "../img/pickaxe.png";
 
 interface State {
-    state: "loading" | "error" | UserDetails
+    state: "loading" | "error" | UserStats
 }
 
 class IndexMemberPage extends React.Component<{}, State> {
@@ -35,9 +35,18 @@ class IndexMemberPage extends React.Component<{}, State> {
         if (this.state.state === "error") return "ERROR";
         else if (this.state.state === "loading") return "LOADING...";
 
-        const { mining } = this.state.state;
+        const { gold, mining } = this.state.state;
 
-        return <>Mining: <LevelInfo levelProgress={mining} /></>;
+        return <>
+            <div>
+                <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />
+                Gold: {gold}
+            </div>
+            <div>
+                <img src={pickaxeSrc} alt="Mining level icon" style={{ width: "16px", height: "16px" }} />
+                Mining: <LevelInfo levelProgress={mining} />
+            </div>
+        </>;
     }
 }
 
