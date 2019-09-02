@@ -37,7 +37,7 @@ export interface Mine {
     width: number;
     height: number;
     cells: MineCell[][];
-    mineBgURL: string;
+    type: MineType;
 }
 
 export interface MineCell {

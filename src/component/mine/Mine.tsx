@@ -22,7 +22,7 @@ class Mine extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
 
-        const background = { src: props.mine.mineBgURL, tiles: MINE_TILES_PER_BG }; // TODO: get this from props
+        const background = { src: props.mine.type.bgURL, tiles: MINE_TILES_PER_BG }; // TODO: get this from props
 
         this.tdRefs = props.mine.cells.map(row => row.map(cell => React.createRef()));
         this.backgroundImgIndices = props.mine.cells.map(row => row.map(cell => Math.floor(Math.random() * 8)));
