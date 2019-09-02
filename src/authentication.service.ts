@@ -1,6 +1,7 @@
 import { BehaviorSubject } from "rxjs";
 import handleResponse from "./helper/handle-response";
 import * as LoginRegisterEndpoint from "./backend/loginregister";
+import { API_ROOT } from "./helper/const";
 
 const CURRENT_USER_KEY = "currentUser";
 
@@ -19,7 +20,7 @@ const authenticationService = {
     }
 };
 
-const fetchRegisterLogin = (route: "register" | "login", req: LoginRegisterEndpoint.Request) => fetch(`/api/${route}`, {
+const fetchRegisterLogin = (route: "register" | "login", req: LoginRegisterEndpoint.Request) => fetch(`${API_ROOT}/api/${route}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req)

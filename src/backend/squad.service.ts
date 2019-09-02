@@ -2,10 +2,11 @@ import authHeader from "../helper/auth-header";
 import handleResponse from "../helper/handle-response";
 import * as SquadEndpoint from "../backend/squad";
 import * as RxJS from "rxjs";
+import { API_ROOT } from "../helper/const";
 
 const squadService = {
     getSquad: () => RxJS.from(
-        fetch("/api/squad", {
+        fetch(`${API_ROOT}/api/squad`, {
             method: "GET",
             headers: authHeader()
         }).then(
@@ -13,7 +14,7 @@ const squadService = {
         )
     ),
     healSquad: () => RxJS.from(
-        fetch("/api/squad/heal", {
+        fetch(`${API_ROOT}/api/squad/heal`, {
             method: "POST",
             headers: authHeader()
         }).then(

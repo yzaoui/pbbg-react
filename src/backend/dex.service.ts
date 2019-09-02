@@ -2,10 +2,11 @@ import authHeader from "../helper/auth-header";
 import handleResponse from "../helper/handle-response";
 import * as DexEndpoint from "./dex";
 import * as RxJS from "rxjs";
+import { API_ROOT } from "../helper/const";
 
 const dexService = {
     getUnits: () => RxJS.from(
-        fetch("/api/dex/units", {
+        fetch(`${API_ROOT}/api/dex/units`, {
             method: "GET",
             headers: authHeader()
         }).then(
@@ -13,7 +14,7 @@ const dexService = {
         )
     ),
     getUnit: (id: string) => RxJS.from(
-        fetch(`/api/dex/units/${id}`, {
+        fetch(`${API_ROOT}/api/dex/units/${id}`, {
             method: "GET",
             headers: authHeader(),
         }).then(
@@ -21,7 +22,7 @@ const dexService = {
         )
     ),
     getItems: () => RxJS.from(
-        fetch("/api/dex/items", {
+        fetch(`${API_ROOT}/api/dex/items`, {
             method: "GET",
             headers: authHeader()
         }).then(
