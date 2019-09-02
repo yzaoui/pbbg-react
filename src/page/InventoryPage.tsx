@@ -15,15 +15,20 @@ import equipMP3 from "../audio/equip_effect.mp3";
 // @ts-ignore
 import equipOGG from "../audio/equip_effect.ogg";
 
-interface State {
-    state: "loading" | "error" | Inventory;
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    inventory: Inventory;
     equipmentChanging: boolean;
-}
+};
+
 
 class InventoryPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        state: "loading",
-        equipmentChanging: false
+        status: "loading"
     };
 
     request?: Subscription;
@@ -38,8 +43,8 @@ class InventoryPage extends React.Component<{}, State> {
 
         this.request = inventoryService.getInventory()
             .subscribe(
-                res => this.setState({ state: res.data }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "loaded", inventory: res.data, equipmentChanging: false }),
+                error => this.setState({ status: "error" })
             )
     }
 
@@ -48,10 +53,10 @@ class InventoryPage extends React.Component<{}, State> {
     }
 
     render() {
-        if (this.state.state === "error") return "ERROR";
-        else if (this.state.state === "loading") return <LoadingSpinner />;
+        if (this.state.status === "error") return "ERROR";
+        else if (this.state.status === "loading") return <LoadingSpinner />;
 
-        const inventory = this.state.state;
+        const { inventory, equipmentChanging } = this.state;
 
         return <>
             <div className="player-equipment">
@@ -67,7 +72,7 @@ class InventoryPage extends React.Component<{}, State> {
                         inventoryEntry={entry}
                         equip={isEquippable(entry) && !entry.equipped ? () => this.handleEquipUnequip(entry.id, "equip") : undefined}
                         unequip={isEquippable(entry) && entry.equipped ? () => this.handleEquipUnequip(entry.id, "unequip") : undefined}
-                        equipDisabled={this.state.equipmentChanging}
+                        equipDisabled={equipmentChanging}
                     />
                 </li>)}
             </ul>
@@ -75,15 +80,18 @@ class InventoryPage extends React.Component<{}, State> {
     }
 
     handleEquipUnequip = (inventoryItemId: number, action: "equip" | "unequip") => {
-        this.setState({ equipmentChanging: true });
+        if (this.state.status !== "loaded") throw Error();
+        this.setState({ ...this.state, equipmentChanging: true });
 
         this.request = inventoryService.equipUnequip(action, { inventoryItemId })
             .subscribe(
                 res => {
+                    if (this.state.status !== "loaded") throw Error();
+
                     this.equipSound.play();
-                    this.setState({ state: res.data, equipmentChanging: false });
+                    this.setState({ ...this.state, inventory: res.data, equipmentChanging: false });
                 },
-                error => this.setState({ state: "error" })
+                error => this.setState({ status: "error" })
             );
     }
 }
