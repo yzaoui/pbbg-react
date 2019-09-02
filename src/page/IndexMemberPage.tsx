@@ -1,18 +1,24 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { UserStats } from "../backend/user";
 import userService from "../backend/user.service";
 import { Subscription } from "rxjs";
 import LevelInfo from "../component/LevelInfo";
 import goldSrc from "../img/gold.png";
 import pickaxeSrc from "../img/pickaxe.png";
+import LoadingSpinner from "../component/LoadingSpinner";
 
-interface State {
-    state: "loading" | "error" | UserStats
-}
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    stats: UserStats;
+};
 
 class IndexMemberPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        status: "loading"
     };
 
     request?: Subscription;
@@ -22,8 +28,8 @@ class IndexMemberPage extends React.Component<{}, State> {
 
         this.request = userService.get()
             .subscribe(
-                res => this.setState({ state: res.data }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "loaded", stats: res.data }),
+                error => this.setState({ status: "error" })
             )
     }
 
@@ -32,22 +38,25 @@ class IndexMemberPage extends React.Component<{}, State> {
     }
 
     render() {
-        if (this.state.state === "error") return "ERROR";
-        else if (this.state.state === "loading") return "LOADING...";
-
-        const { gold, mining } = this.state.state;
+        if (this.state.status === "error") return "ERROR";
 
         return <>
             <div>
                 <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />
-                Gold: {gold}
+                Gold: {this.state.status === "loaded" ? this.state.stats.gold : <LoadingSpinner style={loadingStyle} /> }
             </div>
             <div>
                 <img src={pickaxeSrc} alt="Mining level icon" style={{ width: "16px", height: "16px" }} />
-                Mining: <LevelInfo levelProgress={mining} />
+                Mining: {this.state.status === "loaded" ? <LevelInfo levelProgress={this.state.stats.mining} /> : <LoadingSpinner style={loadingStyle} />}
             </div>
         </>;
     }
 }
+
+const loadingStyle: CSSProperties = {
+    width: "8px",
+    height: "8px",
+    borderWidth: "5px"
+};
 
 export default IndexMemberPage;
