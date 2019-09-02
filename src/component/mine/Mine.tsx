@@ -11,13 +11,26 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     onMineAction: (x: number, y: number) => void;
 }
 
+const MINE_TILES_PER_BG = 8;
+const MINE_TILE_SIZE = 18;
+
 class Mine extends React.Component<Props> {
     tdRefs: RefObject<HTMLTableDataCellElement>[][];
+    backgroundImgIndices: number[][];
+    backgroundStyle: string;
 
     constructor(props: Props) {
         super(props);
 
+        const background = { src: props.mine.mineBgURL, tiles: MINE_TILES_PER_BG }; // TODO: get this from props
+
         this.tdRefs = props.mine.cells.map(row => row.map(cell => React.createRef()));
+        this.backgroundImgIndices = props.mine.cells.map(row => row.map(cell => Math.floor(Math.random() * 8)));
+        this.backgroundStyle = "";
+        for (let i = 0; i < background.tiles; i++) {
+            this.backgroundStyle += `.Mine td.background-${i}:not([data-in-range]):not([data-submitting]), .Mine[data-submitting] td.background-${i}:not([data-submitting])` +
+                ` { background-image: url(${background.src}); background-position-x: -${i * MINE_TILE_SIZE}px }`
+        }
     }
 
     componentDidUpdate(prevProps: Readonly<Props>) {
@@ -33,12 +46,14 @@ class Mine extends React.Component<Props> {
 
         return <div className="Mine" {...(pickaxeLoaded && !isSubmittingAction ? { "data-can-mine": "", onMouseLeave: this.handleMineMouseLeave } :
             isSubmittingAction ? { "data-submitting": "" } : {})} {...rest}>
+            <style>{this.backgroundStyle}</style>
             <table>
                 <tbody>
                 {mine.cells.map((row, y) =>
                     <tr key={y}>
                         {row.map((cell, x) =>
                             <td key={x}
+                                className={`background-${this.backgroundImgIndices[y][x]}`}
                                 ref={this.tdRefs[y][x]}
                                 {...(pickaxeLoaded ? { onMouseEnter: this.handleCellMouseEnter } : {})}
                                 {...(pickaxeLoaded && !isSubmittingAction ? { onClick: this.handleCellClick } : {})}

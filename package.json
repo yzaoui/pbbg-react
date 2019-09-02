@@ -43,6 +43,5 @@
     "@types/classnames": "^2.2.9",
     "@types/howler": "^2.1.1",
     "@types/react-router-dom": "^4.3.4"
-  },
-  "proxy": "http://localhost:8080/"
+  }
 }
