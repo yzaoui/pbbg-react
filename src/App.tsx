@@ -18,6 +18,7 @@ import DexPage from "./page/dex/DexPage";
 import SettingsPage from "./page/SettingsPage";
 import authenticationService from "./authentication.service";
 import history from "./helper/history";
+import BattlePage from "./page/BattlePage";
 
 interface State {
     currentUserToken: string | null;
@@ -45,6 +46,7 @@ class App extends React.Component<{}, State> {
                     <MemberRoute path="/squad" component={SquadPage} />
                     <MemberRoute path="/mine" component={MinePage} />
                     <MemberRoute path="/inventory" component={InventoryPage} />
+                    <MemberRoute path="/battle" component={BattlePage} />
                     <MemberRoute path="/dex" component={DexPage} />
                     <MemberRoute path="/settings" component={SettingsPage} />
                 </main>

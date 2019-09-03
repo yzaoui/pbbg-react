@@ -10,6 +10,7 @@ const navItems = [
     { to: "/", emoji: "🏠", label: "Home", exact: true },
     { to: "/squad", emoji: "👥", label: "Squad", exact: true },
     { to: "/inventory", emoji: "🎒", label: "Inventory", exact: true },
+    { to: "/battle", emoji: "⚔️", label: "Battle", exact: true },
     { to: "/mine", emoji: "⛏️", label: "Mine", exact: false },
     { to: "/dex", emoji: "📚", label: "Dex", exact: false },
     { to: "/settings", emoji: "⚙️", label: "Settings", exact: true }
@@ -32,6 +33,10 @@ class MemberNav extends React.Component<{}, State> {
                 res => this.setState({ state: { username: res.data.username } }),
                 error => this.setState({ state: "error" })
             )
+    }
+
+    componentWillUnmount() {
+        this.request && this.request.unsubscribe();
     }
 
     render() {
