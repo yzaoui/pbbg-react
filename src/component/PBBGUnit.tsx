@@ -6,9 +6,10 @@ import PBBGProgressBar from "./PBBGProgressBar";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     unit: MyUnit;
+    facing?: "left" | "right";
 }
 
-const PBBGUnit: React.FC<Props> = ({ unit, ...rest }) => <div className="pbbg-unit" {...rest}>
+const PBBGUnit: React.FC<Props> = ({ unit, facing = "right", ...rest }) => <div className="pbbg-unit" data-facing={facing} {...rest}>
     <img src={unit.idleAnimationURL} className="sprite" alt={unit.name + " sprite"} />
     <div>
         <div>

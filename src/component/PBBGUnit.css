@@ -1,8 +1,7 @@
 .pbbg-unit {
     display: inline-flex;
     flex-direction: row;
-    width: 22em;
-    box-sizing: border-box;
+    width: 21em;
     border: 1px solid #333333;
     padding: 6px;
 }
@@ -42,7 +41,7 @@
 }
 
 .pbbg-unit .hp-bar {
-    width: 120px;
+    width: 140px;
     height: 11px;
     --bar-background-color: linear-gradient(#53ff52, #0f9c16);
 }

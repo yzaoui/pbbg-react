@@ -1,0 +1,47 @@
+.Battle {
+    display: grid;
+    grid-template-areas: "turns turns" "allies enemies";
+}
+
+.Battle > :nth-child(1) {
+    grid-area: turns;
+}
+
+.Battle > :nth-child(2) {
+    grid-area: allies;
+}
+
+.Battle > :nth-child(3) {
+    grid-area: enemies;
+}
+
+.Battle > .unit-list-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Battle > .unit-list-section > ul {
+    display: inline-block;
+    list-style: none;
+    padding: 0;
+}
+
+.Battle .pbbg-unit {
+    margin: 5px;
+}
+
+.Battle .pbbg-unit[data-side="ally"][data-current-turn] {
+    border-color: darkblue;
+}
+
+.Battle .pbbg-unit[data-side="enemy"][data-current-turn] {
+    border-color: darkred;
+}
+
+.Battle .pbbg-unit[data-current-turn] {
+    border-style: solid;
+    margin: 4px 4px 4px 0;
+    border-width: 2px 2px 2px 5px;
+}
