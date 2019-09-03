@@ -1,5 +1,6 @@
 import React from "react";
 import { Battle as BattleData } from "../../backend/battle";
+import BattleQueue from "./BattleQueue";
 
 type Props = {
     battle: BattleData;
@@ -7,7 +8,9 @@ type Props = {
 
 class Battle extends React.Component<Props> {
     render() {
-        return <>{JSON.stringify(this.props)}</>;
+        return <div>
+            <BattleQueue battle={this.props.battle} />
+        </div>;
     }
 }
 
