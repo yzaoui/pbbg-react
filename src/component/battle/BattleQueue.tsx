@@ -4,15 +4,24 @@ import "./BattleQueue.css";
 
 interface Props {
     battle: BattleData;
+    onUnitEnter: (unitId: number) => void;
+    onUnitLeave: (unitId: number) => void;
+    hoveredUnit: number | null;
 }
 
-const BattleQueue: React.FC<Props> = ({ battle }) => <div className="BattleQueue">
+const BattleQueue: React.FC<Props> = ({ battle, onUnitEnter, onUnitLeave, hoveredUnit }) => <div className="BattleQueue">
     <span><b>Turn Order ►</b></span>
-    <ol>{
-        combineBattleToQueue(battle).map(({ unit, side }) => <li key={unit.id} data-side={side}>
+    <ol>{combineBattleToQueue(battle).map(({ unit, side }) =>
+        <li
+            key={unit.id}
+            data-side={side}
+            onMouseEnter={() => onUnitEnter(unit.id)}
+            onMouseLeave={() => onUnitLeave(unit.id)}
+            data-hovered={hoveredUnit === unit.id ? "" : undefined}
+        >
             <img src={unit.iconURL} alt={unit.name + " icon"} />
-        </li>)
-    }</ol>
+        </li>
+    )}</ol>
 </div>;
 
 const combineBattleToQueue = (battle: BattleData) => battle.turns.map(turn => {

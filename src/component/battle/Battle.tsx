@@ -6,12 +6,24 @@ type Props = {
     battle: BattleData;
 };
 
-class Battle extends React.Component<Props> {
+type State = {
+    hoveredUnit: number | null;
+}
+
+class Battle extends React.Component<Props, State> {
+    readonly state: Readonly<State> = {
+        hoveredUnit: null
+    };
+
     render() {
         return <div>
-            <BattleQueue battle={this.props.battle} />
+            <BattleQueue battle={this.props.battle} onUnitEnter={this.handleUnitEnter} onUnitLeave={this.handleUnitLeave} hoveredUnit={this.state.hoveredUnit} />
         </div>;
     }
+
+    handleUnitEnter = (unitId: number) => this.setState({ hoveredUnit: unitId });
+
+    handleUnitLeave = (unitId: number) => this.setState({ hoveredUnit: null });
 }
 
 export default Battle;
