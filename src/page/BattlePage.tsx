@@ -47,7 +47,7 @@ class BattlePage extends React.Component<{}, State> {
                 <span>Generate battle</span>
             </button>;
 
-            else return <Battle battle={this.state.battle} onEnemyTurn={this.handleEnemyTurn} />;
+            else return <Battle battle={this.state.battle} performingAction={this.state.performingAction} onAllyTurn={this.handleAllyTurn} onEnemyTurn={this.handleEnemyTurn} />;
         }
 
         else if (this.state.status === "generating battle") return <button className="fancy loading" disabled style={{ alignSelf: "center" }}>
@@ -66,6 +66,23 @@ class BattlePage extends React.Component<{}, State> {
             );
     };
 
+    handleAllyTurn = () => {
+        if (this.state.status !== "loaded" || this.state.battle === null) throw Error();
+
+        // TODO: Let user pick target
+        const enemies = this.state.battle.enemies;
+        const enemyId = enemies[Math.floor(Math.random() * enemies.length)].id;
+
+        this.setState({ ...this.state, performingAction: true });
+        this.request = battleService.allyTurn({ enemyId })
+            .subscribe(
+                res => {
+                    this.setState({ ...this.state, battle: res.data.battle, performingAction: false });
+                },
+                error => this.setState({ status: "error" })
+            );
+    };
+
     handleEnemyTurn = () => {
         this.setState({ ...this.state, performingAction: true });
 
@@ -76,7 +93,7 @@ class BattlePage extends React.Component<{}, State> {
                 },
                 error => this.setState({ status: "error" })
             );
-    }
+    };
 }
 
 const loadingStyle: CSSProperties = {

@@ -12,6 +12,14 @@ type BattleResponse = Battle | null;
 type BattleGenerateResponse = Battle;
 
 /**
+ * /battle/allyTurn
+ */
+type BattleAllyTurnRequest = {
+    enemyId: number;
+};
+type BattleAllyTurnResponse = BattleActionResult;
+
+/**
  * /battle/enemyTurn
  */
 type BattleEnemyTurnResponse = BattleActionResult;

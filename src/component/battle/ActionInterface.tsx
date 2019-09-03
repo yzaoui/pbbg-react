@@ -1,17 +1,21 @@
 import React from "react";
+import LoadingButton from "../LoadingButton";
 
 type Props = {
+    performingAction: boolean;
+} & ({
     enemyTurn: true;
     onProcessEnemyTurn: () => void;
 } | {
     enemyTurn: false;
-}
+    onProcessAllyTurn: () => void;
+});
 
 const ActionInterface: React.FC<Props> = (props) => <div>
     {props.enemyTurn ?
-        <button className="fancy" onClick={props.onProcessEnemyTurn}>Process enemy turn</button>
+        <LoadingButton loading={props.performingAction} onClick={props.onProcessEnemyTurn}>Process enemy turn</LoadingButton>
     :
-        <button className="fancy">Attack</button>
+        <LoadingButton loading={props.performingAction} onClick={props.onProcessAllyTurn}>Attack</LoadingButton>
     }
 </div>;
 

@@ -7,7 +7,9 @@ import ActionInterface from "./ActionInterface";
 
 type Props = {
     battle: BattleData;
+    onAllyTurn: () => void;
     onEnemyTurn: () => void;
+    performingAction: boolean;
 };
 
 type State = {
@@ -20,7 +22,7 @@ class Battle extends React.Component<Props, State> {
     };
 
     render() {
-        const { battle } = this.props;
+        const { battle, onAllyTurn, onEnemyTurn, performingAction } = this.props;
         const currentSide = battle.allies.some(ally => ally.id === battle.turns[0].unitId) ? "ally" : "enemy";
 
         return <div className="Battle">
@@ -47,11 +49,12 @@ class Battle extends React.Component<Props, State> {
                     /></li>)}
                 </ul>
             </div>
-            <ActionInterface {...(currentSide === "ally" ? {
-                enemyTurn: false
+            <ActionInterface performingAction={performingAction} {...(currentSide === "ally" ? {
+                enemyTurn: false,
+                onProcessAllyTurn: onAllyTurn
             } : {
                 enemyTurn: true,
-                onProcessEnemyTurn: this.props.onEnemyTurn
+                onProcessEnemyTurn: onEnemyTurn
             })} />
         </div>;
     }
