@@ -3,7 +3,8 @@ import { Battle as BattleData } from "../../backend/battle";
 import BattleQueue from "./BattleQueue";
 import PBBGUnit from "../PBBGUnit";
 import "./Battle.css";
-import ActionInterface from "./ActionInterface";
+import BattleActions from "./BattleActions";
+import BattleLog from "./BattleLog";
 
 type Props = {
     battle: BattleData;
@@ -49,13 +50,14 @@ class Battle extends React.Component<Props, State> {
                     /></li>)}
                 </ul>
             </div>
-            <ActionInterface performingAction={performingAction} {...(currentSide === "ally" ? {
+            <BattleActions performingAction={performingAction} {...(currentSide === "ally" ? {
                 enemyTurn: false,
                 onProcessAllyTurn: onAllyTurn
             } : {
                 enemyTurn: true,
                 onProcessEnemyTurn: onEnemyTurn
             })} />
+            <BattleLog />
         </div>;
     }
 

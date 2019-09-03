@@ -1,10 +1,10 @@
-.ActionInterface {
+.BattleLog {
     display: flex;
     flex-direction: column;
     height: 202px;
 }
 
-.ActionInterface > h1 {
+.BattleLog > h1 {
     display: inline-block;
     margin: 0;
     padding: 4px;
@@ -17,7 +17,7 @@
     align-self: start;
 }
 
-.ActionInterface > div {
+.BattleLog > div {
     flex-grow: 1;
     border: 1px solid black;
     padding: 8px;

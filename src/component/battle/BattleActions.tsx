@@ -1,6 +1,6 @@
 import React from "react";
 import LoadingButton from "../LoadingButton";
-import "./ActionInterface.css";
+import "./BattleActions.css";
 
 type Props = {
     performingAction: boolean;
@@ -12,7 +12,7 @@ type Props = {
     onProcessAllyTurn: () => void;
 });
 
-const ActionInterface: React.FC<Props> = (props) => <div className="ActionInterface">
+const BattleActions: React.FC<Props> = (props) => <div className="BattleActions">
     <h1>Actions</h1>
     <div>
         {props.enemyTurn ?
@@ -23,4 +23,4 @@ const ActionInterface: React.FC<Props> = (props) => <div className="ActionInterf
     </div>
 </div>;
 
-export default ActionInterface;
+export default BattleActions;

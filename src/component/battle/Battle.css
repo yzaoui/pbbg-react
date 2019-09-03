@@ -1,6 +1,6 @@
 .Battle {
     display: grid;
-    grid-template-areas: "turns turns" "allies enemies" "actions .";
+    grid-template-areas: "turns turns" "allies enemies" "actions log";
 }
 
 .Battle > :nth-child(1) {
@@ -17,6 +17,14 @@
 
 .Battle > :nth-child(4) {
     grid-area: actions;
+}
+
+.Battle > :nth-child(4) > div {
+    border-right-width: 0;
+}
+
+.Battle > :nth-child(5) {
+    grid-area: log;
 }
 
 .Battle > .unit-list-section {
