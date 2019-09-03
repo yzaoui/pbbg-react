@@ -20,6 +20,14 @@ const battleService = {
         }).then(
             res => handleResponse<BattleEndpoint.BattleGenerateResponse>(res)
         )
+    ),
+    enemyTurn: () => RxJS.from(
+        fetch(`${API_ROOT}/api/battle/enemyTurn`, {
+            method: "POST",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<BattleEndpoint.BattleActionResult>(res)
+        )
     )
 };
 

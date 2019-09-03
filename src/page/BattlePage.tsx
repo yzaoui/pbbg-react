@@ -10,6 +10,7 @@ type State = {
 } | {
     status: "loaded";
     battle: BattleData | null;
+    performingAction: boolean;
 } | {
     status: "generating battle";
 } | {
@@ -46,7 +47,7 @@ class BattlePage extends React.Component<{}, State> {
                 <span>Generate battle</span>
             </button>;
 
-            else return <Battle battle={this.state.battle} />;
+            else return <Battle battle={this.state.battle} onEnemyTurn={this.handleEnemyTurn} />;
         }
 
         else if (this.state.status === "generating battle") return <button className="fancy loading" disabled style={{ alignSelf: "center" }}>
@@ -60,10 +61,22 @@ class BattlePage extends React.Component<{}, State> {
 
         this.request = battleService.generateBattle()
             .subscribe(
-                res => this.setState({ status: "loaded", battle: res.data }),
+                res => this.setState({ status: "loaded", battle: res.data, performingAction: false }),
                 error => this.setState({ status: "error" })
             );
     };
+
+    handleEnemyTurn = () => {
+        this.setState({ ...this.state, performingAction: true });
+
+        this.request = battleService.enemyTurn()
+            .subscribe(
+                res => {
+                    this.setState({ ...this.state, battle: res.data.battle, performingAction: false });
+                },
+                error => this.setState({ status: "error" })
+            );
+    }
 }
 
 const loadingStyle: CSSProperties = {

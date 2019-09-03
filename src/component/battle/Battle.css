@@ -22,6 +22,10 @@
     align-items: center;
 }
 
+.Battle > .unit-list-section > h1 {
+    margin: 0;
+}
+
 .Battle > .unit-list-section > ul {
     display: inline-block;
     list-style: none;

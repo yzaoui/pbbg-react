@@ -3,9 +3,11 @@ import { Battle as BattleData } from "../../backend/battle";
 import BattleQueue from "./BattleQueue";
 import PBBGUnit from "../PBBGUnit";
 import "./Battle.css";
+import ActionInterface from "./ActionInterface";
 
 type Props = {
     battle: BattleData;
+    onEnemyTurn: () => void;
 };
 
 type State = {
@@ -19,6 +21,7 @@ class Battle extends React.Component<Props, State> {
 
     render() {
         const { battle } = this.props;
+        const currentSide = battle.allies.some(ally => ally.id === battle.turns[0].unitId) ? "ally" : "enemy";
 
         return <div className="Battle">
             <BattleQueue battle={battle} onUnitEnter={this.handleUnitEnter} onUnitLeave={this.handleUnitLeave} hoveredUnit={this.state.hoveredUnit} />
@@ -44,6 +47,12 @@ class Battle extends React.Component<Props, State> {
                     /></li>)}
                 </ul>
             </div>
+            <ActionInterface {...(currentSide === "ally" ? {
+                enemyTurn: false
+            } : {
+                enemyTurn: true,
+                onProcessEnemyTurn: this.props.onEnemyTurn
+            })} />
         </div>;
     }
 
