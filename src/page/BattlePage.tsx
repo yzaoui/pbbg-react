@@ -3,7 +3,6 @@ import { Subscription } from "rxjs";
 import LoadingSpinner from "../component/LoadingSpinner";
 import battleService from "../backend/battle.service";
 import { Battle } from "../backend/battle";
-import classNames from "classnames";
 
 type State = {
     status: "loading";
@@ -41,15 +40,29 @@ class BattlePage extends React.Component<{}, State> {
         if (this.state.status === "loading") return <LoadingSpinner style={{ alignSelf: "center" }} />;
         else if (this.state.status === "error") return <>ERROR</>;
 
-        else if (this.state.status === "loaded") return <button className="fancy" style={{ alignSelf: "center" }}>
-            <span>Generate battle</span>
-        </button>;
+        else if (this.state.status === "loaded") {
+            if (this.state.battle === null) return <button className="fancy" style={{ alignSelf: "center" }} onClick={this.handleGenerateBattleClick}>
+                <span>Generate battle</span>
+            </button>;
+
+            else return <>Battle loaded!</>;
+        }
 
         else if (this.state.status === "generating battle") return <button className="fancy loading" disabled style={{ alignSelf: "center" }}>
             <span>Generating battle</span>
             <LoadingSpinner style={loadingStyle} />
         </button>;
     }
+
+    handleGenerateBattleClick = () => {
+        this.setState({ status: "generating battle" });
+
+        this.request = battleService.generateBattle()
+            .subscribe(
+                res => this.setState({ status: "loaded", battle: res.data }),
+                error => this.setState({ status: "error" })
+            );
+    };
 }
 
 const loadingStyle: CSSProperties = {

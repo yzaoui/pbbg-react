@@ -5,6 +5,11 @@ import { MyUnit } from "./squad";
  */
 type BattleResponse = Battle | null;
 
+/**
+ * /battle/session?action=generate
+ */
+type BattleGenerateResponse = Battle;
+
 interface Battle {
     allies: MyUnit[];
     enemies: MyUnit[];

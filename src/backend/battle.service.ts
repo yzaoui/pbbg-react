@@ -6,11 +6,19 @@ import * as BattleEndpoint from "./battle";
 
 const battleService = {
     getBattle: () => RxJS.from(
-        fetch(`${API_ROOT}/api/mine`, {
+        fetch(`${API_ROOT}/api/battle/session`, {
             method: "GET",
             headers: authHeader()
         }).then(
             res => handleResponse<BattleEndpoint.BattleResponse>(res)
+        )
+    ),
+    generateBattle: () => RxJS.from(
+        fetch(`${API_ROOT}/api/battle/session?action=generate`, {
+            method: "POST",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<BattleEndpoint.BattleGenerateResponse>(res)
         )
     )
 };
