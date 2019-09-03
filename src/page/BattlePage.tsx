@@ -2,13 +2,14 @@ import React, { CSSProperties } from "react";
 import { Subscription } from "rxjs";
 import LoadingSpinner from "../component/LoadingSpinner";
 import battleService from "../backend/battle.service";
-import { Battle } from "../backend/battle";
+import { Battle as BattleData } from "../backend/battle";
+import Battle from "../component/battle/Battle";
 
 type State = {
     status: "loading";
 } | {
     status: "loaded";
-    battle: Battle | null;
+    battle: BattleData | null;
 } | {
     status: "generating battle";
 } | {
@@ -45,7 +46,7 @@ class BattlePage extends React.Component<{}, State> {
                 <span>Generate battle</span>
             </button>;
 
-            else return <>Battle loaded!</>;
+            else return <Battle battle={this.state.battle} />;
         }
 
         else if (this.state.status === "generating battle") return <button className="fancy loading" disabled style={{ alignSelf: "center" }}>
