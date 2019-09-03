@@ -98,36 +98,35 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return <>ERROR</>;
 
-        /* Mining level */
-        let miningLvlComponent;
-        if (this.state.miningLvl === "loading") miningLvlComponent = <LoadingSpinner style={style} />;
-        else miningLvlComponent = <LevelInfo levelProgress={this.state.miningLvl} style={style} />;
-
-        /* Pickaxe */
-        let pickaxeComponent;
-        let pickaxe;
-        if (this.state.pickaxe === "loading") {
-            pickaxeComponent = <LoadingSpinner style={style} />;
-            pickaxe = null;
-        } else if (this.state.pickaxe === null) {
-            pickaxeComponent = <>No pickaxe equipped</>;
-            pickaxe = null;
-        } else {
-            pickaxeComponent = <InventoryItem inventoryEntry={this.state.pickaxe} style={style} />;
-            pickaxe = this.state.pickaxe
-        }
-
         return <>
-            {this.state.status === "loaded" ?
+            {this.state.status === "loaded" ? <>
                 <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
-                :
+                <Mine
+                    mine={this.state.mine}
+                    style={style}
+                    pickaxe={this.state.pickaxe !== "loading" ? this.state.pickaxe : null}
+                    submittingAction={this.state.submittingAction}
+                    onMineAction={this.handleMineAction}
+                />
+            </>: this.state.status === "exited" ?
                 <Link to={"/mine/list"} className="fancy" style={style}>Return to mine list</Link>
+            : {}}
+
+            {/* Mining level */}
+            {this.state.miningLvl === "loading" ?
+                <LoadingSpinner style={style} />
+            :
+                <LevelInfo levelProgress={this.state.miningLvl} style={style} />
             }
-            {this.state.status === "loaded" &&
-                <Mine mine={this.state.mine} style={style} pickaxe={pickaxe} submittingAction={this.state.submittingAction} onMineAction={this.handleMineAction} />
+
+            {/* Equipped pickaxe slot */}
+            {this.state.pickaxe === "loading" ?
+                <LoadingSpinner style={style} />
+            : this.state.pickaxe === null ?
+                <>No pickaxe equipped</>
+            :
+                <InventoryItem inventoryEntry={this.state.pickaxe} style={style} />
             }
-            {miningLvlComponent}
-            {pickaxeComponent}
             <MineLog results={this.state.results} expanded={this.state.status === "exited"} />
         </>;
     }
