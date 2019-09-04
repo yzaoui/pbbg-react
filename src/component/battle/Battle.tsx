@@ -15,20 +15,26 @@ type Props = {
 
 type State = {
     hoveredUnit: number | null;
+    selectingEnemyTarget: boolean;
 }
 
 class Battle extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
-        hoveredUnit: null
+        hoveredUnit: null,
+        selectingEnemyTarget: false
     };
 
     render() {
-        const { battle, onAllyTurn, onEnemyTurn, performingAction } = this.props;
+        const { battle, onEnemyTurn, performingAction } = this.props;
+        const { hoveredUnit, selectingEnemyTarget } = this.state;
         const currentSide = battle.allies.some(ally => ally.id === battle.turns[0].unitId) ? "ally" : "enemy";
 
-        return <div className="Battle">
-            <BattleQueue battle={battle} onUnitEnter={this.handleUnitEnter} onUnitLeave={this.handleUnitLeave} hoveredUnit={this.state.hoveredUnit} />
-            <div className="unit-list-section">
+        return <div className="Battle" data-overlay-active={selectingEnemyTarget ? "" : undefined}>
+            {selectingEnemyTarget &&
+                this.createOverlay()
+            }
+            <BattleQueue battle={battle} onUnitEnter={this.handleUnitEnter} onUnitLeave={this.handleUnitLeave} hoveredUnit={hoveredUnit} />
+            <div className="allies-container unit-list-section">
                 <h1>Allies</h1>
                 <ul>
                     {battle.allies.map(ally => <li key={ally.id}><PBBGUnit
@@ -39,7 +45,7 @@ class Battle extends React.Component<Props, State> {
                     /></li>)}
                 </ul>
             </div>
-            <div className="unit-list-section">
+            <div className="enemies-container unit-list-section">
                 <h1>Enemies</h1>
                 <ul>
                     {battle.enemies.map(enemy => <li key={enemy.id}><PBBGUnit
@@ -52,7 +58,7 @@ class Battle extends React.Component<Props, State> {
             </div>
             <BattleActions performingAction={performingAction} {...(currentSide === "ally" ? {
                 enemyTurn: false,
-                onProcessAllyTurn: onAllyTurn
+                onProcessAllyTurn: this.handleAllyTurn
             } : {
                 enemyTurn: true,
                 onProcessEnemyTurn: onEnemyTurn
@@ -61,9 +67,20 @@ class Battle extends React.Component<Props, State> {
         </div>;
     }
 
+    createOverlay = () => <div className="overlay">
+        <div>
+            <button className="fancy danger" onClick={this.handleCancelTargetting}>Cancel</button>
+            <span>Select target</span>
+        </div>
+    </div>;
+
     handleUnitEnter = (unitId: number) => this.setState({ hoveredUnit: unitId });
 
     handleUnitLeave = (unitId: number) => this.setState({ hoveredUnit: null });
+
+    handleAllyTurn = () => this.setState({ selectingEnemyTarget: true });
+
+    handleCancelTargetting = () => this.setState({ selectingEnemyTarget: false });
 }
 
 export default Battle;

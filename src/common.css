@@ -131,11 +131,26 @@ button.fancy {
     padding: 3px 15px;
     color: white;
     height: 32px;
-    background-color: #0086d4;
-    border: none;
-    border-radius: 2px;
+    background-color: #007bff;
+    border: 1px #007bff;
+    border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
     transition: all 150ms ease-in;
+}
+
+button.fancy:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+button.fancy.danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+button.fancy.danger:hover {
+    background-color: #bd2130;
+    border-color: #b21f2d;
 }
 
 a.fancy {
