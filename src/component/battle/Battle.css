@@ -49,7 +49,7 @@
     z-index: 2;
 }
 
-.Battle[data-overlay-active] .pbbg-unit:not([data-current-turn]) {
+.Battle[data-overlay-active] .pbbg-unit:not([data-current-turn][data-dead]) {
     cursor: pointer;
 }
 
@@ -87,17 +87,18 @@
     align-self: center;
     margin-top: 22px;
     background-color: #0000004f;
-    padding: 16px;
+    padding: 16px 28px;
     border-radius: 36px;
+    box-shadow: #0000001f 0 1px 6px, #0000001f 0 1px 4px;
 }
 
 .Battle > .overlay > div > button {
-    margin-top: 5px;
-    margin-right: 32px;
+    margin-top: 4px;
+    margin-right: 22px;
 }
 
 .Battle > .overlay > div > span {
-    font-size: 36px;
+    font-size: 33px;
     color: white;
     text-shadow: 2px 2px black;
 }

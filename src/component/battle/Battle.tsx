@@ -15,22 +15,23 @@ type Props = {
 
 type State = {
     hoveredUnit: number | null;
-    selectingEnemyTarget: boolean;
+    selectingTarget: boolean;
 }
 
 class Battle extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
         hoveredUnit: null,
-        selectingEnemyTarget: false
+        selectingTarget: false
     };
 
     render() {
         const { battle, onEnemyTurn, performingAction } = this.props;
-        const { hoveredUnit, selectingEnemyTarget } = this.state;
-        const currentSide = battle.allies.some(ally => ally.id === battle.turns[0].unitId) ? "ally" : "enemy";
+        const { hoveredUnit, selectingTarget } = this.state;
+        const nextUnitId = battle.turns[0].unitId;
+        const currentSide = battle.allies.some(ally => nextUnitId === ally.id) ? "ally" : "enemy";
 
-        return <div className="Battle" data-overlay-active={selectingEnemyTarget ? "" : undefined}>
-            {selectingEnemyTarget &&
+        return <div className="Battle" data-overlay-active={selectingTarget ? "" : undefined}>
+            {selectingTarget &&
                 this.createOverlay()
             }
             <BattleQueue battle={battle} onUnitEnter={this.handleUnitEnter} onUnitLeave={this.handleUnitLeave} hoveredUnit={hoveredUnit} />
@@ -41,10 +42,10 @@ class Battle extends React.Component<Props, State> {
                         unit={ally}
                         facing="right"
                         data-side="ally"
-                        data-current-turn={ally.id === battle.turns[0].unitId ? "" : undefined}
+                        data-current-turn={ally.id === nextUnitId ? "" : undefined}
                         onMouseEnter={() => this.handleUnitEnter(ally.id)}
                         onMouseLeave={this.handleUnitLeave}
-                        {...(selectingEnemyTarget &&
+                        {...(selectingTarget && ally.id !== nextUnitId && ally.hp > 0 &&
                             { onClick: () => this.handleSelectTarget(ally.id) }
                         )}
                     /></li>)}
@@ -57,10 +58,10 @@ class Battle extends React.Component<Props, State> {
                         unit={enemy}
                         facing="left"
                         data-side="enemy"
-                        data-current-turn={enemy.id === battle.turns[0].unitId ? "" : undefined}
+                        data-current-turn={enemy.id === nextUnitId ? "" : undefined}
                         onMouseEnter={() => this.handleUnitEnter(enemy.id)}
                         onMouseLeave={this.handleUnitLeave}
-                        {...(selectingEnemyTarget &&
+                        {...(selectingTarget && enemy.id !== nextUnitId && enemy.hp > 0 &&
                             { onClick: () => this.handleSelectTarget(enemy.id) }
                         )}
                     /></li>)}
@@ -88,14 +89,14 @@ class Battle extends React.Component<Props, State> {
 
     handleUnitLeave = () => this.setState({ hoveredUnit: null });
 
-    handleAllyTurn = () => this.setState({ selectingEnemyTarget: true });
+    handleAllyTurn = () => this.setState({ selectingTarget: true });
 
     handleSelectTarget = (unitId: number) => {
-        this.setState({ selectingEnemyTarget: false });
+        this.setState({ selectingTarget: false });
         this.props.onAllyTurn(unitId);
     };
 
-    handleCancelTargetting = () => this.setState({ selectingEnemyTarget: false });
+    handleCancelTargetting = () => this.setState({ selectingTarget: false });
 }
 
 export default Battle;
