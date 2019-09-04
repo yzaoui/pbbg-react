@@ -2,15 +2,20 @@ import React, { CSSProperties } from "react";
 import { Subscription } from "rxjs";
 import LoadingSpinner from "../component/LoadingSpinner";
 import battleService from "../backend/battle.service";
-import { Battle as BattleData } from "../backend/battle";
+import { Battle as BattleData, BattleReward, MappedUnitEffects } from "../backend/battle";
 import Battle from "../component/battle/Battle";
 
 type State = {
     status: "loading";
 } | {
     status: "loaded";
-    battle: BattleData | null;
+    battle: BattleData;
     performingAction: boolean;
+    effectsList: MappedUnitEffects[];
+    reward: BattleReward | null;
+} | {
+    status: "loaded";
+    battle: null;
 } | {
     status: "generating battle";
 } | {
@@ -29,7 +34,7 @@ class BattlePage extends React.Component<{}, State> {
 
         this.request = battleService.getBattle()
             .subscribe(
-                res => this.setState({ status: "loaded", battle: res.data }),
+                res => this.setState(res.data !== null ? this.stateLoadedInitialBattle(res.data) : this.stateLoadedNoBattle),
                 error => this.setState({ status: "error" })
             );
     }
@@ -47,7 +52,14 @@ class BattlePage extends React.Component<{}, State> {
                 <span>Generate battle</span>
             </button>;
 
-            else return <Battle battle={this.state.battle} performingAction={this.state.performingAction} onAllyTurn={this.handleAllyTurn} onEnemyTurn={this.handleEnemyTurn} />;
+            else return <Battle
+                battle={this.state.battle}
+                performingAction={this.state.performingAction}
+                onAllyTurn={this.handleAllyTurn}
+                onEnemyTurn={this.handleEnemyTurn}
+                effects={this.state.effectsList}
+                reward={this.state.reward}
+            />;
         }
 
         else if (this.state.status === "generating battle") return <button className="fancy loading" disabled style={{ alignSelf: "center" }}>
@@ -56,12 +68,25 @@ class BattlePage extends React.Component<{}, State> {
         </button>;
     }
 
+    stateLoadedInitialBattle = (battle: BattleData): State => ({
+        status: "loaded",
+        battle: battle,
+        performingAction: false,
+        effectsList: [],
+        reward: null
+    });
+
+    stateLoadedNoBattle = (): State => ({
+        status: "loaded",
+        battle: null
+    });
+
     handleGenerateBattleClick = () => {
         this.setState({ status: "generating battle" });
 
         this.request = battleService.generateBattle()
             .subscribe(
-                res => this.setState({ status: "loaded", battle: res.data, performingAction: false }),
+                res => this.setState(this.stateLoadedInitialBattle(res.data)),
                 error => this.setState({ status: "error" })
             );
     };
@@ -73,7 +98,14 @@ class BattlePage extends React.Component<{}, State> {
         this.request = battleService.allyTurn({ targetUnitId })
             .subscribe(
                 res => {
-                    this.setState({ ...this.state, battle: res.data.battle, performingAction: false });
+                    if (this.state.status !== "loaded" || this.state.battle === null) throw Error();
+
+                    this.setState({ ...this.state,
+                        battle: res.data.battle,
+                        performingAction: false,
+                        effectsList: this.state.effectsList.concat(res.data.unitEffects),
+                        reward: res.data.reward
+                    });
                 },
                 error => this.setState({ status: "error" })
             );
@@ -85,7 +117,14 @@ class BattlePage extends React.Component<{}, State> {
         this.request = battleService.enemyTurn()
             .subscribe(
                 res => {
-                    this.setState({ ...this.state, battle: res.data.battle, performingAction: false });
+                    if (this.state.status !== "loaded" || this.state.battle === null) throw Error();
+
+                    this.setState({ ...this.state,
+                        battle: res.data.battle,
+                        performingAction: false,
+                        effectsList: this.state.effectsList.concat(res.data.unitEffects),
+                        reward: res.data.reward
+                    });
                 },
                 error => this.setState({ status: "error" })
             );

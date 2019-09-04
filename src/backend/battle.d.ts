@@ -36,9 +36,11 @@ interface Turn {
 
 interface BattleActionResult {
     battle: Battle;
-    unitEffects: Record<number, UnitEffect>;
-    reward: BattleReward;
+    unitEffects: MappedUnitEffects;
+    reward: BattleReward | null;
 }
+
+type MappedUnitEffects = Record<number, UnitEffect>;
 
 type UnitEffect = HealthEffect;
 

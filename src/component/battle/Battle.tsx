@@ -1,5 +1,5 @@
 import React from "react";
-import { Battle as BattleData } from "../../backend/battle";
+import { Battle as BattleData, BattleReward, MappedUnitEffects } from "../../backend/battle";
 import BattleQueue from "./BattleQueue";
 import PBBGUnit from "../PBBGUnit";
 import "./Battle.css";
@@ -11,6 +11,8 @@ type Props = {
     onAllyTurn: (unitId: number) => void;
     onEnemyTurn: () => void;
     performingAction: boolean;
+    effects: MappedUnitEffects[];
+    reward: BattleReward | null;
 };
 
 type State = {
@@ -25,7 +27,7 @@ class Battle extends React.Component<Props, State> {
     };
 
     render() {
-        const { battle, onEnemyTurn, performingAction } = this.props;
+        const { battle, onEnemyTurn, performingAction, effects, reward } = this.props;
         const { hoveredUnit, selectingTarget } = this.state;
         const nextUnitId = battle.turns[0].unitId;
         const currentSide = battle.allies.some(ally => nextUnitId === ally.id) ? "ally" : "enemy";
@@ -74,7 +76,7 @@ class Battle extends React.Component<Props, State> {
                 enemyTurn: true,
                 onProcessEnemyTurn: onEnemyTurn
             })} />
-            <BattleLog />
+            <BattleLog effects={effects} reward={reward} />
         </div>;
     }
 

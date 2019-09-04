@@ -49,7 +49,7 @@
     z-index: 2;
 }
 
-.Battle[data-overlay-active] .pbbg-unit:not([data-current-turn][data-dead]) {
+.Battle[data-overlay-active] .pbbg-unit:not([data-current-turn]):not([data-dead]) {
     cursor: pointer;
 }
 
