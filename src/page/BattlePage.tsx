@@ -66,15 +66,11 @@ class BattlePage extends React.Component<{}, State> {
             );
     };
 
-    handleAllyTurn = () => {
+    handleAllyTurn = (targetUnitId: number) => {
         if (this.state.status !== "loaded" || this.state.battle === null) throw Error();
 
-        // TODO: Let user pick target
-        const enemies = this.state.battle.enemies;
-        const enemyId = enemies[Math.floor(Math.random() * enemies.length)].id;
-
         this.setState({ ...this.state, performingAction: true });
-        this.request = battleService.allyTurn({ enemyId })
+        this.request = battleService.allyTurn({ targetUnitId })
             .subscribe(
                 res => {
                     this.setState({ ...this.state, battle: res.data.battle, performingAction: false });

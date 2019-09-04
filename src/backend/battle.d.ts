@@ -15,7 +15,7 @@ type BattleGenerateResponse = Battle;
  * /battle/allyTurn
  */
 type BattleAllyTurnRequest = {
-    enemyId: number;
+    targetUnitId: number;
 };
 type BattleAllyTurnResponse = BattleActionResult;
 

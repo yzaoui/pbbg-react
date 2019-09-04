@@ -8,7 +8,7 @@ import BattleLog from "./BattleLog";
 
 type Props = {
     battle: BattleData;
-    onAllyTurn: () => void;
+    onAllyTurn: (unitId: number) => void;
     onEnemyTurn: () => void;
     performingAction: boolean;
 };
@@ -42,6 +42,11 @@ class Battle extends React.Component<Props, State> {
                         facing="right"
                         data-side="ally"
                         data-current-turn={ally.id === battle.turns[0].unitId ? "" : undefined}
+                        onMouseEnter={() => this.handleUnitEnter(ally.id)}
+                        onMouseLeave={this.handleUnitLeave}
+                        {...(selectingEnemyTarget &&
+                            { onClick: () => this.handleSelectTarget(ally.id) }
+                        )}
                     /></li>)}
                 </ul>
             </div>
@@ -53,6 +58,11 @@ class Battle extends React.Component<Props, State> {
                         facing="left"
                         data-side="enemy"
                         data-current-turn={enemy.id === battle.turns[0].unitId ? "" : undefined}
+                        onMouseEnter={() => this.handleUnitEnter(enemy.id)}
+                        onMouseLeave={this.handleUnitLeave}
+                        {...(selectingEnemyTarget &&
+                            { onClick: () => this.handleSelectTarget(enemy.id) }
+                        )}
                     /></li>)}
                 </ul>
             </div>
@@ -76,9 +86,14 @@ class Battle extends React.Component<Props, State> {
 
     handleUnitEnter = (unitId: number) => this.setState({ hoveredUnit: unitId });
 
-    handleUnitLeave = (unitId: number) => this.setState({ hoveredUnit: null });
+    handleUnitLeave = () => this.setState({ hoveredUnit: null });
 
     handleAllyTurn = () => this.setState({ selectingEnemyTarget: true });
+
+    handleSelectTarget = (unitId: number) => {
+        this.setState({ selectingEnemyTarget: false });
+        this.props.onAllyTurn(unitId);
+    };
 
     handleCancelTargetting = () => this.setState({ selectingEnemyTarget: false });
 }

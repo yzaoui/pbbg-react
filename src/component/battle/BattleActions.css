@@ -22,3 +22,8 @@
     border: 1px solid black;
     padding: 8px;
 }
+
+.BattleActions button {
+    display: block;
+    margin: auto;
+}
