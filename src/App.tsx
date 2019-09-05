@@ -19,6 +19,7 @@ import SettingsPage from "./page/SettingsPage";
 import authenticationService from "./authentication.service";
 import history from "./helper/history";
 import BattlePage from "./page/BattlePage";
+import MarketPage from "./page/MarketPage";
 
 interface State {
     currentUserToken: string | null;
@@ -44,9 +45,10 @@ class App extends React.Component<{}, State> {
                     <GuestRoute path="/register" component={RegisterPage} />
                     <GuestRoute path="/login" component={LoginPage} />
                     <MemberRoute path="/squad" component={SquadPage} />
-                    <MemberRoute path="/mine" component={MinePage} />
                     <MemberRoute path="/inventory" component={InventoryPage} />
+                    <MemberRoute path="/market" component={MarketPage} />
                     <MemberRoute path="/battle" component={BattlePage} />
+                    <MemberRoute path="/mine" component={MinePage} />
                     <MemberRoute path="/dex" component={DexPage} />
                     <MemberRoute path="/settings" component={SettingsPage} />
                 </main>

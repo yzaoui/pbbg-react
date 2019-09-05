@@ -10,6 +10,7 @@ const navItems = [
     { to: "/", emoji: "🏠", label: "Home", exact: true },
     { to: "/squad", emoji: "👥", label: "Squad", exact: true },
     { to: "/inventory", emoji: "🎒", label: "Inventory", exact: true },
+    { to: "/market", emoji: "💰", label: "Market", exact: true },
     { to: "/battle", emoji: "⚔️", label: "Battle", exact: true },
     { to: "/mine", emoji: "⛏️", label: "Mine", exact: false },
     { to: "/dex", emoji: "📚", label: "Dex", exact: false },
