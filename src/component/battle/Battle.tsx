@@ -5,6 +5,9 @@ import PBBGUnit from "../PBBGUnit";
 import "./Battle.css";
 import BattleActions from "./BattleActions";
 import BattleLog from "./BattleLog";
+import { MyUnit } from "../../backend/squad";
+
+export type SidedUnit = MyUnit & { side: "ally" | "enemy" };
 
 type Props = {
     battle: BattleData;
@@ -31,6 +34,8 @@ class Battle extends React.Component<Props, State> {
         const { hoveredUnit, selectingTarget } = this.state;
         const nextUnitId = battle.turns[0].unitId;
         const currentSide = battle.allies.some(ally => nextUnitId === ally.id) ? "ally" : "enemy";
+
+        const dfg = battle.allies.map(ally => ({ ...ally, side: "ally" }))
 
         return <div className="Battle" data-overlay-active={selectingTarget ? "" : undefined}>
             {selectingTarget &&
@@ -76,7 +81,11 @@ class Battle extends React.Component<Props, State> {
                 enemyTurn: true,
                 onProcessEnemyTurn: onEnemyTurn
             })} />
-            <BattleLog effects={effects} reward={reward} />
+            <BattleLog effects={effects} reward={reward} units={new Map(
+                battle.allies.map(ally => ({ ...ally, side: "ally" }) as SidedUnit)
+                    .concat(battle.enemies.map(enemy => ({ ...enemy, side: "enemy" }) as SidedUnit))
+                    .map(unit => [unit.id, unit])
+            )} />
         </div>;
     }
 

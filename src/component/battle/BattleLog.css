@@ -22,3 +22,37 @@
     border: 1px solid black;
     overflow-y: scroll;
 }
+
+.BattleLog > div > ol {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #d6d9f7cf;
+}
+
+.BattleLog > div > ol > li {
+    padding: 4px;
+}
+
+.BattleLog > div > ol > li:nth-child(even) {
+    background-color: #edf1ffcf;;
+}
+
+.HealthEffectResult > .damage {
+    color: red;
+}
+
+.HealthEffectResult > .ally, .HealthEffectResult > .enemy {
+    font-weight: bold;
+    cursor: default;
+}
+
+.HealthEffectResult > .ally {
+    color: #1d1dd2;
+    text-shadow: 1px 1px 1px #9a9aff;
+}
+
+.HealthEffectResult > .enemy {
+    color: #c31600;
+    text-shadow: 1px 1px 1px #bb9a96;
+}
