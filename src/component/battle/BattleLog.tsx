@@ -23,7 +23,6 @@ class BattleLog extends React.Component<Props> {
 
     componentDidUpdate(prevProps: Readonly<Props>) {
         if (prevProps.effects.length !== this.props.effects.length || (prevProps.reward === null && this.props.reward !== null)) {
-            console.log("changed!");
             this.scrollRef.current!!.scrollTop = this.scrollRef.current!!.scrollHeight;
         }
     }

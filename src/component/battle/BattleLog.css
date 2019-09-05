@@ -1,7 +1,6 @@
 .BattleLog {
     display: flex;
     flex-direction: column;
-    height: 202px;
 }
 
 .BattleLog > h1 {

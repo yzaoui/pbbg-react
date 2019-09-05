@@ -4,6 +4,10 @@
     position: relative;
 }
 
+.Battle[data-battle-over] {
+    grid-template-areas: "allies enemies" "log log";
+}
+
 .Battle > .BattleQueue {
     grid-area: turns;
 }
@@ -25,7 +29,12 @@
 }
 
 .Battle > .BattleLog {
+    height: 202px;
     grid-area: log;
+}
+
+.Battle[data-battle-over] > .BattleLog {
+    height: 289px;
 }
 
 .Battle > .unit-list-section {
