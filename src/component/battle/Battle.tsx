@@ -83,7 +83,7 @@ class Battle extends React.Component<Props, State> {
                 enemyTurn: true,
                 onProcessEnemyTurn: onEnemyTurn
             })} />
-            <BattleLog effects={effects} reward={reward} units={new Map(
+            <BattleLog effects={effects} reward={reward} onUnitNameEnter={this.handleUnitEnter} onUnitNameLeave={this.handleUnitLeave} units={new Map(
                 battle.allies.map(ally => ({ ...ally, side: "ally" }) as SidedUnit)
                     .concat(battle.enemies.map(enemy => ({ ...enemy, side: "enemy" }) as SidedUnit))
                     .map(unit => [unit.id, unit])

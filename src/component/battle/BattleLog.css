@@ -31,7 +31,7 @@
 }
 
 .BattleLog > div > ol > li {
-    padding: 4px;
+    padding: 6px;
 }
 
 .BattleLog > div > ol > li:nth-child(even) {
@@ -45,6 +45,8 @@
 .HealthEffectResult > .ally, .HealthEffectResult > .enemy {
     font-weight: bold;
     cursor: default;
+    border-radius: 4px;
+    padding: 0 4px;
 }
 
 .HealthEffectResult > .ally {
@@ -52,7 +54,17 @@
     text-shadow: 1px 1px 1px #9a9aff;
 }
 
+.HealthEffectResult > .ally:hover {
+    background-color: #aeb0ff96;
+    text-shadow: none;
+}
+
 .HealthEffectResult > .enemy {
     color: #c31600;
     text-shadow: 1px 1px 1px #bb9a96;
+}
+
+.HealthEffectResult > .enemy:hover {
+    background-color: #ffaeae96;
+    text-shadow: none;
 }
