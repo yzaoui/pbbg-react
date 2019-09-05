@@ -13,5 +13,5 @@
 .pbbg-progress-bar .inner {
     height: 100%;
     background: var(--bar-background-color, linear-gradient(#6de1ff, #00789c));
-    transition: width 0.8s cubic-bezier(.8,0,.2,1);
+    transition: width 0.8s cubic-bezier(.75,0,.25,1);
 }

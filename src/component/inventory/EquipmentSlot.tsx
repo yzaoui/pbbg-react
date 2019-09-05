@@ -15,7 +15,7 @@ const EquipmentSlot: React.FC<Props> = ({ item, style, children }) => <div class
     : item === null ?
         children
     :
-        <img src={item.item.baseItem.imgURL} alt={item.item.baseItem.friendlyName + " sprite"} />
+        <img src={item.item.baseItem.img16} alt={item.item.baseItem.friendlyName + " sprite"} />
     }
 </div>;
 

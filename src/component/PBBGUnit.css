@@ -1,10 +1,10 @@
 .pbbg-unit {
     display: inline-flex;
     flex-direction: row;
-    width: 22em;
-    box-sizing: border-box;
+    width: 21em;
     border: 1px solid #333333;
     padding: 6px;
+    background-color: #e9ebff;
 }
 
 .pbbg-unit:not([data-dead]) {
@@ -28,13 +28,14 @@
 }
 
 .pbbg-unit .name {
-    font-size: 1.1em;
+    font-size: 1.05em;
     font-weight: bold;
 }
 
 .pbbg-unit .stat-container {
-    border: 1px solid #00000033;
-    border-radius: 8px;
+    background: #0400ff1a;
+    border-radius: 4px;
+    padding: 0 2px;
 }
 
 .pbbg-unit > div > div > *:not(:first-child) {
@@ -42,7 +43,7 @@
 }
 
 .pbbg-unit .hp-bar {
-    width: 120px;
+    width: 140px;
     height: 11px;
     --bar-background-color: linear-gradient(#53ff52, #0f9c16);
 }

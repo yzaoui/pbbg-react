@@ -11,7 +11,7 @@ interface Props {
 const DexItemEntry: React.FC<Props> = ({ id, item }) => <li className="entry-li">
     <Link to={"/dex/items/" + id} className="entry-container">
         <span>#{id}</span>
-        <img src={item.imgURL} alt={item.friendlyName + " sprite"} />
+        <img src={item.img16} alt={item.friendlyName + " sprite"} />
         <span>{item.friendlyName}</span>
     </Link>
 </li>;

@@ -1,0 +1,118 @@
+.Battle {
+    display: grid;
+    grid-template-areas: "turns turns" "allies enemies" "actions log";
+    position: relative;
+}
+
+.Battle[data-battle-over] {
+    grid-template-areas: "allies enemies" "log log";
+}
+
+.Battle > .BattleQueue {
+    grid-area: turns;
+}
+
+.Battle > .allies-container {
+    grid-area: allies;
+}
+
+.Battle > .enemies-container {
+    grid-area: enemies;
+}
+
+.Battle > .BattleActions {
+    grid-area: actions;
+}
+
+.Battle > .BattleActions > div {
+    border-right-width: 0;
+}
+
+.Battle > .BattleLog {
+    height: 202px;
+    grid-area: log;
+}
+
+.Battle[data-battle-over] > .BattleLog {
+    height: 289px;
+}
+
+.Battle > .unit-list-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Battle > .unit-list-section > h1 {
+    margin: 0;
+}
+
+.Battle > .unit-list-section > ul {
+    display: inline-block;
+    list-style: none;
+    padding: 0;
+}
+
+.Battle[data-overlay-active] > .unit-list-section {
+    z-index: 2;
+}
+
+.Battle[data-overlay-active] .pbbg-unit:not([data-current-turn]):not([data-dead]) {
+    cursor: pointer;
+}
+
+.Battle .pbbg-unit {
+    margin: 5px 6px;
+    transition: transform 0.25s cubic-bezier(0, 1.5, 0.5, 1);
+}
+
+.Battle .pbbg-unit[data-side="ally"][data-current-turn] {
+    border-color: #1d1dd2;;
+}
+
+.Battle .pbbg-unit[data-side="enemy"][data-current-turn] {
+    border-color: #c30000;
+}
+
+.Battle .pbbg-unit[data-hovered]:not([data-dead]) {
+    transform: scale(1.02);
+}
+
+.Battle .pbbg-unit[data-current-turn] {
+    border-style: solid;
+    margin: 3px 4px 3px 0;
+    border-width: 3px 3px 3px 7px;
+}
+
+.Battle > .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #0000008f;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.Battle > .overlay > div {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-self: center;
+    margin-top: 22px;
+    background-color: #0000004f;
+    padding: 16px 28px;
+    border-radius: 36px;
+    box-shadow: #0000001f 0 1px 6px, #0000001f 0 1px 4px;
+}
+
+.Battle > .overlay > div > button {
+    margin-top: 4px;
+    margin-right: 22px;
+}
+
+.Battle > .overlay > div > span {
+    font-size: 33px;
+    color: white;
+    text-shadow: 2px 2px black;
+}
