@@ -13,12 +13,19 @@ interface Props {
 }
 
 class BattleLog extends React.Component<Props> {
-    olRef: RefObject<HTMLOListElement>;
+    scrollRef: RefObject<HTMLDivElement>;
 
     constructor(props: Props) {
         super(props);
 
-        this.olRef = React.createRef();
+        this.scrollRef = React.createRef();
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
+        if (prevProps.effects.length !== this.props.effects.length || (prevProps.reward === null && this.props.reward !== null)) {
+            console.log("changed!");
+            this.scrollRef.current!!.scrollTop = this.scrollRef.current!!.scrollHeight;
+        }
     }
 
     render() {
@@ -26,8 +33,8 @@ class BattleLog extends React.Component<Props> {
 
         return <div className="BattleLog">
             <h1>Log</h1>
-            <div>
-                <ol ref={this.olRef}>
+            <div ref={this.scrollRef}>
+                <ol>
                     {effects.map((mappedEffect, i) => Object.entries(mappedEffect).map(([id, effect]) => {
                         const unitId = parseInt(id);
 
@@ -48,6 +55,6 @@ class BattleLog extends React.Component<Props> {
     }
 }
 
-const BattleRewardResult: React.FC<BattleReward> = () => <li>[reward]</li>;
+const BattleRewardResult: React.FC<BattleReward> = () => <li>[BATTLE OVER RESULTS]</li>;
 
 export default BattleLog;
