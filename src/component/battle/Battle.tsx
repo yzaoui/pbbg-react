@@ -19,19 +19,19 @@ type Props = {
 };
 
 type State = {
-    hoveredUnit: number | null;
+    hoveredUnitId: number | null;
     selectingTarget: boolean;
 }
 
 class Battle extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
-        hoveredUnit: null,
+        hoveredUnitId: null,
         selectingTarget: false
     };
 
     render() {
         const { battle, onEnemyTurn, performingAction, effects, reward } = this.props;
-        const { hoveredUnit, selectingTarget } = this.state;
+        const { hoveredUnitId, selectingTarget } = this.state;
         const nextUnitId = battle.turns[0].unitId;
         const currentSide = battle.allies.some(ally => nextUnitId === ally.id) ? "ally" : "enemy";
 
@@ -41,7 +41,7 @@ class Battle extends React.Component<Props, State> {
             {selectingTarget &&
                 this.createOverlay()
             }
-            <BattleQueue battle={battle} onUnitEnter={this.handleUnitEnter} onUnitLeave={this.handleUnitLeave} hoveredUnit={hoveredUnit} />
+            <BattleQueue battle={battle} onUnitEnter={this.handleUnitEnter} onUnitLeave={this.handleUnitLeave} hoveredUnit={hoveredUnitId} />
             <div className="allies-container unit-list-section">
                 <h1>Allies</h1>
                 <ul>
@@ -50,6 +50,7 @@ class Battle extends React.Component<Props, State> {
                         facing="right"
                         data-side="ally"
                         data-current-turn={ally.id === nextUnitId ? "" : undefined}
+                        data-hovered={ally.id === hoveredUnitId ? "" : undefined}
                         onMouseEnter={() => this.handleUnitEnter(ally.id)}
                         onMouseLeave={this.handleUnitLeave}
                         {...(selectingTarget && ally.id !== nextUnitId && ally.hp > 0 &&
@@ -66,6 +67,7 @@ class Battle extends React.Component<Props, State> {
                         facing="left"
                         data-side="enemy"
                         data-current-turn={enemy.id === nextUnitId ? "" : undefined}
+                        data-hovered={enemy.id === hoveredUnitId ? "" : undefined}
                         onMouseEnter={() => this.handleUnitEnter(enemy.id)}
                         onMouseLeave={this.handleUnitLeave}
                         {...(selectingTarget && enemy.id !== nextUnitId && enemy.hp > 0 &&
@@ -96,9 +98,9 @@ class Battle extends React.Component<Props, State> {
         </div>
     </div>;
 
-    handleUnitEnter = (unitId: number) => this.setState({ hoveredUnit: unitId });
+    handleUnitEnter = (unitId: number) => this.setState({ hoveredUnitId: unitId });
 
-    handleUnitLeave = () => this.setState({ hoveredUnit: null });
+    handleUnitLeave = () => this.setState({ hoveredUnitId: null });
 
     handleAllyTurn = () => this.setState({ selectingTarget: true });
 

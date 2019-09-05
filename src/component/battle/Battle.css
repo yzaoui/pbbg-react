@@ -55,6 +55,7 @@
 
 .Battle .pbbg-unit {
     margin: 5px 6px;
+    transition: transform 0.25s cubic-bezier(0, 1.5, 0.5, 1);
 }
 
 .Battle .pbbg-unit[data-side="ally"][data-current-turn] {
@@ -63,6 +64,10 @@
 
 .Battle .pbbg-unit[data-side="enemy"][data-current-turn] {
     border-color: #c30000;
+}
+
+.Battle .pbbg-unit[data-hovered]:not([data-dead]) {
+    transform: scale(1.02);
 }
 
 .Battle .pbbg-unit[data-current-turn] {
