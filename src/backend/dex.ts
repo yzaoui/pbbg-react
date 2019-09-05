@@ -38,7 +38,9 @@ export interface MyUnitEnum {
 
 export interface BaseItem {
     friendlyName: string;
-    imgURL: string;
+    img16: string;
+    img32: string;
+    img64: string;
     description: string;
 }
 

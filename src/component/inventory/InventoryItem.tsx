@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 const InventoryItem: React.FC<Props> = ({ inventoryEntry, ...rest }) => <div className="InventoryItem" {...rest}>
-    <img src={inventoryEntry.item.baseItem.imgURL} alt={inventoryEntry.item.baseItem.friendlyName + " sprite"} />
+    <img src={inventoryEntry.item.baseItem.img16} alt={inventoryEntry.item.baseItem.friendlyName + " sprite"} />
     {isStackable(inventoryEntry.item) &&
         <span className="quantity">{inventoryEntry.item.quantity}</span>
     }
