@@ -45,5 +45,9 @@
     border: 1px solid black;
     border-top-width: 0;
     text-align: right;
-    padding: 8px;
+    padding: 4px;
+}
+
+.Market .footer > :not(:last-child) {
+    margin-right: 8px;
 }
