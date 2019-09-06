@@ -17,11 +17,11 @@
     grid-area: inventory;
 }
 
-.Market .ForSale, .Market .Inventory {
+.Market .ForSale, .Market .UserInventory {
     margin: 0 16px;
 }
 
-.Market .ForSale > ul, .Market .Inventory > ul {
+.Market .ForSale > ul, .Market .UserInventory > ul {
     display: flex;
     flex-direction: row;
     margin: 0;
@@ -30,11 +30,11 @@
     padding: 8px;
 }
 
-.Market .ForSale > ul > li:not(:last-child), .Market .Inventory > ul > li:not(:last-child) {
+.Market .ForSale > ul > li:not(:last-child), .Market .UserInventory > ul > li:not(:last-child) {
     margin-right: 6px;
 }
 
-.Market .ForSale > ul > li > img, .Market .Inventory > ul > li > img {
+.Market .ForSale > ul > li > img, .Market .UserInventory > ul > li > img {
     width: 32px;
     height: 32px;
     padding: 2px;
