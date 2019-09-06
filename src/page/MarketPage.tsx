@@ -6,6 +6,7 @@ import LoadingSpinner from "../component/LoadingSpinner";
 import inventoryService from "../backend/inventory.service";
 import { Inventory } from "../backend/inventory";
 import { Market } from "../backend/market";
+import goldSrc from "../img/gold.png";
 
 interface State {
     market: "loading" | Market;
@@ -48,7 +49,7 @@ class MarketPage extends React.Component<{}, State> {
                 {this.state.market === "loading" ?
                     <LoadingSpinner />
                     :
-                    "Loaded!"
+                    <ForSale items={this.state.market.items} />
                 }
             </div>
             <div className="inventory">
@@ -62,5 +63,15 @@ class MarketPage extends React.Component<{}, State> {
         </div>;
     }
 }
+
+const ForSale: React.FC<Market> = ({ items }) => <ul className="ForSale">
+    {items.map(({ id, item, price }) => <li key={id}>
+        <img src={item.baseItem.img16} />
+        <div>
+            <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />
+            <span>{price}</span>
+        </div>
+    </li>)}
+</ul>;
 
 export default MarketPage;

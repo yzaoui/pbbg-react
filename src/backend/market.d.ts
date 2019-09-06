@@ -10,6 +10,7 @@ export interface Market {
 }
 
 interface MarketItem {
+    id: number;
     item: MaterializedItem;
     price: number;
 }
