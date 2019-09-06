@@ -18,21 +18,32 @@
 }
 
 .Market .ForSale, .Market .Inventory {
+    margin: 0 16px;
+}
+
+.Market .ForSale > ul, .Market .Inventory > ul {
     display: flex;
     flex-direction: row;
-    margin: 0 16px;
+    margin: 0;
     border: 1px solid black;
     list-style-type: none;
     padding: 8px;
 }
 
-.Market .ForSale > li:not(:last-child), .Market .Inventory > li:not(:last-child) {
+.Market .ForSale > ul > li:not(:last-child), .Market .Inventory > ul > li:not(:last-child) {
     margin-right: 6px;
 }
 
-.Market .ForSale > li > img, .Market .Inventory > li > img {
+.Market .ForSale > ul > li > img, .Market .Inventory > ul > li > img {
     width: 32px;
     height: 32px;
     padding: 2px;
     border: 1px solid black;
+}
+
+.Market .footer {
+    border: 1px solid black;
+    border-top-width: 0;
+    text-align: right;
+    padding: 8px;
 }
