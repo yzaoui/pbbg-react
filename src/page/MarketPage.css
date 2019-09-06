@@ -1,0 +1,17 @@
+.Market {
+    display: grid;
+    grid-template-areas: "header header" "for-sale inventory";
+    text-align: center;
+}
+
+.Market > h1 {
+    grid-area: header;
+}
+
+.Market > .for-sale {
+    grid-area: for-sale;
+}
+
+.Market > .inventory {
+    grid-area: inventory;
+}
