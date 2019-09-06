@@ -12,6 +12,14 @@ const marketService = {
         }).then(
             res => handleResponse<MarketEndpoint.MarketResponse>(res)
         )
+    ),
+    getUserInventory: () => RxJS.from(
+        fetch(`${API_ROOT}/api/market/inventory`, {
+            method: "GET",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<MarketEndpoint.UserInventoryResponse>(res)
+        )
     )
 };
 

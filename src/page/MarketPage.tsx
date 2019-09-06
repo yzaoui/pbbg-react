@@ -3,14 +3,12 @@ import { Subscription } from "rxjs";
 import "./MarketPage.css";
 import marketService from "../backend/market.service";
 import LoadingSpinner from "../component/LoadingSpinner";
-import inventoryService from "../backend/inventory.service";
-import { Inventory } from "../backend/inventory";
 import { Market } from "../backend/market";
 import goldSrc from "../img/gold.png";
 
 interface State {
     market: "loading" | Market;
-    inventory: "loading" | Inventory;
+    inventory: "loading" | Market;
 }
 
 class MarketPage extends React.Component<{}, State> {
@@ -29,7 +27,7 @@ class MarketPage extends React.Component<{}, State> {
                 error => console.log("error")
             );
 
-        this.inventoryRequest = inventoryService.getInventory()
+        this.inventoryRequest = marketService.getUserInventory()
             .subscribe(
                 res => this.setState({ inventory: res.data }),
                 error => console.log("error")
@@ -57,7 +55,7 @@ class MarketPage extends React.Component<{}, State> {
                 {this.state.inventory === "loading" ?
                     <LoadingSpinner />
                     :
-                    "Loaded!"
+                    <Inventory items={this.state.inventory.items} />
                 }
             </div>
         </div>;
@@ -66,7 +64,17 @@ class MarketPage extends React.Component<{}, State> {
 
 const ForSale: React.FC<Market> = ({ items }) => <ul className="ForSale">
     {items.map(({ id, item, price }) => <li key={id}>
-        <img src={item.baseItem.img16} />
+        <img src={item.baseItem.img16} alt={item.baseItem.friendlyName + " sprite"} />
+        <div>
+            <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />
+            <span>{price}</span>
+        </div>
+    </li>)}
+</ul>;
+
+const Inventory: React.FC<Market> = ({ items }) => <ul className="Inventory">
+    {items.map(({ id, item, price }) => <li key={id}>
+        <img src={item.baseItem.img16} alt={item.baseItem.friendlyName + " sprite"} />
         <div>
             <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />
             <span>{price}</span>

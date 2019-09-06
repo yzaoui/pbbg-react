@@ -1,6 +1,7 @@
 .Market {
     display: grid;
     grid-template-areas: "header header" "for-sale inventory";
+    grid-template-columns: 50% 50%;
     text-align: center;
 }
 
@@ -16,15 +17,22 @@
     grid-area: inventory;
 }
 
-.Market .ForSale {
+.Market .ForSale, .Market .Inventory {
     display: flex;
     flex-direction: row;
+    margin: 0 16px;
     border: 1px solid black;
     list-style-type: none;
     padding: 8px;
 }
 
-.Market .ForSale > li > img {
+.Market .ForSale > li:not(:last-child), .Market .Inventory > li:not(:last-child) {
+    margin-right: 6px;
+}
+
+.Market .ForSale > li > img, .Market .Inventory > li > img {
     width: 32px;
     height: 32px;
+    padding: 2px;
+    border: 1px solid black;
 }

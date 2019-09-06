@@ -1,9 +1,14 @@
+import { MaterializedItem } from "./inventory";
+
 /**
  * /market
  */
-import { MaterializedItem } from "./inventory";
-
 export type MarketResponse = Market
+
+/**
+ * /market/inventory
+ */
+export type UserInventoryResponse = Market
 
 export interface Market {
     items: MarketItem[];
