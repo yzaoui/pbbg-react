@@ -56,11 +56,18 @@ class MarketPage extends React.Component<{}, State> {
                 {this.state.inventory === "loading" ?
                     <LoadingSpinner />
                     :
-                    <UserInventory items={this.state.inventory.items} />
+                    <UserInventory
+                        items={this.state.inventory.items}
+                        onSell={this.handleSell}
+                    />
                 }
             </div>
         </div>;
     }
+
+    handleSell = (ids: number[]) => {
+
+    };
 }
 
 export default MarketPage;

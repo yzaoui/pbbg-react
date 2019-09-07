@@ -132,7 +132,7 @@ button.fancy {
     color: white;
     height: 32px;
     background-color: #007bff;
-    border: 1px #007bff;
+    border: 1px solid #007bff;
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
     transition: all 150ms ease-in;
@@ -169,10 +169,14 @@ a.fancy {
 
 button.fancy:disabled {
     cursor: not-allowed;
-    background-color: #009fed;
-    border: 1px solid #999999;
+    background-color: #007bff;
+    border-color: #007bff;
     box-shadow: initial;
     opacity: 0.7;
+}
+
+button.fancy:not(:disabled) {
+    box-shadow: 0 0 0 0.2rem rgba(38,143,255,.5);
 }
 
 button.loading, button.loading.fancy, button.loading.fancy:disabled {
