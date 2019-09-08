@@ -52,7 +52,7 @@ class MemberNav extends React.Component<{}, State> {
                 )}
             </div>
             <div className="sidebar-logout">
-                <button onClick={handleLogoutClick}>Log out</button>
+                <button className="fancy" onClick={handleLogoutClick}>Log out</button>
             </div>
         </nav>;
     }

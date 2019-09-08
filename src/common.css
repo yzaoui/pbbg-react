@@ -175,7 +175,7 @@ button.fancy:disabled {
     opacity: 0.7;
 }
 
-button.fancy:not(:disabled) {
+button.fancy:not(:disabled):focus {
     box-shadow: 0 0 0 0.2rem rgba(38,143,255,.5);
 }
 
