@@ -1,12 +1,16 @@
 .Market {
     display: grid;
-    grid-template-areas: "header header" "for-sale inventory";
+    grid-template-areas: "header header" "gold gold" "for-sale inventory";
     grid-template-columns: 50% 50%;
     text-align: center;
 }
 
 .Market > h1 {
     grid-area: header;
+}
+
+.Market > .gold {
+    grid-area: gold;
 }
 
 .Market > .for-sale {

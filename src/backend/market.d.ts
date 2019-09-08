@@ -22,6 +22,7 @@ export type SellRequest = {
 export type SellResponse = UserAndGameMarkets
 
 export interface UserAndGameMarkets {
+    gold: number;
     userMarket: Market;
     gameMarket: Market;
 }
