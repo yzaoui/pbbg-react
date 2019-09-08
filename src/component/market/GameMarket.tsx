@@ -5,28 +5,31 @@ import LoadingButton from "../LoadingButton";
 
 interface Props {
     items: MarketItem[];
-    selling: boolean;
-    onSell: (ids: number[]) => void;
+    userGold: number;
+    buying: boolean;
+    onBuy: (ids: number[]) => void;
 }
 
 interface State {
     selectedItems: Set<number>;
 }
 
-class UserInventory extends React.Component<Props, State> {
+class GameMarket extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
         selectedItems: new Set<number>()
     };
 
     componentDidUpdate(prevProps: Readonly<Props>) {
-        if (prevProps.selling && !this.props.selling) this.setState({ selectedItems: new Set() });
+        if (prevProps.buying && !this.props.buying) this.setState({ selectedItems: new Set() });
     }
 
     render() {
-        const { items, selling } = this.props;
+        const { items, userGold, buying } = this.props;
         const { selectedItems } = this.state;
+        const total = this.total();
+        const notEnoughGold = userGold < total;
 
-        return <div className="UserInventory">
+        return <div className="ForSale">
             <ul>
                 {items.map(({ id, item, price }) => <li key={id}>
                     <img
@@ -42,9 +45,9 @@ class UserInventory extends React.Component<Props, State> {
                     </div>
                 </li>)}
             </ul>
-            <div className="footer">
-                <span>Total: {goldImg}{this.total()}</span>
-                <LoadingButton loading={selling} disabled={selling || selectedItems.size === 0} onClick={this.handleSell}>Sell</LoadingButton>
+            <div className="footer" data-not-enough-gold={notEnoughGold ? "" : undefined}>
+                <span>Total: {goldImg}{total}</span>
+                <LoadingButton loading={buying} disabled={notEnoughGold || buying || selectedItems.size === 0} onClick={this.handleBuy}>Buy</LoadingButton>
             </div>
         </div>;
     }
@@ -68,11 +71,11 @@ class UserInventory extends React.Component<Props, State> {
         this.setState({ selectedItems: newItems });
     };
 
-    handleSell = () => {
-        this.props.onSell(Array.from(this.state.selectedItems));
+    handleBuy = () => {
+        this.props.onBuy(Array.from(this.state.selectedItems));
     };
 }
 
 const goldImg = <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />;
 
-export default UserInventory;
+export default GameMarket;

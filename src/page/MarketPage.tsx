@@ -4,8 +4,8 @@ import "./MarketPage.css";
 import marketService from "../backend/market.service";
 import LoadingSpinner from "../component/LoadingSpinner";
 import { UserAndGameMarkets } from "../backend/market";
-import ForSale from "../component/market/ForSale";
-import UserInventory from "../component/market/UserInventory";
+import GameMarket from "../component/market/GameMarket";
+import UserMarket from "../component/market/UserMarket";
 import goldSrc from "../img/gold.png";
 
 interface State {
@@ -50,8 +50,9 @@ class MarketPage extends React.Component<{}, State> {
                 {this.state.markets === "loading" ?
                     <LoadingSpinner />
                 :
-                    <ForSale
+                    <GameMarket
                         items={this.state.markets.gameMarket.items}
+                        userGold={this.state.markets.gold}
                         buying={this.state.buying}
                         onBuy={this.handleBuy}
                     />
@@ -62,7 +63,7 @@ class MarketPage extends React.Component<{}, State> {
                 {this.state.markets === "loading" ?
                     <LoadingSpinner />
                     :
-                    <UserInventory
+                    <UserMarket
                         items={this.state.markets.userMarket.items}
                         selling={this.state.selling}
                         onSell={this.handleSell}

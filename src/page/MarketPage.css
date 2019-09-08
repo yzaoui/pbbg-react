@@ -63,3 +63,7 @@
 .Market .footer > :not(:last-child) {
     margin-right: 8px;
 }
+
+.Market .footer[data-not-enough-gold] {
+    color: red;
+}

@@ -5,24 +5,28 @@ import LoadingButton from "../LoadingButton";
 
 interface Props {
     items: MarketItem[];
-    buying: boolean;
-    onBuy: (ids: number[]) => void;
+    selling: boolean;
+    onSell: (ids: number[]) => void;
 }
 
 interface State {
     selectedItems: Set<number>;
 }
 
-class ForSale extends React.Component<Props, State> {
+class UserMarket extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
         selectedItems: new Set<number>()
     };
 
+    componentDidUpdate(prevProps: Readonly<Props>) {
+        if (prevProps.selling && !this.props.selling) this.setState({ selectedItems: new Set() });
+    }
+
     render() {
-        const { items, buying } = this.props;
+        const { items, selling } = this.props;
         const { selectedItems } = this.state;
 
-        return <div className="ForSale">
+        return <div className="UserInventory">
             <ul>
                 {items.map(({ id, item, price }) => <li key={id}>
                     <img
@@ -40,7 +44,7 @@ class ForSale extends React.Component<Props, State> {
             </ul>
             <div className="footer">
                 <span>Total: {goldImg}{this.total()}</span>
-                <LoadingButton loading={buying} disabled={buying || selectedItems.size === 0} onClick={this.handleBuy}>Buy</LoadingButton>
+                <LoadingButton loading={selling} disabled={selling || selectedItems.size === 0} onClick={this.handleSell}>Sell</LoadingButton>
             </div>
         </div>;
     }
@@ -64,11 +68,11 @@ class ForSale extends React.Component<Props, State> {
         this.setState({ selectedItems: newItems });
     };
 
-    handleBuy = () => {
-        this.props.onBuy(Array.from(this.state.selectedItems));
+    handleSell = () => {
+        this.props.onSell(Array.from(this.state.selectedItems));
     };
 }
 
 const goldImg = <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />;
 
-export default ForSale;
+export default UserMarket;
