@@ -10,6 +10,14 @@ export type MarketResponse = Market
  */
 export type UserInventoryResponse = Market
 
+/**
+ * /market/sell
+ */
+export type SellRequest = {
+    orders: { id: number, quantity?: number }[];
+}
+export type SellResponse = Market
+
 export interface Market {
     items: MarketItem[];
 }

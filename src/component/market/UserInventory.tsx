@@ -5,6 +5,7 @@ import LoadingButton from "../LoadingButton";
 
 interface Props {
     items: MarketItem[];
+    selling: boolean;
     onSell: (ids: number[]) => void;
 }
 
@@ -17,12 +18,17 @@ class UserInventory extends React.Component<Props, State> {
         selectedItems: new Set<number>()
     };
 
+    componentDidUpdate(prevProps: Readonly<Props>) {
+        if (prevProps.selling && !this.props.selling) this.setState({ selectedItems: new Set() });
+    }
+
     render() {
+        const { items, selling } = this.props;
         const { selectedItems } = this.state;
 
         return <div className="UserInventory">
             <ul>
-                {this.props.items.map(({ id, item, price }) => <li key={id}>
+                {items.map(({ id, item, price }) => <li key={id}>
                     <img
                         src={item.baseItem.img16} alt={item.baseItem.friendlyName + " sprite"}
                         onClick={() => this.handleClickItem(id)}
@@ -37,7 +43,7 @@ class UserInventory extends React.Component<Props, State> {
             </ul>
             <div className="footer">
                 <span>Total: {goldImg}{this.total()}</span>
-                <LoadingButton loading={false} disabled={selectedItems.size === 0} onClick={this.handleSell}>Sell</LoadingButton>
+                <LoadingButton loading={selling} disabled={selling || selectedItems.size === 0} onClick={this.handleSell}>Sell</LoadingButton>
             </div>
         </div>;
     }

@@ -10,12 +10,14 @@ import UserInventory from "../component/market/UserInventory";
 interface State {
     market: "loading" | Market;
     inventory: "loading" | Market;
+    selling: boolean;
 }
 
 class MarketPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
         market: "loading",
-        inventory: "loading"
+        inventory: "loading",
+        selling: false
     };
 
     marketRequest?: Subscription;
@@ -58,6 +60,7 @@ class MarketPage extends React.Component<{}, State> {
                     :
                     <UserInventory
                         items={this.state.inventory.items}
+                        selling={this.state.selling}
                         onSell={this.handleSell}
                     />
                 }
@@ -66,7 +69,13 @@ class MarketPage extends React.Component<{}, State> {
     }
 
     handleSell = (ids: number[]) => {
+        this.setState({ selling: true });
 
+        marketService.sell({ orders: ids.map(id => ({ id: id })) })
+            .subscribe(
+                res => this.setState({ selling: false, inventory: res.data }),
+                error => {}
+            );
     };
 }
 
