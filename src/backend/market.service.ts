@@ -6,7 +6,7 @@ import * as MarketEndpoint from "./market";
 import jsonHeader from "../helper/json-header";
 
 const marketService = {
-    getMarket: () => RxJS.from(
+    getGameMarket: () => RxJS.from(
         fetch(`${API_ROOT}/api/market`, {
             method: "GET",
             headers: authHeader()
@@ -14,12 +14,21 @@ const marketService = {
             res => handleResponse<MarketEndpoint.MarketResponse>(res)
         )
     ),
-    getUserInventory: () => RxJS.from(
+    getUserMarket: () => RxJS.from(
         fetch(`${API_ROOT}/api/market/inventory`, {
             method: "GET",
             headers: authHeader()
         }).then(
             res => handleResponse<MarketEndpoint.UserInventoryResponse>(res)
+        )
+    ),
+    buy: (req: MarketEndpoint.SellRequest) => RxJS.from(
+        fetch(`${API_ROOT}/api/market/buy`, {
+            method: "POST",
+            headers: { ...jsonHeader(), ...authHeader() },
+            body: JSON.stringify(req)
+        }).then(
+            res => handleResponse<MarketEndpoint.BuyResponse>(res)
         )
     ),
     sell: (req: MarketEndpoint.SellRequest) => RxJS.from(

@@ -8,15 +8,17 @@ import ForSale from "../component/market/ForSale";
 import UserInventory from "../component/market/UserInventory";
 
 interface State {
-    market: "loading" | Market;
-    inventory: "loading" | Market;
+    gameMarket: "loading" | Market;
+    userMarket: "loading" | Market;
+    buying: boolean;
     selling: boolean;
 }
 
 class MarketPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        market: "loading",
-        inventory: "loading",
+        gameMarket: "loading",
+        userMarket: "loading",
+        buying: false,
         selling: false
     };
 
@@ -24,15 +26,15 @@ class MarketPage extends React.Component<{}, State> {
     inventoryRequest?: Subscription;
 
     componentDidMount() {
-        this.marketRequest = marketService.getMarket()
+        this.marketRequest = marketService.getGameMarket()
             .subscribe(
-                res => this.setState({ market: res.data }),
+                res => this.setState({ gameMarket: res.data }),
                 error => console.log("error")
             );
 
-        this.inventoryRequest = marketService.getUserInventory()
+        this.inventoryRequest = marketService.getUserMarket()
             .subscribe(
-                res => this.setState({ inventory: res.data }),
+                res => this.setState({ userMarket: res.data }),
                 error => console.log("error")
             );
     }
@@ -47,19 +49,23 @@ class MarketPage extends React.Component<{}, State> {
             <h1>Market</h1>
             <div className="for-sale">
                 <h2>For sale</h2>
-                {this.state.market === "loading" ?
+                {this.state.gameMarket === "loading" ?
                     <LoadingSpinner />
                     :
-                    <ForSale items={this.state.market.items} />
+                    <ForSale
+                        items={this.state.gameMarket.items}
+                        buying={this.state.buying}
+                        onBuy={this.handleBuy}
+                    />
                 }
             </div>
             <div className="inventory">
                 <h2>Your inventory</h2>
-                {this.state.inventory === "loading" ?
+                {this.state.userMarket === "loading" ?
                     <LoadingSpinner />
                     :
                     <UserInventory
-                        items={this.state.inventory.items}
+                        items={this.state.userMarket.items}
                         selling={this.state.selling}
                         onSell={this.handleSell}
                     />
@@ -68,12 +74,22 @@ class MarketPage extends React.Component<{}, State> {
         </div>;
     }
 
+    handleBuy = (ids: number[]) => {
+        this.setState({ buying: true });
+
+        marketService.buy({ orders: ids.map(id => ({ id: id })) })
+            .subscribe(
+                res => this.setState({ buying: false, gameMarket: res.data.gameMarket, userMarket: res.data.userMarket }),
+                error => {}
+            );
+    };
+
     handleSell = (ids: number[]) => {
         this.setState({ selling: true });
 
         marketService.sell({ orders: ids.map(id => ({ id: id })) })
             .subscribe(
-                res => this.setState({ selling: false, inventory: res.data }),
+                res => this.setState({ selling: false, gameMarket: res.data.gameMarket, userMarket: res.data.userMarket }),
                 error => {}
             );
     };

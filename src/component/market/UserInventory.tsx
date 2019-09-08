@@ -30,7 +30,8 @@ class UserInventory extends React.Component<Props, State> {
             <ul>
                 {items.map(({ id, item, price }) => <li key={id}>
                     <img
-                        src={item.baseItem.img16} alt={item.baseItem.friendlyName + " sprite"}
+                        src={item.baseItem.img16}
+                        alt={item.baseItem.friendlyName + " sprite"}
                         onClick={() => this.handleClickItem(id)}
                         tabIndex={0}
                         data-selected={selectedItems.has(id) ? "" : undefined}
