@@ -22,26 +22,18 @@ class MarketPage extends React.Component<{}, State> {
         selling: false
     };
 
-    marketRequest?: Subscription;
-    inventoryRequest?: Subscription;
+    request?: Subscription;
 
     componentDidMount() {
-        this.marketRequest = marketService.getGameMarket()
+        this.request = marketService.getMarkets()
             .subscribe(
-                res => this.setState({ gameMarket: res.data }),
-                error => console.log("error")
-            );
-
-        this.inventoryRequest = marketService.getUserMarket()
-            .subscribe(
-                res => this.setState({ userMarket: res.data }),
+                res => this.setState({ gameMarket: res.data.gameMarket, userMarket: res.data.userMarket }),
                 error => console.log("error")
             );
     }
 
     componentWillUnmount() {
-        this.marketRequest && this.marketRequest.unsubscribe();
-        this.inventoryRequest && this.inventoryRequest.unsubscribe();
+        this.request && this.request.unsubscribe();
     }
 
     render() {

@@ -3,12 +3,7 @@ import { MaterializedItem } from "./inventory";
 /**
  * /market
  */
-export type MarketResponse = Market
-
-/**
- * /market/inventory
- */
-export type UserInventoryResponse = Market
+export type MarketResponse = UserAndGameMarkets
 
 /**
  * /market/buy
