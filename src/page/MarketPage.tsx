@@ -7,6 +7,11 @@ import { UserAndGameMarkets } from "../backend/market";
 import GameMarket from "../component/market/GameMarket";
 import UserMarket from "../component/market/UserMarket";
 import goldSrc from "../img/gold.png";
+import { Howl } from "howler";
+// @ts-ignore
+import transactionMP3 from "../audio/transaction.mp3";
+// @ts-ignore
+import transactionOGG from "../audio/transaction.ogg";
 
 interface State {
     markets: "loading" | UserAndGameMarkets;
@@ -22,6 +27,11 @@ class MarketPage extends React.Component<{}, State> {
     };
 
     request?: Subscription;
+
+    transactionSound = new Howl({
+        src: [transactionMP3, transactionOGG],
+        preload: true
+    });
 
     componentDidMount() {
         this.request = marketService.getMarkets()
@@ -78,7 +88,10 @@ class MarketPage extends React.Component<{}, State> {
 
         marketService.buy({ orders: ids.map(id => ({ id: id })) })
             .subscribe(
-                res => this.setState({ buying: false, markets: res.data }),
+                res => {
+                    this.transactionSound.play();
+                    this.setState({ buying: false, markets: res.data });
+                },
                 error => {}
             );
     };
@@ -88,7 +101,10 @@ class MarketPage extends React.Component<{}, State> {
 
         marketService.sell({ orders: ids.map(id => ({ id: id })) })
             .subscribe(
-                res => this.setState({ selling: false, markets: res.data }),
+                res => {
+                    this.transactionSound.play();
+                    this.setState({ selling: false, markets: res.data });
+                },
                 error => {}
             );
     };
