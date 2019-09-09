@@ -34,6 +34,8 @@ class MarketPage extends React.Component<{}, State> {
     });
 
     componentDidMount() {
+        document.title = "Market - PBBG";
+
         this.request = marketService.getMarkets()
             .subscribe(
                 res => this.setState({ markets: res.data }),
