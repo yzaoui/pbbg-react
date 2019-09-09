@@ -2,30 +2,31 @@ import React from "react";
 import { MarketItem } from "../../backend/market";
 import goldSrc from "../../img/gold.png";
 import LoadingButton from "../LoadingButton";
+import { isStackable } from "../../backend/inventory";
 
 interface Props {
     items: MarketItem[];
     userGold: number;
     buying: boolean;
-    onBuy: (ids: number[]) => void;
+    onBuy: (orders: Map<number, number | undefined>) => void;
 }
 
 interface State {
-    selectedItems: Set<number>;
+    selectedItemsWithQuantity: Map<number, number | undefined>;
 }
 
 class GameMarket extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
-        selectedItems: new Set<number>()
+        selectedItemsWithQuantity: new Map()
     };
 
     componentDidUpdate(prevProps: Readonly<Props>) {
-        if (prevProps.buying && !this.props.buying) this.setState({ selectedItems: new Set() });
+        if (prevProps.buying && !this.props.buying) this.setState({ selectedItemsWithQuantity: new Map() });
     }
 
     render() {
         const { items, userGold, buying } = this.props;
-        const { selectedItems } = this.state;
+        const { selectedItemsWithQuantity } = this.state;
         const total = this.total();
         const notEnoughGold = userGold < total;
 
@@ -37,9 +38,15 @@ class GameMarket extends React.Component<Props, State> {
                         alt={item.baseItem.friendlyName + " sprite"}
                         onClick={() => this.handleClickItem(id)}
                         tabIndex={0}
-                        data-selected={selectedItems.has(id) ? "" : undefined}
+                        data-selected={selectedItemsWithQuantity.has(id) ? "" : undefined}
                     />
                     <div>
+                        {isStackable(item) && (() => {
+                            const selectedQuantity = selectedItemsWithQuantity.get(id);
+                            if (selectedQuantity !== null && selectedQuantity !== undefined) return `${selectedQuantity}×`;
+                            else return "";
+                        })()
+                        }
                         {goldImg}
                         <span>{price}</span>
                     </div>
@@ -47,32 +54,63 @@ class GameMarket extends React.Component<Props, State> {
             </ul>
             <div className="footer" data-not-enough-gold={notEnoughGold ? "" : undefined}>
                 <span>Total: {goldImg}{total}</span>
-                <LoadingButton loading={buying} disabled={notEnoughGold || buying || selectedItems.size === 0} onClick={this.handleBuy}>Buy</LoadingButton>
+                <LoadingButton loading={buying} disabled={notEnoughGold || buying || selectedItemsWithQuantity.size === 0} onClick={this.handleBuy}>Buy</LoadingButton>
             </div>
         </div>;
     }
 
     total = () => {
-        return this.props.items.filter(item => this.state.selectedItems.has(item.id))
-            .map(item => item.price)
-            .reduce((total, price) => total + price, 0);
+        return this.props.items.filter(item => this.state.selectedItemsWithQuantity.has(item.id))
+            .map(item => ({ price: item.price, quantity: this.selectedItemQuantity(item.id) }))
+            .reduce((total, { price, quantity }) => total + (quantity !== null ? price * quantity : price ), 0);
+    };
+
+    selectedItemQuantity = (itemId: number) => {
+        const quantity = this.state.selectedItemsWithQuantity.get(itemId);
+
+        if (quantity === null || quantity === undefined) return null;
+
+        return quantity;
     };
 
     handleClickItem = (id: number) => {
-        const currentItems = this.state.selectedItems;
+        const currentlySelectedItems = this.state.selectedItemsWithQuantity;
 
-        let newItems = new Set(currentItems);
-        if (currentItems.has(id)) {
-            newItems.delete(id);
+        const item = this.props.items.find(item => item.id === id)!.item;
+
+        const newMap = new Map(currentlySelectedItems);
+
+        if (isStackable(item)) {
+            const currentQuantity = currentlySelectedItems.get(id);
+            const inputQuantityString = window.prompt(
+                `How many? (max: ${item.quantity})`,
+                (currentQuantity !== null && currentQuantity !== undefined) ? currentQuantity.toString() : "0"
+            );
+
+            if (inputQuantityString === null) return;
+
+            const inputQuantity = parseInt(inputQuantityString);
+
+            if (isNaN(inputQuantity) || inputQuantity < 0 || inputQuantity > item.quantity) {
+                window.alert(`Invalid quantity: ${inputQuantityString}. Must be an integer within 0 and ${item.quantity}.`);
+                return;
+            }
+
+            if (inputQuantity === 0) newMap.delete(id);
+            else newMap.set(id, inputQuantity);
         } else {
-            newItems.add(id);
+            if (currentlySelectedItems.has(id)) {
+                newMap.delete(id);
+            } else {
+                newMap.set(id, undefined);
+            }
         }
 
-        this.setState({ selectedItems: newItems });
+        this.setState({ selectedItemsWithQuantity: newMap });
     };
 
     handleBuy = () => {
-        this.props.onBuy(Array.from(this.state.selectedItems));
+        this.props.onBuy(this.state.selectedItemsWithQuantity);
     };
 }
 
