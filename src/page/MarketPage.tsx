@@ -100,10 +100,12 @@ class MarketPage extends React.Component<{}, State> {
             );
     };
 
-    handleSell = (ids: number[]) => {
+    handleSell = (orders: Map<number, number | undefined>) => {
         this.setState({ selling: true });
 
-        marketService.sell({ orders: ids.map(id => ({ id: id })) })
+        const ordersArray = Array.from(orders, ([id, quantity]) => ({ id, quantity }));
+
+        marketService.sell({ orders: ordersArray })
             .subscribe(
                 res => {
                     this.transactionSound.play();
