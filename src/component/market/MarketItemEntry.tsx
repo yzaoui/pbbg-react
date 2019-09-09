@@ -1,6 +1,8 @@
 import React from "react";
 import { MarketItem } from "../../backend/market";
 import { goldImg } from "../../helper/const";
+import { isStackable } from "../../backend/inventory";
+import "./MarketItemEntry.css";
 
 interface Props {
     marketItem: MarketItem;
@@ -9,14 +11,21 @@ interface Props {
     selectedQuantity?: number;
 }
 
-const MarketItemEntry: React.FC<Props> = ({ marketItem, onClick, selected, selectedQuantity }) => <li>
-    <img
-        src={marketItem.item.baseItem.img16}
-        alt={marketItem.item.baseItem.friendlyName + " sprite"}
+const MarketItemEntry: React.FC<Props> = ({ marketItem, onClick, selected, selectedQuantity }) => <li className="MarketItemEntry" data-selected={selected ? "" : undefined}>
+    <div
+        className="sprite-container"
         onClick={() => onClick(marketItem.id)}
         tabIndex={0}
-        data-selected={selected ? "" : undefined}
-    />
+    >
+        <img
+            className="item-sprite"
+            src={marketItem.item.baseItem.img16}
+            alt={marketItem.item.baseItem.friendlyName + " sprite"}
+        />
+        {isStackable(marketItem.item) &&
+            <span className="quantity">{marketItem.item.quantity}</span>
+        }
+    </div>
     <div>
         {selectedQuantity !== undefined && selectedQuantity > 0 &&
             `${selectedQuantity}×`

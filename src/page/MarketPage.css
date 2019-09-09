@@ -34,23 +34,8 @@
     padding: 8px;
 }
 
-.Market .ForSale > ul > li:not(:last-child), .Market .UserInventory > ul > li:not(:last-child) {
+.Market .MarketItemEntry {
     margin-right: 6px;
-}
-
-.Market .ForSale > ul > li > img, .Market .UserInventory > ul > li > img {
-    width: 32px;
-    height: 32px;
-    padding: 2px;
-    border: 1px solid gray;
-    cursor: pointer;
-    box-shadow: #0000001f 2px 2px 1px;
-}
-
-.Market .ForSale > ul > li > img[data-selected], .Market .UserInventory > ul > li > img[data-selected] {
-    border-width: 2px;
-    border-color: black;
-    box-shadow: none;
 }
 
 .Market .footer {
