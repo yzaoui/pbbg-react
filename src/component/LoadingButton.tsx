@@ -1,8 +1,8 @@
-import React, { HTMLAttributes } from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import classNames from "classnames";
 import LoadingSpinner from "./LoadingSpinner";
 
-interface Props extends HTMLAttributes<HTMLButtonElement> {
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
     loading: boolean
 }
 
