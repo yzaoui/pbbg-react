@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Route, RouteComponentProps } from "react-router-dom";
-import "./DexPage.css";
+import "./DexPage.scss";
 import DexUnitsPage from "./DexUnitsPage";
 import DexItemsPage from "./DexItemsPage";
 
@@ -18,7 +18,7 @@ class Index extends React.Component<RouteComponentProps> {
     render() {
         const { match } = this.props;
 
-        return <div className="dex-categories">
+        return <div className="DexPage">
             <Link to={match.url + "/items"}>Items</Link>
             <Link to={match.url + "/units"}>Units</Link>
         </div>;
