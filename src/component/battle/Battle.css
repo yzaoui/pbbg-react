@@ -58,28 +58,28 @@
     z-index: 2;
 }
 
-.Battle[data-overlay-active] .pbbg-unit:not([data-current-turn]):not([data-dead]) {
+.Battle[data-overlay-active] .PBBGUnit:not([data-current-turn]):not([data-dead]) {
     cursor: pointer;
 }
 
-.Battle .pbbg-unit {
+.Battle .PBBGUnit {
     margin: 5px 6px;
     transition: transform 0.25s cubic-bezier(0, 1.5, 0.5, 1);
 }
 
-.Battle .pbbg-unit[data-side="ally"][data-current-turn] {
+.Battle .PBBGUnit[data-side="ally"][data-current-turn] {
     border-color: #1d1dd2;;
 }
 
-.Battle .pbbg-unit[data-side="enemy"][data-current-turn] {
+.Battle .PBBGUnit[data-side="enemy"][data-current-turn] {
     border-color: #c30000;
 }
 
-.Battle .pbbg-unit[data-hovered]:not([data-dead]) {
+.Battle .PBBGUnit[data-hovered]:not([data-dead]) {
     transform: scale(1.02);
 }
 
-.Battle .pbbg-unit[data-current-turn] {
+.Battle .PBBGUnit[data-current-turn] {
     border-style: solid;
     margin: 3px 4px 3px 0;
     border-width: 3px 3px 3px 7px;
