@@ -1,5 +1,5 @@
 import React from "react";
-import "./MineList.css";
+import "./MineList.scss";
 import LoadingSpinner from "../LoadingSpinner";
 import { MineTypeList } from "../../backend/mine";
 import MineListRow from "./MineListRow";
