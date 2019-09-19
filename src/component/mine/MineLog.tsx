@@ -1,5 +1,5 @@
 import React, { RefObject } from "react";
-import "./MineLog.css";
+import "./MineLog.scss";
 import { LevelUp as LevelUpData, MinedItemResult } from "../../backend/mine";
 import { isStackable } from "../../backend/inventory";
 import classNames from "classnames";
