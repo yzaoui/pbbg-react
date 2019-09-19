@@ -2,7 +2,7 @@ import React from "react";
 import { MarketItem } from "../../backend/market";
 import { goldImg } from "../../helper/const";
 import { isStackable } from "../../backend/inventory";
-import "./MarketItemEntry.css";
+import "./MarketItemEntry.scss";
 
 interface Props {
     marketItem: MarketItem;
