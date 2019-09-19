@@ -1,7 +1,6 @@
 import React from "react";
 import { InventoryEntry, isEquippable, isStackable } from "../../backend/inventory";
 import "./InventoryItemTooltip.scss";
-import "../../common.css";
 import GridPreview from "../GridPreview";
 import { isGridPreviewable } from "../../backend/dex";
 

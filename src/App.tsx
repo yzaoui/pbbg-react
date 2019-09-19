@@ -1,6 +1,6 @@
 import React from 'react';
 import "normalize.css"
-import "./common.css"
+import "./common.scss"
 import { Route, Router } from "react-router-dom";
 import GuestNav from "./component/GuestNav";
 import MemberNav from "./component/MemberNav";
