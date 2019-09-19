@@ -1,6 +1,6 @@
 import React from "react";
 import LoadingButton from "../LoadingButton";
-import "./BattleActions.css";
+import "./BattleActions.scss";
 
 type Props = {
     performingAction: boolean;
