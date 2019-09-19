@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import "./EquipmentSlot.css";
+import "./EquipmentSlot.scss";
 import { InventoryEntry } from "../../backend/inventory";
 import classNames from "classnames";
 import LoadingSpinner from "../LoadingSpinner";
