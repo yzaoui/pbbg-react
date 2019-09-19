@@ -2,7 +2,7 @@ import React from "react";
 import { Battle as BattleData, BattleReward, MappedUnitEffects } from "../../backend/battle";
 import BattleQueue from "./BattleQueue";
 import PBBGUnit from "../PBBGUnit";
-import "./Battle.css";
+import "./Battle.scss";
 import BattleActions from "./BattleActions";
 import BattleLog from "./BattleLog";
 import { MyUnit } from "../../backend/squad";
