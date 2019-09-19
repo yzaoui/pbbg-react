@@ -1,6 +1,6 @@
 import React from "react";
 import { Battle as BattleData } from "../../backend/battle";
-import "./BattleQueue.css";
+import "./BattleQueue.scss";
 
 interface Props {
     battle: BattleData;
