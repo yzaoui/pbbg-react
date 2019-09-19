@@ -1,5 +1,5 @@
 import React, { RefObject } from "react";
-import "./BattleLog.css";
+import "./BattleLog.scss";
 import { BattleReward, MappedUnitEffects } from "../../backend/battle";
 import { SidedUnit } from "./Battle";
 import HealthEffectResult from "./HealthEffectResult";
