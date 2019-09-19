@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, MouseEventHandler, RefObject } from "react";
-import "./Mine.css";
+import "./Mine.scss";
 import { Mine as MineData } from "../../backend/mine";
 import { InventoryEntry, Point } from "../../backend/inventory";
 import { isGridPreviewable } from "../../backend/dex";
