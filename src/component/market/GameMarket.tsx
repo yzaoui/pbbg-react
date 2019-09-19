@@ -31,7 +31,7 @@ class GameMarket extends React.Component<Props, State> {
         const total = this.total();
         const notEnoughGold = userGold < total;
 
-        return <div className="ForSale">
+        return <div className="GameMarket">
             <ul>
                 {items.map(marketItem => <MarketItemEntry
                     key={marketItem.id}
