@@ -1,7 +1,7 @@
 import React from "react";
 import * as DexEndpoint from "../../backend/dex";
 import { Route, RouteComponentProps } from "react-router-dom";
-import "./DexSubpage.css";
+import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
