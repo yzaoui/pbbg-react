@@ -63,7 +63,7 @@ class MarketPage extends React.Component<{}, State> {
                     <LoadingSpinner />
                 :
                     <GameMarket
-                        items={this.state.markets.gameMarket.items}
+                        marketItems={this.state.markets.gameMarket.items}
                         userGold={this.state.markets.gold}
                         buying={this.state.buying}
                         onBuy={this.handleBuy}
@@ -76,7 +76,7 @@ class MarketPage extends React.Component<{}, State> {
                     <LoadingSpinner />
                     :
                     <UserMarket
-                        items={this.state.markets.userMarket.items}
+                        marketItems={this.state.markets.userMarket.items}
                         selling={this.state.selling}
                         onSell={this.handleSell}
                     />

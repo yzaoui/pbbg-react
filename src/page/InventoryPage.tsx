@@ -25,7 +25,6 @@ type State = {
     equipmentChanging: boolean;
 };
 
-
 class InventoryPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
         status: "loading"
@@ -73,12 +72,12 @@ class InventoryPage extends React.Component<{}, State> {
     }
 
     inventoryContents = ({ inventory, equipmentChanging }: { inventory: Inventory, equipmentChanging: boolean }) =>
-        inventory.items.sort((a, b) => a.id - b.id).map(entry => <li key={entry.id} className="inventory-item">
+        inventory.items.sort((a, b) => a.item.id - b.item.id).map(entry => <li key={entry.item.id} className="inventory-item">
             <InventoryItem inventoryEntry={entry} />
             <InventoryItemTooltip
                 inventoryEntry={entry}
-                equip={isEquippable(entry) && !entry.equipped ? () => this.handleEquipUnequip(entry.id, "equip") : undefined}
-                unequip={isEquippable(entry) && entry.equipped ? () => this.handleEquipUnequip(entry.id, "unequip") : undefined}
+                equip={isEquippable(entry) && !entry.equipped ? () => this.handleEquipUnequip(entry.item.id, "equip") : undefined}
+                unequip={isEquippable(entry) && entry.equipped ? () => this.handleEquipUnequip(entry.item.id, "unequip") : undefined}
                 equipDisabled={equipmentChanging}
             />
         </li>);

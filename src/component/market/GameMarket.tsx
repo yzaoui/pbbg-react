@@ -6,7 +6,7 @@ import MarketItemEntry from "./MarketItemEntry";
 import { goldImg } from "../../helper/const";
 
 interface Props {
-    items: MarketItem[];
+    marketItems: MarketItem[];
     userGold: number;
     buying: boolean;
     onBuy: (orders: Map<number, number | undefined>) => void;
@@ -26,19 +26,19 @@ class GameMarket extends React.Component<Props, State> {
     }
 
     render() {
-        const { items, userGold, buying } = this.props;
+        const { marketItems, userGold, buying } = this.props;
         const { selectedItemsWithQuantity } = this.state;
         const total = this.total();
         const notEnoughGold = userGold < total;
 
         return <div className="GameMarket">
             <ul>
-                {items.map(marketItem => <MarketItemEntry
-                    key={marketItem.id}
+                {marketItems.map(marketItem => <MarketItemEntry
+                    key={marketItem.item.id}
                     marketItem={marketItem}
                     onClick={this.handleClickItem}
-                    selected={selectedItemsWithQuantity.has(marketItem.id)}
-                    selectedQuantity={selectedItemsWithQuantity.get(marketItem.id)}
+                    selected={selectedItemsWithQuantity.has(marketItem.item.id)}
+                    selectedQuantity={selectedItemsWithQuantity.get(marketItem.item.id)}
                 />)}
             </ul>
             <div className="footer" data-not-enough-gold={notEnoughGold ? "" : undefined}>
@@ -49,8 +49,8 @@ class GameMarket extends React.Component<Props, State> {
     }
 
     total = () => {
-        return this.props.items.filter(item => this.state.selectedItemsWithQuantity.has(item.id))
-            .map(item => ({ price: item.price, quantity: this.selectedItemQuantity(item.id) }))
+        return this.props.marketItems.filter(marketItem => this.state.selectedItemsWithQuantity.has(marketItem.item.id))
+            .map(marketItem => ({ price: marketItem.price, quantity: this.selectedItemQuantity(marketItem.item.id) }))
             .reduce((total, { price, quantity }) => total + (quantity !== null ? price * quantity : price ), 0);
     };
 
@@ -65,7 +65,7 @@ class GameMarket extends React.Component<Props, State> {
     handleClickItem = (id: number) => {
         const currentlySelectedItems = this.state.selectedItemsWithQuantity;
 
-        const item = this.props.items.find(item => item.id === id)!.item;
+        const item = this.props.marketItems.find(marketItem => marketItem.item.id === id)!.item;
 
         const newMap = new Map(currentlySelectedItems);
 

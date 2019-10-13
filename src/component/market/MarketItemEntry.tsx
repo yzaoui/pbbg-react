@@ -14,7 +14,7 @@ interface Props {
 const MarketItemEntry: React.FC<Props> = ({ marketItem, onClick, selected, selectedQuantity }) => <li className="MarketItemEntry" data-selected={selected ? "" : undefined}>
     <div
         className="sprite-container"
-        onClick={() => onClick(marketItem.id)}
+        onClick={() => onClick(marketItem.item.id)}
         tabIndex={0}
     >
         <img
