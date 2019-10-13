@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
-import "../page/LoginRegisterPage.css";
+import "../page/LoginRegisterPage.scss";
 
 interface Props {
     onSubmit: (username: string, password: string) => void;

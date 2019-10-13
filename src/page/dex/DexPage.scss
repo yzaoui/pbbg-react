@@ -1,31 +1,31 @@
-div.dex-categories {
+.DexPage {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
 
-div.dex-categories > a {
-    display: inline-block;
-    width: 200px;
-    border: 3px solid black;
-    border-top: 0;
-    padding: 20px;
-    text-align: center;
-    text-decoration: none;
-}
+    > a {
+        display: inline-block;
+        width: 200px;
+        border: 3px solid black;
+        border-top: 0;
+        padding: 20px;
+        text-align: center;
+        text-decoration: none;
 
-div.dex-categories > a:hover {
-    color: white;
-    background-color: #0390f9;
-}
+        &:hover {
+            color: white;
+            background-color: #0390f9;
+        }
 
-div.dex-categories > a:first-child {
-    border-top: 3px solid black;
-    border-radius: 10px 10px 0 0;
-}
+        &:first-child {
+            border-top: 3px solid black;
+            border-radius: 10px 10px 0 0;
+        }
 
-div.dex-categories > a:last-child {
-    border-radius: 0 0 10px 10px;
+        &:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+    }
 }
 
 div.dex-header {

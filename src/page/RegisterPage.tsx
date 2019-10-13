@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./LoginRegisterPage.css";
+import "./LoginRegisterPage.scss";
 import RegisterForm from "../component/RegisterForm";
 import authenticationService from "./../authentication.service";
 

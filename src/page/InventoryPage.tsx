@@ -1,6 +1,6 @@
 import React from "react";
 import player from "../img/player.png";
-import "./InventoryPage.css";
+import "./InventoryPage.scss";
 import { Inventory, isEquippable } from "../backend/inventory";
 import LoadingSpinner from "../component/LoadingSpinner";
 import InventoryItem from "../component/inventory/InventoryItem";
@@ -55,7 +55,7 @@ class InventoryPage extends React.Component<{}, State> {
     render() {
         if (this.state.status === "error") return "ERROR";
 
-        return <>
+        return <div className="InventoryPage">
             <div className="player-equipment">
                 <img className="player-portrait" src={player} alt="Player portrait" />
                 <EquipmentSlot item={this.state.status === "loaded" ? this.state.inventory.equipment.pickaxe : "loading"} style={{ top: "100px", left: "90px" }}>
@@ -69,11 +69,11 @@ class InventoryPage extends React.Component<{}, State> {
                     <LoadingSpinner />
                 : {}}
             </ul>
-        </>;
+        </div>;
     }
 
     inventoryContents = ({ inventory, equipmentChanging }: { inventory: Inventory, equipmentChanging: boolean }) =>
-        inventory.items.sort((a, b) => a.id - b.id).map(entry => <li key={entry.id}>
+        inventory.items.sort((a, b) => a.id - b.id).map(entry => <li key={entry.id} className="inventory-item">
             <InventoryItem inventoryEntry={entry} />
             <InventoryItemTooltip
                 inventoryEntry={entry}

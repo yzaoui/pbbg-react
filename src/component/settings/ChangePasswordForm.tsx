@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
-import "./ChangePasswordForm.css"
+import "./ChangePasswordForm.scss"
 import { PASSWORD_REGEX } from "../../helper/const";
 
 interface State {

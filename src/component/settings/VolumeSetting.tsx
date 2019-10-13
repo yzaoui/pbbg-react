@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler } from "react";
 import audioService from "../../audio.service";
-import "./VolumeSetting.css"
+import "./VolumeSetting.scss"
 
 interface State {
     volume: string;

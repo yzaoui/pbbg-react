@@ -1,5 +1,5 @@
 import React from "react";
-import "./GridPreview.css";
+import "./GridPreview.scss";
 import { Point } from "../backend/inventory";
 
 interface Props {

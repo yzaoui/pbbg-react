@@ -28,7 +28,7 @@ class UserMarket extends React.Component<Props, State> {
         const { items, selling } = this.props;
         const { selectedItemsWithQuantity } = this.state;
 
-        return <div className="UserInventory">
+        return <div className="UserMarket">
             <ul>
                 {items.map(marketItem => <MarketItemEntry
                     key={marketItem.id}

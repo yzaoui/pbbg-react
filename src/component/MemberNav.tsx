@@ -1,5 +1,4 @@
 import React from "react";
-import "../common.css";
 import { NavLink } from "react-router-dom";
 import authenticationService from "./../authentication.service";
 import { Subscription } from "rxjs";

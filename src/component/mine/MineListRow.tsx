@@ -1,6 +1,6 @@
 import React from "react";
 import { MineType } from "../../backend/mine";
-import "./MineListRow.css";
+import "./MineListRow.scss";
 
 interface Props {
     mineType: MineType;

@@ -1,6 +1,12 @@
 body {
     font-size: 16px;
     background-image: url(./img/background.png);
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -46,18 +52,18 @@ main {
     border: 1px solid black;
     order: -1;
     background: #e1e4ffcf;
+
+    > .username {
+        text-align: center;
+        font-weight: bold;
+        border-bottom: grey 1px solid;
+        padding: 10px;
+    }
 }
 
 .sidebar-guest > * {
     text-align: center;
     padding: 6px;
-}
-
-.sidebar > .username {
-    text-align: center;
-    font-weight: bold;
-    border-bottom: grey 1px solid;
-    padding: 10px;
 }
 
 .navigation {
@@ -69,11 +75,11 @@ a.sidebar-item {
     position: relative;
     text-decoration: none;
     padding: 10px 10px 10px 40px;
-}
 
-a.sidebar-item:hover {
-    background-color: #0390f9;
-    color: white;
+    &:hover {
+        background-color: #0390f9;
+        color: white;
+    }
 }
 
 span.sidebar-item-icon {
@@ -95,11 +101,11 @@ a.current-site-section.sidebar-item:hover {
 .sidebar-logout {
     margin-top: auto;
     margin-bottom: 0;
-}
 
-.sidebar-logout > button {
-    width: 100%;
-    padding: 6px
+    > button {
+        width: 100%;
+        padding: 6px
+    }
 }
 
 .sidebar-login-form > * {
@@ -115,15 +121,15 @@ a.btn {
     padding: 7px;
     text-decoration: none;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
 
-a.btn:hover {
-    background-color: #0069d9;
-    border-color: #0062cc;
-}
+    &:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
 
-a.btn:focus {
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.5);
+    }
 }
 
 button.fancy {
@@ -136,28 +142,40 @@ button.fancy {
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
     transition: all 150ms ease-in;
-}
 
-button.fancy:hover {
-    background-color: #0069d9;
-    border-color: #0062cc;
-}
+    &:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
 
-button.fancy.danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
+    &:disabled {
+        cursor: not-allowed;
+        background-color: #007bff;
+        border-color: #007bff;
+        box-shadow: initial;
+        opacity: 0.7;
+    }
 
-button.fancy.danger:hover {
-    background-color: #bd2130;
-    border-color: #b21f2d;
+    &:not(:disabled):focus {
+        box-shadow: 0 0 0 0.2rem rgba(38,143,255,.5);
+    }
+
+    &.danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+
+        &:hover {
+            background-color: #bd2130;
+            border-color: #b21f2d;
+        }
+    }
 }
 
 a.fancy {
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    padding: 0px 15px;
+    padding: 0 15px;
     color: white;
     height: 32px;
     background-color: #0086d4;
@@ -165,18 +183,6 @@ a.fancy {
     border-radius: 2px;
     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
     transition: all 150ms ease-in;
-}
-
-button.fancy:disabled {
-    cursor: not-allowed;
-    background-color: #007bff;
-    border-color: #007bff;
-    box-shadow: initial;
-    opacity: 0.7;
-}
-
-button.fancy:not(:disabled):focus {
-    box-shadow: 0 0 0 0.2rem rgba(38,143,255,.5);
 }
 
 button.loading, button.loading.fancy, button.loading.fancy:disabled {

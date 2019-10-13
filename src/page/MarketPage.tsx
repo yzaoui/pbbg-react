@@ -1,6 +1,6 @@
 import React from 'react';
 import { Subscription } from "rxjs";
-import "./MarketPage.css";
+import "./MarketPage.scss";
 import marketService from "../backend/market.service";
 import LoadingSpinner from "../component/LoadingSpinner";
 import { UserAndGameMarkets } from "../backend/market";

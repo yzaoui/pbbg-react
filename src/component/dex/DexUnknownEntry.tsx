@@ -1,5 +1,5 @@
 import React from "react";
-import "../../page/dex/DexSubpage.css"
+import "../../page/dex/DexSubpage.scss"
 import unknownImg from "./../../img/dex-unknown.png";
 
 interface Props {

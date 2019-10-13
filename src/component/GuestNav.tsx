@@ -1,6 +1,5 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
-import "../common.css";
-import "./GuestNav.css";
+import "./GuestNav.scss";
 import { Link } from "react-router-dom";
 import authenticationService from "./../authentication.service";
 import history from "./../helper/history";

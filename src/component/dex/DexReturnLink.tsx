@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import styles from "./DexReturnLink.module.css";
+import styles from "./DexReturnLink.module.scss";
 import * as H from "history";
 
 interface Props {

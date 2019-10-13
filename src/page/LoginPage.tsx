@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
-import "./LoginRegisterPage.css";
+import "./LoginRegisterPage.scss";
 import authenticationService from "./../authentication.service";
 import LoginForm, { IncorrectCredentialsError } from "../component/LoginForm";
 

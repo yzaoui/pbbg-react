@@ -1,6 +1,6 @@
 import React, { HTMLAttributes } from "react";
 import { MyUnit } from "../backend/squad";
-import "./PBBGUnit.css"
+import "./PBBGUnit.scss"
 import PBBGLevelProgress from "./PBBGLevelProgress";
 import PBBGProgressBar from "./PBBGProgressBar";
 
@@ -11,7 +11,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 const PBBGUnit: React.FC<Props> = ({ unit, facing = "right", ...rest }) =>
     <div
-        className="pbbg-unit"
+        className="PBBGUnit"
         data-facing={facing}
         data-dead={unit.hp === 0 ? "" : undefined}
         {...rest}
