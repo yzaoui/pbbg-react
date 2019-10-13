@@ -49,9 +49,9 @@ class DexItemDetailedPage extends React.Component<Props, State> {
             <h1>{item.friendlyName}</h1>
             <h2>Sprites</h2>
             <div className="body">
-                <img src={item.img16} alt={`${item.friendlyName} 16x16 sprite`} />
-                <img src={item.img32} alt={`${item.friendlyName} 32x32 sprite`} />
-                <img src={item.img64} alt={`${item.friendlyName} 64x64 sprite`} />
+                <img className="item-sprite" src={item.img16} alt={`${item.friendlyName} 16x16 sprite`} />
+                <img className="item-sprite" src={item.img32} alt={`${item.friendlyName} 32x32 sprite`} />
+                <img className="item-sprite" src={item.img64} alt={`${item.friendlyName} 64x64 sprite`} />
             </div>
             <h2>Description</h2>
             <div className="body">
