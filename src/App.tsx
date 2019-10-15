@@ -1,7 +1,7 @@
 import React from 'react';
 import "normalize.css"
 import "./common.scss"
-import { Route, Router } from "react-router-dom";
+import { Route, Router, Switch, Redirect } from "react-router-dom";
 import GuestNav from "./component/GuestNav";
 import MemberNav from "./component/MemberNav";
 import GuestRoute from "./GuestRoute";
@@ -40,16 +40,19 @@ class App extends React.Component<{}, State> {
             <div className="container">
                 {isLoggedIn ? <MemberNav /> : <GuestNav />}
                 <main>
-                    <Route path="/" exact render={() => isLoggedIn ? <IndexMemberPage /> : <IndexGuestPage />} />
-                    <GuestRoute path="/register" component={RegisterPage} />
-                    <GuestRoute path="/login" component={LoginPage} />
-                    <MemberRoute path="/squad" component={SquadPage} />
-                    <MemberRoute path="/inventory" component={InventoryPage} />
-                    <MemberRoute path="/market" component={MarketPage} />
-                    <MemberRoute path="/battle" component={BattlePage} />
-                    <MemberRoute path="/mine" component={MinePage} />
-                    <MemberRoute path="/dex" component={DexPage} />
-                    <MemberRoute path="/settings" component={SettingsPage} />
+                    <Switch>
+                        <Route path="/" exact render={() => isLoggedIn ? <IndexMemberPage /> : <IndexGuestPage />} />
+                        <GuestRoute path="/register" component={RegisterPage} />
+                        <GuestRoute path="/login" component={LoginPage} />
+                        <MemberRoute path="/squad" component={SquadPage} />
+                        <MemberRoute path="/inventory" component={InventoryPage} />
+                        <MemberRoute path="/market" component={MarketPage} />
+                        <MemberRoute path="/battle" component={BattlePage} />
+                        <MemberRoute path="/mine" component={MinePage} />
+                        <MemberRoute path="/dex" component={DexPage} />
+                        <MemberRoute path="/settings" component={SettingsPage} />
+                        <Redirect to="/" />
+                    </Switch>
                 </main>
             </div>
         </Router>;
