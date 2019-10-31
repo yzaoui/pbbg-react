@@ -48,10 +48,15 @@ class ItemPage extends React.Component<Props, State> {
             <div>
                 <h4>History</h4>
                 <ol>
-                    {history.map((entry, index) => <li key={index}>
-                        <ItemHistoryEntryDescription info={entry.info} userDetails={linkedUserInfo} />
-                        <ItemHistoryEntryDate date={entry.date} />
-                    </li>)}
+                    {history
+                        .sort((a, b) => b.date - a.date) // Sort by descending
+                        .map((entry, index) =>
+                                <li key={index}>
+                                    <ItemHistoryEntryDescription info={entry.info} userDetails={linkedUserInfo} />
+                                    <ItemHistoryEntryDate date={entry.date} />
+                                </li>
+                        )
+                    }
                 </ol>
             </div>
         </div>;
