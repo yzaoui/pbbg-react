@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { InventoryEntry, isEquippable, isStackable } from "../../backend/inventory";
 import "./InventoryItemTooltip.scss";
 import GridPreview from "../GridPreview";
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const InventoryItemTooltip: React.FC<Props> = ({ inventoryEntry, equip, unequip, equipDisabled }) => <div className="InventoryItemTooltip">
-    <div>{inventoryEntry.item.baseItem.friendlyName}</div>
+    <div><Link to={`/item/${inventoryEntry.item.id}`}>{inventoryEntry.item.baseItem.friendlyName}</Link></div>
     {isStackable(inventoryEntry.item) && <>
         <hr />
         <div>Quantity: {inventoryEntry.item.quantity}</div>

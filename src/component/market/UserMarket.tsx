@@ -6,7 +6,7 @@ import { goldImg } from "../../helper/const";
 import { isStackable } from "../../backend/inventory";
 
 interface Props {
-    items: MarketItem[];
+    marketItems: MarketItem[];
     selling: boolean;
     onSell: (orders: Map<number, number | undefined>) => void;
 }
@@ -25,17 +25,17 @@ class UserMarket extends React.Component<Props, State> {
     }
 
     render() {
-        const { items, selling } = this.props;
+        const { marketItems, selling } = this.props;
         const { selectedItemsWithQuantity } = this.state;
 
         return <div className="UserMarket">
             <ul>
-                {items.map(marketItem => <MarketItemEntry
-                    key={marketItem.id}
+                {marketItems.map(marketItem => <MarketItemEntry
+                    key={marketItem.item.id}
                     marketItem={marketItem}
                     onClick={this.handleClickItem}
-                    selected={selectedItemsWithQuantity.has(marketItem.id)}
-                    selectedQuantity={selectedItemsWithQuantity.get(marketItem.id)}
+                    selected={selectedItemsWithQuantity.has(marketItem.item.id)}
+                    selectedQuantity={selectedItemsWithQuantity.get(marketItem.item.id)}
                 />)}
             </ul>
             <div className="footer">
@@ -46,8 +46,8 @@ class UserMarket extends React.Component<Props, State> {
     }
 
     total = () => {
-        return this.props.items.filter(item => this.state.selectedItemsWithQuantity.has(item.id))
-            .map(item => ({ price: item.price, quantity: this.selectedItemQuantity(item.id) }))
+        return this.props.marketItems.filter(marketItem => this.state.selectedItemsWithQuantity.has(marketItem.item.id))
+            .map(marketItem => ({ price: marketItem.price, quantity: this.selectedItemQuantity(marketItem.item.id) }))
             .reduce((total, { price, quantity }) => total + (quantity !== null ? price * quantity : price ), 0);
     };
 
@@ -62,7 +62,7 @@ class UserMarket extends React.Component<Props, State> {
     handleClickItem = (id: number) => {
         const currentlySelectedItems = this.state.selectedItemsWithQuantity;
 
-        const item = this.props.items.find(item => item.id === id)!.item;
+        const item = this.props.marketItems.find(marketItem => marketItem.item.id === id)!.item;
 
         const newMap = new Map(currentlySelectedItems);
 

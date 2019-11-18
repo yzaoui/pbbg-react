@@ -18,11 +18,11 @@ export interface Equipment {
 }
 
 export interface InventoryEntry {
-    id: number;
     item: MaterializedItem;
 }
 
 export interface MaterializedItem {
+    id: number;
     baseItem: BaseItem;
 }
 
