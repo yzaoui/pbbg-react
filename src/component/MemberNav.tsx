@@ -16,13 +16,18 @@ const navItems = [
     { to: "/settings", emoji: "⚙️", label: "Settings", exact: true }
 ];
 
-interface State {
-    state: "loading" | "error" | { username: string }
-}
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    username: string;
+};
 
 class MemberNav extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        status: "loading"
     };
 
     request?: Subscription;
@@ -30,8 +35,8 @@ class MemberNav extends React.Component<{}, State> {
     componentDidMount(): void {
         this.request = userService.get()
             .subscribe(
-                res => this.setState({ state: { username: res.data.username } }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "loaded", username: res.data.username }),
+                error => this.setState({ status: "error" })
             )
     }
 
@@ -57,10 +62,10 @@ class MemberNav extends React.Component<{}, State> {
     }
 
     renderUsername = () => {
-        if (this.state.state === "loading") return <LoadingSpinner />;
-        else if (this.state.state === "error") return <i>ERROR</i>;
+        if (this.state.status === "loading") return <LoadingSpinner />;
+        else if (this.state.status === "error") return <i>ERROR</i>;
 
-        return this.state.state.username;
+        return this.state.username;
     };
 }
 
