@@ -1,6 +1,12 @@
-import React, { ChangeEventHandler, FormEventHandler } from "react";
+import React, { ChangeEventHandler, CSSProperties, FormEventHandler } from "react";
 import "./ChangePasswordForm.scss"
 import { PASSWORD_REGEX } from "../../helper/const";
+import LoadingSpinner from "../LoadingSpinner";
+
+interface Props {
+    onSubmit: (currentPassword: string, newPassword: string, confirmNewPassword: string) => void;
+    submitting: boolean;
+}
 
 interface State {
     currentPassword: string;
@@ -8,7 +14,7 @@ interface State {
     confirmNewPassword: string;
 }
 
-class ChangePasswordForm extends React.Component<{}, State> {
+class ChangePasswordForm extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
         currentPassword: "",
         newPassword: "",
@@ -27,6 +33,7 @@ class ChangePasswordForm extends React.Component<{}, State> {
                         autoComplete="current-password"
                         onChange={this.handleCurrentPasswordChange}
                         value={this.state.currentPassword}
+                        disabled={this.props.submitting}
                         required
                     />
                 </div>
@@ -40,6 +47,7 @@ class ChangePasswordForm extends React.Component<{}, State> {
                         value={this.state.newPassword}
                         pattern={PASSWORD_REGEX.pattern}
                         title={PASSWORD_REGEX.description}
+                        disabled={this.props.submitting}
                         required
                     />
                 </div>
@@ -51,10 +59,16 @@ class ChangePasswordForm extends React.Component<{}, State> {
                         autoComplete="new-password"
                         onChange={this.handleConfirmNewPasswordChange}
                         value={this.state.confirmNewPassword}
+                        disabled={this.props.submitting}
                         required
                     />
                 </div>
-                <button className="fancy" type="submit" disabled={!this.readyToSubmit()}>Save</button>
+                <button className="fancy" type="submit" disabled={!this.readyToSubmit()}>
+                    <span>Save</span>
+                    {this.props.submitting &&
+                        <LoadingSpinner style={loadingStyle} />
+                    }
+                </button>
             </fieldset>
         </form>;
     }
@@ -65,12 +79,23 @@ class ChangePasswordForm extends React.Component<{}, State> {
 
     handleConfirmNewPasswordChange: ChangeEventHandler<HTMLInputElement> = (event) => this.setState({ confirmNewPassword: event.target.value });
 
-    readyToSubmit = (): boolean => this.state.currentPassword !== "" && this.state.newPassword !== "" && this.state.confirmNewPassword === this.state.newPassword;
+    readyToSubmit = (): boolean =>
+        !this.props.submitting &&
+        this.state.currentPassword !== "" &&
+        this.state.newPassword !== ""
+        && this.state.confirmNewPassword === this.state.newPassword;
 
     handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
+        this.props.onSubmit(this.state.currentPassword, this.state.newPassword, this.state.confirmNewPassword);
     };
-
 }
+
+const loadingStyle: CSSProperties = {
+    width: "14px",
+    height: "14px",
+    borderWidth: "3px",
+    marginLeft: "5px"
+};
 
 export default ChangePasswordForm;
