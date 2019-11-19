@@ -16,13 +16,18 @@ const DexUnitsPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/:id"} component={DexUnitDetailedPage} />
 </>;
 
-interface State {
-    state: "loading" | "error" | DexUnits;
-}
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    dexUnits: DexUnits;
+};
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        status: "loading"
     };
 
     request?: Subscription;
@@ -32,8 +37,8 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
         this.request = dexService.getUnits()
             .subscribe(
-                res => this.setState({ state: res.data }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "loaded", dexUnits: res.data }),
+                error => this.setState({ status: "error" })
             )
     }
 
@@ -50,10 +55,10 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     }
 
     renderContainer = () => {
-        if (this.state.state === "loading") return <LoadingSpinner />;
-        else if (this.state.state === "error") return "ERROR";
+        if (this.state.status === "loading") return <LoadingSpinner />;
+        else if (this.state.status === "error") return "ERROR";
 
-        const { discoveredUnits, lastUnitIsDiscovered } = this.state.state;
+        const { discoveredUnits, lastUnitIsDiscovered } = this.state.dexUnits;
 
         let lastDiscoveredId = -1;
 
