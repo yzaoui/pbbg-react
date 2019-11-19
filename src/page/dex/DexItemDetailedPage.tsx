@@ -9,13 +9,18 @@ import DexReturnLink from "../../component/dex/DexReturnLink";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
-interface State {
-    state: "loading" | "error" | BaseItem;
-}
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    baseItem: BaseItem;
+};
 
 class DexItemDetailedPage extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        status: "loading"
     };
 
     request?: Subscription;
@@ -23,8 +28,8 @@ class DexItemDetailedPage extends React.Component<Props, State> {
     componentDidMount() {
         this.request = dexService.getItem(this.props.match.params.id)
             .subscribe(
-                res => this.setState({ state: res.data }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "loaded", baseItem: res.data }),
+                error => this.setState({ status: "error" })
             )
     }
 
@@ -40,10 +45,10 @@ class DexItemDetailedPage extends React.Component<Props, State> {
     }
 
     renderContainer = () => {
-        if (this.state.state === "loading") return <div><LoadingSpinner /></div>;
-        else if (this.state.state === "error") return <div>"ERROR"</div>;
+        if (this.state.status === "loading") return <div><LoadingSpinner /></div>;
+        else if (this.state.status === "error") return <div>"ERROR"</div>;
 
-        const item = this.state.state;
+        const item = this.state.baseItem;
 
         return <>
             <h1>{item.friendlyName}</h1>
