@@ -15,9 +15,21 @@ import { InventoryEntry, Point } from "../../backend/inventory";
 import InventoryItem from "../../component/inventory/InventoryItem";
 import { Howl } from "howler";
 // @ts-ignore
-import pickaxeMP3 from "../../audio/pickaxe.mp3";
+import pickaxe1MP3 from "../../audio/pickaxe1.mp3";
 // @ts-ignore
-import pickaxeOGG from "../../audio/pickaxe.ogg";
+import pickaxe1OGG from "../../audio/pickaxe1.ogg";
+// @ts-ignore
+import pickaxe2MP3 from "../../audio/pickaxe2.mp3";
+// @ts-ignore
+import pickaxe2OGG from "../../audio/pickaxe2.ogg";
+// @ts-ignore
+import pickaxe3MP3 from "../../audio/pickaxe3.mp3";
+// @ts-ignore
+import pickaxe3OGG from "../../audio/pickaxe3.ogg";
+// @ts-ignore
+import pickaxe4MP3 from "../../audio/pickaxe4.mp3";
+// @ts-ignore
+import pickaxe4OGG from "../../audio/pickaxe4.ogg";
 // @ts-ignore
 import levelUpMP3 from "../../audio/level-up.mp3";
 // @ts-ignore
@@ -60,10 +72,26 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     userRequest?: Subscription;
     inventoryRequest?: Subscription;
 
-    pickaxeSound = new Howl({
-        src: [pickaxeMP3, pickaxeOGG],
-        preload: true
-    });
+    pickaxeSounds = [
+        new Howl({
+            src: [pickaxe1MP3, pickaxe1OGG],
+            preload: true
+        }),
+        new Howl({
+            src: [pickaxe2MP3, pickaxe2OGG],
+            preload: true
+        }),
+        new Howl({
+            src: [pickaxe3MP3, pickaxe3OGG],
+            preload: true
+        }),
+        new Howl({
+            src: [pickaxe4MP3, pickaxe4OGG],
+            preload: true
+        })
+    ];
+    // Keep track of last played pickaxe sound to avoid repetition
+    lastPickaxeSoundIndex = -1;
 
     levelUpSound = new Howl({
         src: [levelUpMP3, levelUpOGG],
@@ -192,7 +220,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                 res => {
                     if (this.state.status !== "loaded") throw Error();
 
-                    this.pickaxeSound.play();
+                    this.playPickaxeSound();
 
                     if (res.data.levelUps.length > 0) {
                         this.levelUpSound.play();
@@ -219,6 +247,18 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                 },
                 error => this.setState({ status: "error" })
             )
+    };
+
+    playPickaxeSound = () => {
+        let soundIndex;
+
+        // Keep rolling for a sound that isn't the one that was last played
+        do {
+            soundIndex = Math.floor(Math.random() * this.pickaxeSounds.length);
+        } while (soundIndex === this.lastPickaxeSoundIndex);
+
+        this.lastPickaxeSoundIndex = soundIndex;
+        this.pickaxeSounds[soundIndex].play();
     };
 }
 
