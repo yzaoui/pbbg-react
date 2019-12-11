@@ -12,6 +12,7 @@ import RegisterPage from "./page/RegisterPage";
 import LoginPage from "./page/LoginPage";
 import SquadPage from "./page/SquadPage";
 import MinePage from "./page/mine/MinePage";
+import FarmPage from "./page/FarmPage";
 import InventoryPage from "./page/InventoryPage";
 import ItemPage from "./page/ItemPage";
 import DexPage from "./page/dex/DexPage";
@@ -51,6 +52,7 @@ class App extends React.Component<{}, State> {
                         <MemberRoute path="/market" component={MarketPage} />
                         <MemberRoute path="/battle" component={BattlePage} />
                         <MemberRoute path="/mine" component={MinePage} />
+                        <MemberRoute path="/farm" component={FarmPage} />
                         <MemberRoute path="/dex" component={DexPage} />
                         <MemberRoute path="/settings" component={SettingsPage} />
                         <Redirect to="/" />
