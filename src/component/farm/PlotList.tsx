@@ -5,6 +5,7 @@ import { PlotData } from "../../model/farm";
 type Props = {
     plots: PlotData[];
     refreshPlantProgress: () => void;
+    fetchingNextStage: Set<number>;
 };
 
 class PlotList extends React.Component<Props> {
@@ -22,13 +23,13 @@ class PlotList extends React.Component<Props> {
     }
 
     render() {
-        const { plots } = this.props;
+        const { plots, fetchingNextStage } = this.props;
 
         return <ul className="PlotList">
             {plots.map(plot =>
                 <li key={plot.id}>
                     {plot.plant !== null ?
-                        <Plot plot={plot} progress={plot.progress} fetchingNextStage={plot.fetchingNextStage} />
+                        <Plot plot={plot} fetchingNextStage={fetchingNextStage.has(plot.id)} />
                     :
                         <Plot plot={plot} />
                     }

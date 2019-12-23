@@ -6,7 +6,6 @@ export type EmptyPlotData = EmptyPlotDataJSON;
 
 export type OccupiedPlotData = OccupiedPlotDataJSON & {
     progress: PlantProgress;
-    fetchingNextStage: boolean;
 };
 
 export type PlantProgress = {
@@ -18,8 +17,7 @@ export const plotFromJSON = (plot: PlotDataJSON): PlotData => {
     if (plot.plant !== null) {
         return {
             ...plot,
-            progress: getPlantProgress(plot.plant, new Date()),
-            fetchingNextStage: false
+            progress: getPlantProgress(plot.plant, new Date())
         }
     } else {
         return plot;

@@ -13,6 +13,7 @@ type State = {
 } | {
     status: "loaded";
     plots: PlotData[];
+    fetchingNextStage: Set<number>;
 };
 
 class FarmPage extends React.Component<{}, State> {
@@ -20,21 +21,26 @@ class FarmPage extends React.Component<{}, State> {
         status: "loading"
     };
 
-    private initialFetch?: Subscription;
-    private request?: Subscription;
+    private initialFetchRequest: Subscription | null = null;
+    private refreshRequest: Subscription | null = null;
 
     componentDidMount() {
         document.title = "Farm - PBBG";
 
-        this.initialFetch = farmService.getPlots()
-            .subscribe(res => this.setState({ status: "loaded", plots: res.data.map(json => plotFromJSON(json)) }));
+        this.initialFetchRequest = farmService.getPlots()
+            .subscribe(res => this.setState({ status: "loaded", plots: res.data.map(json => plotFromJSON(json)), fetchingNextStage: new Set() }));
+    }
+
+    componentWillUnmount() {
+        this.initialFetchRequest !== null && this.initialFetchRequest.unsubscribe();
+        this.refreshRequest !== null && this.refreshRequest.unsubscribe();
     }
 
     render() {
         if (this.state.status === "loading") return <LoadingSpinner />;
 
         return <div className="FarmPage">
-            <PlotList plots={this.state.plots} refreshPlantProgress={this.refreshPlantProgress} />
+            <PlotList plots={this.state.plots} refreshPlantProgress={this.refreshPlantProgress} fetchingNextStage={this.state.fetchingNextStage} />
         </div>;
     }
 
@@ -42,43 +48,35 @@ class FarmPage extends React.Component<{}, State> {
         if (this.state.status === "loading") return;
 
         const updatedPlots: PlotData[] = cloneDeep(this.state.plots);
-        const plotsToRefresh: number[] = [];
         const now = new Date();
+        const toFetch: Set<number> = new Set();
 
         for (const plot of updatedPlots) {
             if ("progress" in plot) {
                 plot.progress = getPlantProgress(plot.plant, now);
 
                 if (plot.progress.percentage === 1 && plot.plant.lifecycle.hasNextStage) {
-                    plot.fetchingNextStage = true;
-                    plotsToRefresh.push(plot.id);
+                    toFetch.add(plot.id);
+
+                    if (this.refreshRequest === null) this.fetchPlots();
                 }
             }
         }
 
-        this.setState({ status: "loaded", plots: updatedPlots });
-        this.fetchPlots(plotsToRefresh);
+        this.setState({ status: "loaded", plots: updatedPlots, fetchingNextStage: toFetch });
     };
 
-    private fetchPlots = (ids: number[]) => {
-        if (ids.length === 0) return;
-
-        this.request = farmService.getPlots(ids)
-            .subscribe(res => this.updatePlots(res.data));
+    private fetchPlots = () => {
+        this.refreshRequest = farmService.getPlots()
+            .subscribe(res => {
+                this.refreshRequest = null;
+                this.updatePlots(res.data)
+            });
     };
 
     private updatePlots = (updatedPlotsJSON: PlotDataJSON[]) => {
-        if (this.state.status === "loading") return;
-
-        const ids = updatedPlotsJSON.map(plot => plot.id);
-
-        let updatedPlots: PlotData[] = updatedPlotsJSON.map(plotJSON => plotFromJSON(plotJSON));
-
-        const newPlots = this.state.plots.filter(plot => !ids.some(id => plot.id === id) ) // Remove all plots to be updated
-            .concat(updatedPlots) // Add newly updated plots
-            .sort((a, b) => a.id - b.id);
-
-        this.setState({ status: "loaded", plots: newPlots })
+        this.setState({ status: "loaded", plots: updatedPlotsJSON.map(plotJSON => plotFromJSON(plotJSON)) });
+        this.refreshPlantProgress();
     };
 }
 
