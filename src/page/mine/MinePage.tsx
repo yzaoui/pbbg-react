@@ -136,7 +136,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
                     submittingAction={this.state.submittingAction}
                     onMineAction={this.handleMineAction}
                 />
-            </>: this.state.status === "exited" ?
+            </> : this.state.status === "exited" ?
                 <Link to={"/mine/list"} className="fancy" style={style}>Return to mine list</Link>
             : {}}
 
