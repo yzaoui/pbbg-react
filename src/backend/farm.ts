@@ -1,3 +1,8 @@
+/**
+ * /plots
+ */
+export type AllPlotsResponse = PlotDataJSON[];
+
 export type PlotDataJSON = EmptyPlotDataJSON | OccupiedPlotDataJSON;
 
 export type EmptyPlotDataJSON = {
