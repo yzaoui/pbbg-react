@@ -1,48 +1,21 @@
 import * as RxJS from "rxjs";
 import * as FarmEndpoint from "./farm";
-import { PlantJSON, PlotDataJSON } from "./farm";
+import { PlotDataJSON } from "./farm";
 import { Success } from "../JSend";
 
 const farmService = {
     getPlots: (): RxJS.Observable<Success<FarmEndpoint.AllPlotsResponse>> => RxJS.from(
         initialPlotsRequest()
+    ),
+    plant: (req: FarmEndpoint.PlantRequest): RxJS.Observable<Success<FarmEndpoint.PlantResponse>> => RxJS.from(
+        plantRequest(req.plotId)
     )
 };
 
-const initialNow = new Date().getTime();
-
-const fastApple = (now: Date): PlantJSON => {
-    const start = new Date(initialNow);
-    const end = new Date(initialNow + 5 * 1000);
-
-    return {
-        type: "apple",
-        lifecycle: {
-            hasNextStage: now < end,
-            startTimestamp: (now < end ? start : end).toISOString(),
-            endTimestamp: end.toISOString(),
-        }
-    };
-};
-
-const slowApple = (now: Date): PlantJSON => {
-    const start = new Date(initialNow);
-    const end = new Date(initialNow + 105.5 * 1000);
-
-    return {
-        type: "apple",
-        lifecycle: {
-            hasNextStage: now < end,
-            startTimestamp: (now < end ? start : end).toISOString(),
-            endTimestamp: end.toISOString(),
-        }
-    };
-};
-
-const mockPlots = (now: Date): PlotDataJSON[] => [
+let mockPlots: PlotDataJSON[] = [
     {
         id: 0,
-        plant: fastApple(now),
+        plant: null,
     },
     {
         id: 1,
@@ -50,13 +23,46 @@ const mockPlots = (now: Date): PlotDataJSON[] => [
     },
     {
         id: 2,
-        plant: slowApple(now),
+        plant: null,
     },
 ];
 
 const initialPlotsRequest = (): Promise<Success<FarmEndpoint.AllPlotsResponse>> => new Promise(resolve => setTimeout(() => resolve({
     status: "success",
-    data: mockPlots(new Date())
-}), 1200));
+    data: mockPlots
+}), 500));
+
+const plantRequest = (plotId: number): Promise<Success<FarmEndpoint.PlantResponse>> => {
+    const now = (new Date()).getTime();
+
+    return new Promise(resolve => setTimeout(() => {
+        const lifespan = 5 * 1000;
+
+        const updatedPlot: PlotDataJSON = {
+            id: plotId,
+            plant: {
+                type: "apple",
+                lifecycle: {
+                    hasNextStage: true,
+                    startTimestamp: (new Date(now)).toISOString(),
+                    endTimestamp: (new Date(now + lifespan)).toISOString()
+                }
+            }
+        };
+
+        setTimeout(() => {
+            updatedPlot.plant.lifecycle.hasNextStage = false;
+        }, lifespan);
+
+        mockPlots = mockPlots.filter(plot => plot.id !== plotId)
+            .concat(updatedPlot)
+            .sort((a, b) => a.id - b.id);
+
+        resolve({
+            status: "success",
+            data: updatedPlot
+        })
+    }, 500));
+};
 
 export default farmService;

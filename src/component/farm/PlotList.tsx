@@ -6,6 +6,7 @@ type Props = {
     plots: PlotData[];
     refreshPlantProgress: () => void;
     fetchingNextStage: Set<number>;
+    onPlant: (plotId: number) => void;
 };
 
 class PlotList extends React.Component<Props> {
@@ -23,7 +24,7 @@ class PlotList extends React.Component<Props> {
     }
 
     render() {
-        const { plots, fetchingNextStage } = this.props;
+        const { plots, fetchingNextStage, onPlant } = this.props;
 
         return <ul className="PlotList">
             {plots.map(plot =>
@@ -31,7 +32,7 @@ class PlotList extends React.Component<Props> {
                     {plot.plant !== null ?
                         <Plot plot={plot} fetchingNextStage={fetchingNextStage.has(plot.id)} />
                     :
-                        <Plot plot={plot} />
+                        <Plot plot={plot} onPlant={onPlant} />
                     }
                 </li>
             )}

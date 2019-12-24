@@ -1,7 +1,15 @@
 /**
- * /plots
+ * /farm/plots
  */
 export type AllPlotsResponse = PlotDataJSON[];
+
+/**
+ * /farm/plant
+ */
+export type PlantRequest = {
+    plotId: number;
+};
+export type PlantResponse = PlotDataJSON;
 
 export type PlotDataJSON = EmptyPlotDataJSON | OccupiedPlotDataJSON;
 

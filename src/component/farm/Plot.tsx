@@ -6,6 +6,7 @@ import { EmptyPlotData, OccupiedPlotData } from "../../model/farm";
 
 type Props = {
     plot: EmptyPlotData;
+    onPlant: (plotId: number) => void;
 } | {
     plot: OccupiedPlotData;
     fetchingNextStage: boolean;
@@ -24,7 +25,7 @@ const Plot: React.FC<Props> = (props: Props) => <div className="Plot">
         <PlotFooter progress={props.plot.progress} hasNextStage={props.plot.plant!.lifecycle.hasNextStage} />
     </> : <>
         <PlotImage />
-        <PlotFooter />
+        <PlotFooter onPlant={() => props.onPlant(props.plot.id)} />
     </>}
 </div>;
 
