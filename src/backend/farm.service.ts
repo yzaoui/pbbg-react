@@ -10,8 +10,11 @@ const farmService = {
     plant: (req: FarmEndpoint.PlantRequest): RxJS.Observable<Success<FarmEndpoint.PlantResponse>> => RxJS.from(
         plantRequest(req.plotId)
     ),
-    harvest: (req: FarmEndpoint.PlantRequest): RxJS.Observable<Success<FarmEndpoint.HarvestResponse>> => RxJS.from(
+    harvest: (req: FarmEndpoint.HarvestRequest): RxJS.Observable<Success<FarmEndpoint.HarvestResponse>> => RxJS.from(
         harvestRequest(req.plotId)
+    ),
+    expand: (): RxJS.Observable<Success<FarmEndpoint.ExpandResponse>> => RxJS.from(
+        expandRequest()
     )
 };
 
@@ -19,15 +22,7 @@ let mockPlots: PlotDataJSON[] = [
     {
         id: 0,
         plant: null,
-    },
-    {
-        id: 1,
-        plant: null,
-    },
-    {
-        id: 2,
-        plant: null,
-    },
+    }
 ];
 
 const getPlotsRequest = (): Promise<Success<FarmEndpoint.AllPlotsResponse>> => new Promise(resolve => setTimeout(() => resolve({
@@ -96,5 +91,21 @@ const harvestRequest = (plotId: number): Promise<Success<FarmEndpoint.HarvestRes
         })
     }, 500));
 };
+
+const expandRequest = (): Promise<Success<FarmEndpoint.ExpandResponse>> => new Promise(
+    resolve => setTimeout(() => {
+        const newPlot: PlotDataJSON = {
+            id: mockPlots.length,
+            plant: null
+        };
+
+        mockPlots = mockPlots.concat(newPlot);
+
+        resolve({
+            status: "success",
+            data: newPlot
+        })
+    }, 500)
+);
 
 export default farmService;

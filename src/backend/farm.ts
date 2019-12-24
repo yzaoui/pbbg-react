@@ -19,6 +19,11 @@ export type HarvestRequest = {
 };
 export type HarvestResponse = PlotDataJSON;
 
+/**
+ * /farm/plots/expand
+ */
+export type ExpandResponse = PlotDataJSON;
+
 export type PlotDataJSON = EmptyPlotDataJSON | OccupiedPlotDataJSON;
 
 export type EmptyPlotDataJSON = {

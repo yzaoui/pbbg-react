@@ -23,13 +23,13 @@ const Plot: React.FC<Props> = (props: Props) => <div className="Plot">
             overlay
         }
         <PlotImage plant={props.plot.plant} progress={props.plot.progress} />
-        <PlotFooter progress={props.plot.progress} hasNextStage={props.plot.plant!.lifecycle.hasNextStage} onHarvest={() => props.onHarvest(props.plot.id)} />
+        <PlotFooter loading={props.loading} progress={props.plot.progress} hasNextStage={props.plot.plant!.lifecycle.hasNextStage} onHarvest={() => props.onHarvest(props.plot.id)} />
     </> : <>
         {props.loading &&
             overlay
         }
         <PlotImage />
-        <PlotFooter onPlant={() => props.onPlant(props.plot.id)} />
+        <PlotFooter loading={props.loading} onPlant={() => props.onPlant(props.plot.id)} />
     </>}
 </div>;
 

@@ -1,12 +1,12 @@
 import React from "react";
 import "./FarmPage.scss";
-import PlotList from "../component/farm/PlotList";
 import { PlotDataJSON } from "../backend/farm";
 import cloneDeep from "lodash/cloneDeep";
 import farmService from "../backend/farm.service";
 import { Subscription } from "rxjs";
 import { getPlantProgress, PlotData, plotFromJSON } from "../model/farm";
 import LoadingSpinner from "../component/LoadingSpinner";
+import ExpandablePlotList from "../component/farm/ExpandablePlotList";
 
 type State = {
     status: "loading";
@@ -15,6 +15,7 @@ type State = {
     plots: PlotData[];
     fetchingNextStage: Set<number>;
     loadingPlots: Set<number>;
+    expanding: boolean;
 };
 
 class FarmPage extends React.Component<{}, State> {
@@ -26,12 +27,13 @@ class FarmPage extends React.Component<{}, State> {
     private refreshRequest: Subscription | null = null;
     private plantRequests: Map<number, Subscription> = new Map();
     private harvestRequests: Map<number, Subscription> = new Map();
+    private expandingRequest: Subscription | null = null;
 
     componentDidMount() {
         document.title = "Farm - PBBG";
 
         this.initialFetchRequest = farmService.getPlots()
-            .subscribe(res => this.setState({ status: "loaded", plots: res.data.map(json => plotFromJSON(json)), fetchingNextStage: new Set(), loadingPlots: new Set() }));
+            .subscribe(res => this.setState({ status: "loaded", plots: res.data.map(json => plotFromJSON(json)), fetchingNextStage: new Set(), loadingPlots: new Set(), expanding: false }));
     }
 
     componentWillUnmount() {
@@ -39,19 +41,22 @@ class FarmPage extends React.Component<{}, State> {
         this.refreshRequest !== null && this.refreshRequest.unsubscribe();
         this.plantRequests.forEach(req => req.unsubscribe());
         this.harvestRequests.forEach(req => req.unsubscribe());
+        this.expandingRequest !== null && this.expandingRequest.unsubscribe();
     }
 
     render() {
         if (this.state.status === "loading") return <LoadingSpinner />;
 
         return <div className="FarmPage">
-            <PlotList
+            <ExpandablePlotList
                 plots={this.state.plots}
                 refreshPlantProgress={this.refreshPlantProgress}
                 fetchingNextStage={this.state.fetchingNextStage}
                 loadingPlots={this.state.loadingPlots}
+                expanding={this.state.expanding}
                 onPlant={this.handlePlant}
                 onHarvest={this.handleHarvest}
+                onExpand={this.handleExpand}
             />
         </div>;
     }
@@ -145,6 +150,21 @@ class FarmPage extends React.Component<{}, State> {
             });
 
         this.harvestRequests.set(plotId, newRequest);
+    };
+
+    private handleExpand = () => {
+        if (this.state.status === "loading") return;
+
+        if (this.expandingRequest !== null) this.expandingRequest.unsubscribe();
+
+        this.setState({ ...this.state, expanding: true });
+
+        this.expandingRequest = farmService.expand()
+            .subscribe(res => {
+                this.expandingRequest = null;
+                this.setState({ ...this.state, expanding: false });
+                this.updatePlot(res.data);
+            })
     };
 }
 
