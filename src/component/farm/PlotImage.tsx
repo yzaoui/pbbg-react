@@ -5,6 +5,9 @@ import appleGrowing1 from "../../img/apple_growing_1.png";
 import appleGrowing2 from "../../img/apple_growing_2.png";
 import appleGrowing3 from "../../img/apple_growing_3.png";
 import appleMature0 from "../../img/apple_mature_0.png";
+import appleMature1 from "../../img/apple_mature_1.png";
+import appleMature2 from "../../img/apple_mature_2.png";
+import appleMature3 from "../../img/apple_mature_3.png";
 import { PlantJSON } from "../../backend/farm";
 import { PlantProgress } from "../../model/farm";
 
@@ -61,7 +64,10 @@ const appleStages = {
         { src: appleGrowing3 }
     ],
     "mature": [
-        { src: appleMature0 }
+        { src: appleMature0 },
+        { src: appleMature1 },
+        { src: appleMature2 },
+        { src: appleMature3 }
     ]
 };
 
