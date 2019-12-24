@@ -1,20 +1,23 @@
 import React from "react";
 import PlotProgress from "./PlotProgress";
 import { PlantProgress } from "../../model/farm";
+import PlotProgressButton from "./PlotProgressButton";
 
 type Props = {
     progress: PlantProgress;
-    fetchingNextStage: boolean;
+    hasNextStage: boolean;
 } | {};
 
 const PlotFooter: React.FC<Props> = (props) => {
     if (!("progress" in props)) return <div className="PlotFooter">
-        <button>Plant</button>
+        <button className="fancy">Plant</button>
     </div>;
 
+    const harvestable = props.progress.percentage === 1 && !props.hasNextStage;
+
     return <div className="PlotFooter">
-        <PlotProgress progress={props.progress} />
-        <button disabled={props.progress.percentage < 1 || props.fetchingNextStage}>Harvest</button>
+        <PlotProgress progress={props.progress} ready={harvestable} />
+        <PlotProgressButton disabled={!harvestable} percentage={props.progress.percentage} label="Harvest" />
     </div>;
 };
 

@@ -21,7 +21,7 @@ const Plot: React.FC<Props> = (props: Props) => <div className="Plot">
             </div>
         }
         <PlotImage plant={props.plot.plant} progress={props.plot.progress} fetchingNextStage={props.fetchingNextStage} />
-        <PlotFooter progress={props.plot.progress} fetchingNextStage={props.fetchingNextStage} />
+        <PlotFooter progress={props.plot.progress} hasNextStage={props.plot.plant!.lifecycle.hasNextStage} />
     </> : <>
         <PlotImage />
         <PlotFooter />

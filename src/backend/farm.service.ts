@@ -27,7 +27,7 @@ const fastApple = (now: Date): PlantJSON => {
 
 const slowApple = (now: Date): PlantJSON => {
     const start = new Date(initialNow);
-    const end = new Date(initialNow + 5.5 * 1000);
+    const end = new Date(initialNow + 105.5 * 1000);
 
     return {
         type: "apple",
@@ -57,6 +57,6 @@ const mockPlots = (now: Date): PlotDataJSON[] => [
 const initialPlotsRequest = (): Promise<Success<FarmEndpoint.AllPlotsResponse>> => new Promise(resolve => setTimeout(() => resolve({
     status: "success",
     data: mockPlots(new Date())
-}), 2600));
+}), 1200));
 
 export default farmService;

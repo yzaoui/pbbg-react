@@ -138,10 +138,10 @@ button.fancy {
     color: white;
     height: 32px;
     background-color: #007bff;
-    border: 1px solid #007bff;
+    border: 1px outset #007bff;
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
-    transition: all 150ms ease-in;
+    transition: all 150ms ease-in, box-shadow 0ms;
 
     &:hover {
         background-color: #0069d9;
@@ -152,12 +152,18 @@ button.fancy {
         cursor: not-allowed;
         background-color: #007bff;
         border-color: #007bff;
+        border-style: solid;
         box-shadow: initial;
         opacity: 0.7;
     }
 
     &:not(:disabled):focus {
-        box-shadow: 0 0 0 0.2rem rgba(38,143,255,.5);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(38,143,255,.5);
+    }
+
+    &:active {
+        border-style: inset;
     }
 
     &.danger {
