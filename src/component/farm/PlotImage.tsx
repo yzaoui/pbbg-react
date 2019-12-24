@@ -1,6 +1,6 @@
 import React from "react";
 import ground from "../../img/ground.png";
-import appleGrowing0 from "../../img/apple_growing_0.png";
+import appleGrowing0 from "../../img/apple_growing_0.gif";
 import appleGrowing1 from "../../img/apple_growing_1.png";
 import appleGrowing2 from "../../img/apple_growing_2.png";
 import appleGrowing3 from "../../img/apple_growing_3.png";
