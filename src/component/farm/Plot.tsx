@@ -5,21 +5,25 @@ import LoadingSpinner from "../LoadingSpinner";
 import { EmptyPlotData, OccupiedPlotData } from "../../model/farm";
 
 type Props = {
-    plot: EmptyPlotData;
-    onPlant: (plotId: number) => void;
     loading: boolean;
-} | {
-    plot: OccupiedPlotData;
-    fetchingNextStage: boolean;
-};
+} & (
+    {
+        plot: EmptyPlotData;
+        onPlant: (plotId: number) => void;
+    } | {
+        plot: OccupiedPlotData;
+        fetchingNextStage: boolean;
+        onHarvest: (plotId: number) => void;
+    }
+);
 
 const Plot: React.FC<Props> = (props: Props) => <div className="Plot">
     {"fetchingNextStage" in props ? <>
-        {props.fetchingNextStage &&
+        {(props.fetchingNextStage || props.loading) &&
             overlay
         }
         <PlotImage plant={props.plot.plant} progress={props.plot.progress} />
-        <PlotFooter progress={props.plot.progress} hasNextStage={props.plot.plant!.lifecycle.hasNextStage} />
+        <PlotFooter progress={props.plot.progress} hasNextStage={props.plot.plant!.lifecycle.hasNextStage} onHarvest={() => props.onHarvest(props.plot.id)} />
     </> : <>
         {props.loading &&
             overlay

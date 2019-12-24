@@ -6,6 +6,7 @@ import PlotProgressButton from "./PlotProgressButton";
 type Props = {
     progress: PlantProgress;
     hasNextStage: boolean;
+    onHarvest: () => void;
 } | {
     onPlant: () => void;
 };
@@ -19,7 +20,7 @@ const PlotFooter: React.FC<Props> = (props) => {
 
     return <div className="PlotFooter">
         <PlotProgress progress={props.progress} ready={harvestable} />
-        <PlotProgressButton disabled={!harvestable} percentage={props.progress.percentage} label="Harvest" />
+        <PlotProgressButton disabled={!harvestable} percentage={props.progress.percentage} label="Harvest" onClick={props.onHarvest} />
     </div>;
 };
 

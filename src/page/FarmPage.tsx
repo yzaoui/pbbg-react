@@ -25,6 +25,7 @@ class FarmPage extends React.Component<{}, State> {
     private initialFetchRequest: Subscription | null = null;
     private refreshRequest: Subscription | null = null;
     private plantRequests: Map<number, Subscription> = new Map();
+    private harvestRequests: Map<number, Subscription> = new Map();
 
     componentDidMount() {
         document.title = "Farm - PBBG";
@@ -36,13 +37,22 @@ class FarmPage extends React.Component<{}, State> {
     componentWillUnmount() {
         this.initialFetchRequest !== null && this.initialFetchRequest.unsubscribe();
         this.refreshRequest !== null && this.refreshRequest.unsubscribe();
+        this.plantRequests.forEach(req => req.unsubscribe());
+        this.harvestRequests.forEach(req => req.unsubscribe());
     }
 
     render() {
         if (this.state.status === "loading") return <LoadingSpinner />;
 
         return <div className="FarmPage">
-            <PlotList plots={this.state.plots} refreshPlantProgress={this.refreshPlantProgress} fetchingNextStage={this.state.fetchingNextStage} loadingPlots={this.state.loadingPlots} onPlant={this.handlePlant} />
+            <PlotList
+                plots={this.state.plots}
+                refreshPlantProgress={this.refreshPlantProgress}
+                fetchingNextStage={this.state.fetchingNextStage}
+                loadingPlots={this.state.loadingPlots}
+                onPlant={this.handlePlant}
+                onHarvest={this.handleHarvest}
+            />
         </div>;
     }
 
@@ -115,7 +125,27 @@ class FarmPage extends React.Component<{}, State> {
             });
 
         this.plantRequests.set(plotId, newRequest);
-    }
+    };
+
+    private handleHarvest = (plotId: number) => {
+        if (this.state.status === "loading") return;
+
+        const existingRequest = this.harvestRequests.get(plotId);
+        if (existingRequest) {
+            existingRequest.unsubscribe();
+            this.harvestRequests.delete(plotId);
+        }
+
+        this.setState({ ...this.state, loadingPlots: (new Set(this.state.loadingPlots)).add(plotId) });
+
+        const newRequest = farmService.harvest({ plotId: plotId })
+            .subscribe(res => {
+                this.harvestRequests.delete(plotId);
+                this.updatePlot(res.data);
+            });
+
+        this.harvestRequests.set(plotId, newRequest);
+    };
 }
 
 export default FarmPage;

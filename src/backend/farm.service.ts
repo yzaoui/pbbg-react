@@ -5,10 +5,13 @@ import { Success } from "../JSend";
 
 const farmService = {
     getPlots: (): RxJS.Observable<Success<FarmEndpoint.AllPlotsResponse>> => RxJS.from(
-        initialPlotsRequest()
+        getPlotsRequest()
     ),
     plant: (req: FarmEndpoint.PlantRequest): RxJS.Observable<Success<FarmEndpoint.PlantResponse>> => RxJS.from(
         plantRequest(req.plotId)
+    ),
+    harvest: (req: FarmEndpoint.PlantRequest): RxJS.Observable<Success<FarmEndpoint.HarvestResponse>> => RxJS.from(
+        harvestRequest(req.plotId)
     )
 };
 
@@ -27,7 +30,7 @@ let mockPlots: PlotDataJSON[] = [
     },
 ];
 
-const initialPlotsRequest = (): Promise<Success<FarmEndpoint.AllPlotsResponse>> => new Promise(resolve => setTimeout(() => resolve({
+const getPlotsRequest = (): Promise<Success<FarmEndpoint.AllPlotsResponse>> => new Promise(resolve => setTimeout(() => resolve({
     status: "success",
     data: mockPlots
 }), 500));
@@ -36,7 +39,7 @@ const plantRequest = (plotId: number): Promise<Success<FarmEndpoint.PlantRespons
     const now = (new Date()).getTime();
 
     return new Promise(resolve => setTimeout(() => {
-        const lifespan = 5 * 1000;
+        const lifespan = 10 * 1000;
 
         const updatedPlot: PlotDataJSON = {
             id: plotId,
@@ -53,6 +56,35 @@ const plantRequest = (plotId: number): Promise<Success<FarmEndpoint.PlantRespons
         setTimeout(() => {
             updatedPlot.plant.lifecycle.hasNextStage = false;
         }, lifespan);
+
+        mockPlots = mockPlots.filter(plot => plot.id !== plotId)
+            .concat(updatedPlot)
+            .sort((a, b) => a.id - b.id);
+
+        resolve({
+            status: "success",
+            data: updatedPlot
+        })
+    }, 500));
+};
+
+const harvestRequest = (plotId: number): Promise<Success<FarmEndpoint.HarvestResponse>> => {
+    const now = (new Date()).getTime();
+
+    return new Promise(resolve => setTimeout(() => {
+        const lifespan = 7 * 1000;
+
+        const updatedPlot: PlotDataJSON = {
+            id: plotId,
+            plant: {
+                type: "apple",
+                lifecycle: {
+                    hasNextStage: false,
+                    startTimestamp: (new Date(now)).toISOString(),
+                    endTimestamp: (new Date(now + lifespan)).toISOString()
+                }
+            }
+        };
 
         mockPlots = mockPlots.filter(plot => plot.id !== plotId)
             .concat(updatedPlot)

@@ -11,6 +11,14 @@ export type PlantRequest = {
 };
 export type PlantResponse = PlotDataJSON;
 
+/**
+ * /farm/harvest
+ */
+export type HarvestRequest = {
+    plotId: number;
+};
+export type HarvestResponse = PlotDataJSON;
+
 export type PlotDataJSON = EmptyPlotDataJSON | OccupiedPlotDataJSON;
 
 export type EmptyPlotDataJSON = {
