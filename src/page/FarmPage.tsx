@@ -14,6 +14,7 @@ type State = {
     status: "loaded";
     plots: PlotData[];
     fetchingNextStage: Set<number>;
+    loadingPlots: Set<number>;
 };
 
 class FarmPage extends React.Component<{}, State> {
@@ -29,7 +30,7 @@ class FarmPage extends React.Component<{}, State> {
         document.title = "Farm - PBBG";
 
         this.initialFetchRequest = farmService.getPlots()
-            .subscribe(res => this.setState({ status: "loaded", plots: res.data.map(json => plotFromJSON(json)), fetchingNextStage: new Set() }));
+            .subscribe(res => this.setState({ status: "loaded", plots: res.data.map(json => plotFromJSON(json)), fetchingNextStage: new Set(), loadingPlots: new Set() }));
     }
 
     componentWillUnmount() {
@@ -41,7 +42,7 @@ class FarmPage extends React.Component<{}, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
 
         return <div className="FarmPage">
-            <PlotList plots={this.state.plots} refreshPlantProgress={this.refreshPlantProgress} fetchingNextStage={this.state.fetchingNextStage} onPlant={this.handlePlant} />
+            <PlotList plots={this.state.plots} refreshPlantProgress={this.refreshPlantProgress} fetchingNextStage={this.state.fetchingNextStage} loadingPlots={this.state.loadingPlots} onPlant={this.handlePlant} />
         </div>;
     }
 
@@ -64,7 +65,7 @@ class FarmPage extends React.Component<{}, State> {
             }
         }
 
-        this.setState({ status: "loaded", plots: updatedPlots, fetchingNextStage: toFetch });
+        this.setState({ ...this.state, plots: updatedPlots, fetchingNextStage: toFetch });
     };
 
     private fetchPlots = () => {
@@ -76,7 +77,9 @@ class FarmPage extends React.Component<{}, State> {
     };
 
     private setPlots = (updatedPlotsJSON: PlotDataJSON[]) => {
-        this.setState({ status: "loaded", plots: updatedPlotsJSON.map(plotJSON => plotFromJSON(plotJSON)) });
+        if (this.state.status === "loading") return;
+
+        this.setState({ ...this.state, plots: updatedPlotsJSON.map(plotJSON => plotFromJSON(plotJSON)) });
         this.refreshPlantProgress();
     };
 
@@ -87,16 +90,23 @@ class FarmPage extends React.Component<{}, State> {
             .concat(plotFromJSON(updatedPlot))
             .sort((a, b) => a.id - b.id);
 
-        this.setState({ status: "loaded", plots: updatedPlots });
+        const updatedLoadingPlots = (new Set(this.state.loadingPlots));
+        updatedLoadingPlots.delete(updatedPlot.id);
+
+        this.setState({ ...this.state, plots: updatedPlots, loadingPlots: updatedLoadingPlots });
         this.refreshPlantProgress();
     };
 
     private handlePlant = (plotId: number) => {
+        if (this.state.status === "loading") return;
+
         const existingRequest = this.plantRequests.get(plotId);
         if (existingRequest) {
             existingRequest.unsubscribe();
             this.plantRequests.delete(plotId);
         }
+
+        this.setState({ ...this.state, loadingPlots: (new Set(this.state.loadingPlots)).add(plotId) });
 
         const newRequest = farmService.plant({ plotId: plotId })
             .subscribe(res => {

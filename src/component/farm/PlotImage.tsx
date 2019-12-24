@@ -11,7 +11,6 @@ import { PlantProgress } from "../../model/farm";
 type Props = {
     plant: PlantJSON;
     progress: PlantProgress;
-    fetchingNextStage: boolean;
 } | {};
 
 const PlotImage: React.FC<Props> = (props: Props) => {
