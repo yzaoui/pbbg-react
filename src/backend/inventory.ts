@@ -1,12 +1,21 @@
 import { BaseItem } from "./dex";
 
 /**
- * /dex/inventory
+ * /inventory
  */
-export interface EquipUnequipRequest {
+export type InventoryResponse = Inventory
+
+/**
+ * /inventory/plantable
+ */
+export type PlantableInventoryResponse = Inventory;
+
+/**
+ * /inventory/equipment
+ */
+export type EquipUnequipRequest = {
     inventoryItemId: number;
 }
-export type InventoryResponse = Inventory
 
 export interface Inventory {
     items: InventoryEntry[];
@@ -21,10 +30,10 @@ export interface InventoryEntry {
     item: MaterializedItem;
 }
 
-export interface MaterializedItem {
+export type MaterializedItem = {
     id: number;
     baseItem: BaseItem;
-}
+} & Partial<Stackable>;
 
 export interface Stackable {
     quantity: number;

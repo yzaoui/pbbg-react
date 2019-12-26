@@ -21,6 +21,11 @@
         .inventory-item {
             list-style-type: none;
             margin: 2px;
+            line-height: 0;
+
+            > * {
+                line-height: normal;
+            }
 
             &:not(:hover) {
                 .InventoryItemTooltip {

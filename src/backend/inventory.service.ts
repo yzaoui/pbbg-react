@@ -14,6 +14,14 @@ const inventoryService = {
             res => handleResponse<InventoryEndpoint.InventoryResponse>(res)
         )
     ),
+    getPlantableInventory: () => RxJS.from(
+        fetch(`${API_ROOT}/api/inventory/plantable`, {
+            method: "GET",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<InventoryEndpoint.PlantableInventoryResponse>(res)
+        )
+    ),
     equipUnequip: (action: "equip" | "unequip", req: InventoryEndpoint.EquipUnequipRequest) => RxJS.from(
         fetch(`${API_ROOT}/api/inventory/equipment?action=${action}`, {
             method: "POST",

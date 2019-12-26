@@ -41,7 +41,7 @@ class App extends React.Component<{}, State> {
         return <Router history={history}>
             <div className="container">
                 {isLoggedIn ? <MemberNav /> : <GuestNav />}
-                <main>
+                <main className="pbbg-main">
                     <Switch>
                         <Route path="/" exact render={() => isLoggedIn ? <IndexMemberPage /> : <IndexGuestPage />} />
                         <GuestRoute path="/register" component={RegisterPage} />

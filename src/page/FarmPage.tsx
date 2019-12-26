@@ -7,16 +7,22 @@ import { Subscription } from "rxjs";
 import { getPlantProgress, PlotData, plotFromJSON } from "../model/farm";
 import LoadingSpinner from "../component/LoadingSpinner";
 import ExpandablePlotList from "../component/farm/ExpandablePlotList";
+import PlantModal from "../component/farm/PlantModal";
 
-type State = {
+type LoadingState = {
     status: "loading";
-} | {
+};
+
+type LoadedState = {
     status: "loaded";
     plots: PlotData[];
     fetchingNextStage: Set<number>;
     loadingPlots: Set<number>;
     expanding: boolean;
+    plantingPlotId: number | null;
 };
+
+type State = LoadingState | LoadedState;
 
 class FarmPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
@@ -32,8 +38,15 @@ class FarmPage extends React.Component<{}, State> {
     componentDidMount() {
         document.title = "Farm - PBBG";
 
-        this.initialFetchRequest = farmService.getPlots()
-            .subscribe(res => this.setState({ status: "loaded", plots: res.data.map(json => plotFromJSON(json)), fetchingNextStage: new Set(), loadingPlots: new Set(), expanding: false }));
+        this.initialFetchRequest = farmService.getPlots().subscribe(res =>
+            this.setState({
+                status: "loaded",
+                plots: res.data.map(json => plotFromJSON(json)),
+                fetchingNextStage: new Set(),
+                loadingPlots: new Set(),
+                expanding: false,
+                plantingPlotId: null
+            }));
     }
 
     componentWillUnmount() {
@@ -58,6 +71,7 @@ class FarmPage extends React.Component<{}, State> {
                 onHarvest={this.handleHarvest}
                 onExpand={this.handleExpand}
             />
+            <PlantModal open={this.state.plantingPlotId !== null} onClose={this.handlePlantModalClose} onSelect={this.handlePlantModalSelect} />
         </div>;
     }
 
@@ -80,7 +94,7 @@ class FarmPage extends React.Component<{}, State> {
             }
         }
 
-        this.setState({ ...this.state, plots: updatedPlots, fetchingNextStage: toFetch });
+        this.setState({ plots: updatedPlots, fetchingNextStage: toFetch } as LoadedState);
     };
 
     private fetchPlots = () => {
@@ -94,7 +108,7 @@ class FarmPage extends React.Component<{}, State> {
     private setPlots = (updatedPlotsJSON: PlotDataJSON[]) => {
         if (this.state.status === "loading") return;
 
-        this.setState({ ...this.state, plots: updatedPlotsJSON.map(plotJSON => plotFromJSON(plotJSON)) });
+        this.setState({ plots: updatedPlotsJSON.map(plotJSON => plotFromJSON(plotJSON)) } as LoadedState);
         this.refreshPlantProgress();
     };
 
@@ -108,28 +122,14 @@ class FarmPage extends React.Component<{}, State> {
         const updatedLoadingPlots = (new Set(this.state.loadingPlots));
         updatedLoadingPlots.delete(updatedPlot.id);
 
-        this.setState({ ...this.state, plots: updatedPlots, loadingPlots: updatedLoadingPlots });
+        this.setState({ plots: updatedPlots, loadingPlots: updatedLoadingPlots } as LoadedState);
         this.refreshPlantProgress();
     };
 
     private handlePlant = (plotId: number) => {
         if (this.state.status === "loading") return;
 
-        const existingRequest = this.plantRequests.get(plotId);
-        if (existingRequest) {
-            existingRequest.unsubscribe();
-            this.plantRequests.delete(plotId);
-        }
-
-        this.setState({ ...this.state, loadingPlots: (new Set(this.state.loadingPlots)).add(plotId) });
-
-        const newRequest = farmService.plant({ plotId: plotId })
-            .subscribe(res => {
-                this.plantRequests.delete(plotId);
-                this.updatePlot(res.data);
-            });
-
-        this.plantRequests.set(plotId, newRequest);
+        this.setState({ plantingPlotId: plotId } as LoadedState);
     };
 
     private handleHarvest = (plotId: number) => {
@@ -165,6 +165,32 @@ class FarmPage extends React.Component<{}, State> {
                 this.setState({ ...this.state, expanding: false });
                 this.updatePlot(res.data);
             })
+    };
+
+    private handlePlantModalSelect = () => {
+        if (this.state.status === "loading") return;
+
+        const plotId = this.state.plantingPlotId!;
+
+        const existingRequest = this.plantRequests.get(plotId);
+        if (existingRequest) {
+            existingRequest.unsubscribe();
+            this.plantRequests.delete(plotId);
+        }
+
+        this.setState({ plantingPlotId: null, loadingPlots: (new Set(this.state.loadingPlots)).add(plotId) } as LoadedState);
+
+        this.plantRequests.set(plotId,
+            farmService.plant({ plotId: plotId })
+                .subscribe(res => {
+                    this.plantRequests.delete(plotId);
+                    this.updatePlot(res.data);
+                })
+        );
+    };
+
+    private handlePlantModalClose = () => {
+        this.setState({ plantingPlotId: null } as LoadedState);
     };
 }
 

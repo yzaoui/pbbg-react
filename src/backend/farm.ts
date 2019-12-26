@@ -20,7 +20,7 @@ export type HarvestRequest = {
 export type HarvestResponse = PlotDataJSON;
 
 /**
- * /farm/plots/expand
+ * /farm/expand
  */
 export type ExpandResponse = PlotDataJSON;
 
