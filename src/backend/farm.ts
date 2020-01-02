@@ -1,7 +1,7 @@
 /**
  * /farm/plots
  */
-export type AllPlotsResponse = PlotDataJSON[];
+export type AllPlotsResponse = PlotJSON[];
 
 /**
  * /farm/plant
@@ -10,7 +10,7 @@ export type PlantRequest = {
     plotId: number;
     itemId: number;
 };
-export type PlantResponse = PlotDataJSON;
+export type PlantResponse = PlotJSON;
 
 /**
  * /farm/harvest
@@ -18,21 +18,21 @@ export type PlantResponse = PlotDataJSON;
 export type HarvestRequest = {
     plotId: number;
 };
-export type HarvestResponse = PlotDataJSON;
+export type HarvestResponse = PlotJSON;
 
 /**
  * /farm/expand
  */
-export type ExpandResponse = PlotDataJSON;
+export type ExpandResponse = PlotJSON;
 
-export type PlotDataJSON = EmptyPlotDataJSON | OccupiedPlotDataJSON;
+export type PlotJSON = EmptyPlotJSON | OccupiedPlotJSON;
 
-export type EmptyPlotDataJSON = {
+export type EmptyPlotJSON = {
     id: number;
     plant: null;
 };
 
-export type OccupiedPlotDataJSON = {
+export type OccupiedPlotJSON = {
     id: number;
     plant: PlantJSON;
 };

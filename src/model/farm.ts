@@ -1,10 +1,10 @@
-import { EmptyPlotDataJSON, OccupiedPlotDataJSON, PlantJSON, PlotDataJSON } from "../backend/farm";
+import { EmptyPlotJSON, OccupiedPlotJSON, PlantJSON, PlotJSON } from "../backend/farm";
 
 export type PlotData = (EmptyPlotData | OccupiedPlotData);
 
-export type EmptyPlotData = EmptyPlotDataJSON;
+export type EmptyPlotData = EmptyPlotJSON;
 
-export type OccupiedPlotData = OccupiedPlotDataJSON & {
+export type OccupiedPlotData = OccupiedPlotJSON & {
     progress: PlantProgress;
 };
 
@@ -13,7 +13,7 @@ export type PlantProgress = {
     remainingTime: string;
 };
 
-export const plotFromJSON = (plot: PlotDataJSON): PlotData => {
+export const plotFromJSON = (plot: PlotJSON): PlotData => {
     if (plot.plant !== null) {
         return {
             ...plot,

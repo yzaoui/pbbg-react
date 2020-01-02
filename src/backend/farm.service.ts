@@ -1,6 +1,6 @@
 import * as RxJS from "rxjs";
 import * as FarmEndpoint from "./farm";
-import { PlotDataJSON } from "./farm";
+import { PlotJSON } from "./farm";
 import { Success } from "../JSend";
 
 const farmService = {
@@ -18,7 +18,7 @@ const farmService = {
     )
 };
 
-let mockPlots: PlotDataJSON[] = [
+let mockPlots: PlotJSON[] = [
     {
         id: 0,
         plant: null,
@@ -36,7 +36,7 @@ const plantRequest = ({ plotId, itemId }: FarmEndpoint.PlantRequest): Promise<Su
     return new Promise(resolve => setTimeout(() => {
         const lifespan = 10 * 1000;
 
-        const updatedPlot: PlotDataJSON = {
+        const updatedPlot: PlotJSON = {
             id: plotId,
             plant: {
                 type: "apple",
@@ -69,7 +69,7 @@ const harvestRequest = (plotId: number): Promise<Success<FarmEndpoint.HarvestRes
     return new Promise(resolve => setTimeout(() => {
         const lifespan = 7 * 1000;
 
-        const updatedPlot: PlotDataJSON = {
+        const updatedPlot: PlotJSON = {
             id: plotId,
             plant: {
                 type: "apple",
@@ -94,7 +94,7 @@ const harvestRequest = (plotId: number): Promise<Success<FarmEndpoint.HarvestRes
 
 const expandRequest = (): Promise<Success<FarmEndpoint.ExpandResponse>> => new Promise(
     resolve => setTimeout(() => {
-        const newPlot: PlotDataJSON = {
+        const newPlot: PlotJSON = {
             id: mockPlots.length,
             plant: null
         };

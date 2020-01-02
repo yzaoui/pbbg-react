@@ -1,6 +1,6 @@
 import React from "react";
 import "./FarmPage.scss";
-import { PlotDataJSON } from "../backend/farm";
+import { PlotJSON } from "../backend/farm";
 import cloneDeep from "lodash/cloneDeep";
 import farmService from "../backend/farm.service";
 import { Subscription } from "rxjs";
@@ -105,14 +105,14 @@ class FarmPage extends React.Component<{}, State> {
             });
     };
 
-    private setPlots = (updatedPlotsJSON: PlotDataJSON[]) => {
+    private setPlots = (updatedPlotsJSON: PlotJSON[]) => {
         if (this.state.status === "loading") return;
 
         this.setState({ plots: updatedPlotsJSON.map(plotJSON => plotFromJSON(plotJSON)) } as LoadedState);
         this.refreshPlantProgress();
     };
 
-    private updatePlot = (updatedPlot: PlotDataJSON) => {
+    private updatePlot = (updatedPlot: PlotJSON) => {
         if (this.state.status === "loading") return;
 
         const updatedPlots = this.state.plots.filter(plot => plot.id !== updatedPlot.id) // Remove plot to update
