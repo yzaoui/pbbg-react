@@ -167,7 +167,7 @@ class FarmPage extends React.Component<{}, State> {
             })
     };
 
-    private handlePlantModalSelect = () => {
+    private handlePlantModalSelect = (itemId: number) => {
         if (this.state.status === "loading") return;
 
         const plotId = this.state.plantingPlotId!;
@@ -181,7 +181,7 @@ class FarmPage extends React.Component<{}, State> {
         this.setState({ plantingPlotId: null, loadingPlots: (new Set(this.state.loadingPlots)).add(plotId) } as LoadedState);
 
         this.plantRequests.set(plotId,
-            farmService.plant({ plotId: plotId })
+            farmService.plant({ plotId: plotId, itemId: itemId })
                 .subscribe(res => {
                     this.plantRequests.delete(plotId);
                     this.updatePlot(res.data);

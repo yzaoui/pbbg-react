@@ -8,6 +8,7 @@ export type AllPlotsResponse = PlotDataJSON[];
  */
 export type PlantRequest = {
     plotId: number;
+    itemId: number;
 };
 export type PlantResponse = PlotDataJSON;
 

@@ -11,7 +11,7 @@ import MicroModal from "react-micro-modal";
 type Props = {
     open: boolean;
     onClose: () => void;
-    onSelect: () => void;
+    onSelect: (itemId: number) => void;
 };
 
 type State = {
@@ -72,7 +72,7 @@ class PlantModal extends React.Component<Props> {
                             }
                         </main>
                         <footer>
-                            <button className={classNames(styles.select, "fancy")} onClick={this.props.onSelect} disabled={this.state.selectedOption === null}>Select</button>
+                            <button className={classNames(styles.select, "fancy")} onClick={this.handleSelect} disabled={this.state.selectedOption === null}>Select</button>
                             <button className={classNames(styles.cancel, "fancy secondary")} onClick={handleClose}>Cancel</button>
                         </footer>
                     </div>
@@ -86,6 +86,12 @@ class PlantModal extends React.Component<Props> {
             selectedOption: Number(event.target.value)
         })
     };
+
+    private handleSelect = () => {
+        if (this.state.selectedOption === null) return;
+
+        this.props.onSelect(this.state.selectedOption)
+    }
 }
 
 export default PlantModal;

@@ -8,7 +8,7 @@ const farmService = {
         getPlotsRequest()
     ),
     plant: (req: FarmEndpoint.PlantRequest): RxJS.Observable<Success<FarmEndpoint.PlantResponse>> => RxJS.from(
-        plantRequest(req.plotId)
+        plantRequest(req)
     ),
     harvest: (req: FarmEndpoint.HarvestRequest): RxJS.Observable<Success<FarmEndpoint.HarvestResponse>> => RxJS.from(
         harvestRequest(req.plotId)
@@ -30,7 +30,7 @@ const getPlotsRequest = (): Promise<Success<FarmEndpoint.AllPlotsResponse>> => n
     data: mockPlots
 }), 500));
 
-const plantRequest = (plotId: number): Promise<Success<FarmEndpoint.PlantResponse>> => {
+const plantRequest = ({ plotId, itemId }: FarmEndpoint.PlantRequest): Promise<Success<FarmEndpoint.PlantResponse>> => {
     const now = (new Date()).getTime();
 
     return new Promise(resolve => setTimeout(() => {
