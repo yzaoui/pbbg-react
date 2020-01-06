@@ -21,4 +21,7 @@ export type ItemHistoryInfo = {
 } | {
     type: "first-mined";
     userId: number;
+} | {
+    type: "first-harvested";
+    userId: number;
 };
