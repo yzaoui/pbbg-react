@@ -6,11 +6,6 @@ import { BaseItem } from "./dex";
 export type InventoryResponse = Inventory
 
 /**
- * /inventory/plantable
- */
-export type PlantableInventoryResponse = Inventory;
-
-/**
  * /inventory/equipment
  */
 export type EquipUnequipRequest = {

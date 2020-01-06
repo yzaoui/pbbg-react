@@ -86,7 +86,7 @@ class FarmPage extends React.Component<{}, State> {
             if ("progress" in plot) {
                 plot.progress = getPlantProgress(plot.plant, now);
 
-                if (plot.progress.percentage === 1 && plot.plant.lifecycle.hasNextStage) {
+                if (plot.progress.percentage === 1 && plot.plant.isMature === false) {
                     toFetch.add(plot.id);
 
                     if (this.refreshRequest === null) this.fetchPlots();

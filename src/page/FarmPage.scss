@@ -60,6 +60,11 @@
             width: 128px;
             height: 128px;
             position: absolute;
+
+            &.plant {
+                object-fit: cover;
+                object-position: calc(-128px * var(--sprite-index));
+            }
         }
     }
 

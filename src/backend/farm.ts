@@ -1,7 +1,7 @@
 /**
  * /farm/plots
  */
-export type AllPlotsResponse = PlotJSON[];
+export type PlotsResponse = PlotJSON[];
 
 /**
  * /farm/plant
@@ -34,14 +34,24 @@ export type EmptyPlotJSON = {
 
 export type OccupiedPlotJSON = {
     id: number;
-    plant: PlantJSON;
+    plant: MaterializedPlantJSON;
 };
 
-export type PlantJSON = {
-    type: "apple";
-    lifecycle: {
-        hasNextStage: boolean;
-        startTimestamp: string;
-        endTimestamp: string;
-    };
+export type MaterializedPlantJSON = {
+    basePlant: BasePlantJSON;
+    cycleStart: string;
+    isMature: boolean | null;
 };
+
+export type BasePlantJSON = {
+    growingPeriod: number;
+    growingSprite: string;
+} & (
+    {
+        maturePeriod: null;
+        matureSprite: null;
+    } | {
+        maturePeriod: number;
+        matureSprite: string;
+    }
+);

@@ -8,7 +8,7 @@ type Props = {
 } & (
     {
         progress: PlantProgress;
-        hasNextStage: boolean;
+        isHarvestable: boolean;
         onHarvest: () => void;
     } | {
         onPlant: () => void;
@@ -20,11 +20,9 @@ const PlotFooter: React.FC<Props> = (props) => {
         <button className="fancy" onClick={props.onPlant} disabled={props.loading}>Plant</button>
     </div>;
 
-    const harvestable = props.progress.percentage === 1 && !props.hasNextStage;
-
     return <div className="PlotFooter">
-        <PlotProgress progress={props.progress} ready={harvestable} />
-        <PlotProgressButton disabled={!harvestable || props.loading} percentage={props.progress.percentage} label="Harvest" onClick={props.onHarvest} />
+        <PlotProgress progress={props.progress} ready={props.isHarvestable} />
+        <PlotProgressButton disabled={!props.isHarvestable || props.loading} percentage={props.progress.percentage} label="Harvest" onClick={props.onHarvest} />
     </div>;
 };
 

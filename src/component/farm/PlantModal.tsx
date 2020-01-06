@@ -36,7 +36,7 @@ class PlantModal extends React.Component<Props> {
     componentDidUpdate(prevProps: Readonly<Props>) {
         if (!prevProps.open && this.props.open) {
             // Modal was opened
-            this.inventoryRequest = inventoryService.getPlantableInventory().subscribe(res =>
+            this.inventoryRequest = inventoryService.getInventory("plantable").subscribe(res =>
                 this.setState({ inventory: res.data })
             );
         } else if (prevProps.open && !this.props.open) {

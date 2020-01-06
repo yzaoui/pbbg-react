@@ -1,4 +1,4 @@
-import { EmptyPlotJSON, OccupiedPlotJSON, PlantJSON, PlotJSON } from "../backend/farm";
+import { EmptyPlotJSON, OccupiedPlotJSON, MaterializedPlantJSON, PlotJSON } from "../backend/farm";
 
 export type PlotData = (EmptyPlotData | OccupiedPlotData);
 
@@ -24,9 +24,10 @@ export const plotFromJSON = (plot: PlotJSON): PlotData => {
     }
 };
 
-export const getPlantProgress = (plant: PlantJSON, nowDate: Date): PlantProgress => {
-    const start = Date.parse(plant.lifecycle.startTimestamp);
-    const end = Date.parse(plant.lifecycle.endTimestamp);
+export const getPlantProgress = (plant: MaterializedPlantJSON, nowDate: Date): PlantProgress => {
+    const start = Date.parse(plant.cycleStart);
+    const period = plant.isMature === true ? plant.basePlant.maturePeriod! : plant.basePlant.growingPeriod;
+    const end = start + period * 1000;
     const now = nowDate.getTime();
 
     if (now > end) {
