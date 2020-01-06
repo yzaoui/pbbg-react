@@ -1,0 +1,59 @@
+import { EmptyPlotJSON, OccupiedPlotJSON, MaterializedPlantJSON, PlotJSON } from "../backend/farm";
+
+export type PlotData = (EmptyPlotData | OccupiedPlotData);
+
+export type EmptyPlotData = EmptyPlotJSON;
+
+export type OccupiedPlotData = OccupiedPlotJSON & {
+    progress: PlantProgress;
+};
+
+export type PlantProgress = {
+    percentage: number;
+    remainingTime: string;
+};
+
+export const plotFromJSON = (plot: PlotJSON): PlotData => {
+    if (plot.plant !== null) {
+        return {
+            ...plot,
+            progress: getPlantProgress(plot.plant, new Date())
+        }
+    } else {
+        return plot;
+    }
+};
+
+export const getPlantProgress = (plant: MaterializedPlantJSON, nowDate: Date): PlantProgress => {
+    const start = Date.parse(plant.cycleStart);
+    const period = plant.isMature === true ? plant.basePlant.maturePeriod! : plant.basePlant.growingPeriod;
+    const end = start + period * 1000;
+    const now = nowDate.getTime();
+
+    if (now > end) {
+        return {
+            percentage: 1,
+            remainingTime: millisecondsToHourMinuteSecond(0)
+        };
+    } else if (now < start) {
+        return {
+            percentage: 0,
+            remainingTime: millisecondsToHourMinuteSecond(end - start)
+        };
+    } else {
+        return {
+            percentage: ((now - start) / (end - start)),
+            remainingTime: millisecondsToHourMinuteSecond(end - now)
+        };
+    }
+};
+
+const millisecondsToHourMinuteSecond = (ms: number): string => {
+    const hours = Math.floor(ms / 1000 / 60 / 60);
+    const minutes = Math.floor((ms / 1000 / 60) % 60);
+    const seconds = Math.floor((ms / 1000) % 60);
+
+    return [hours, minutes, seconds]
+        .map((num) => num < 10 ? `0${num}` : `${num}`)
+        .join(":");
+};

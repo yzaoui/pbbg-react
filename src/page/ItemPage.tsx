@@ -76,6 +76,9 @@ const ItemHistoryEntryDescription: React.FC<{ info: ItemHistoryInfo, userDetails
         case "first-mined":
             content = <>Mined by <a href={`/user/${info.userId}`}>{userDetails[info.userId]}</a></>;
             break;
+        case "first-harvested":
+            content = <>Harvested by <a href={`/user/${info.userId}`}>{userDetails[info.userId]}</a></>;
+            break;
         default:
             throw Error();
     }
