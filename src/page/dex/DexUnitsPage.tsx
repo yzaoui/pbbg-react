@@ -1,5 +1,5 @@
 import React from "react";
-import * as DexEndpoint from "../../backend/dex";
+import { DexUnits } from "../../backend/dex";
 import { Route, RouteComponentProps } from "react-router-dom";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
@@ -8,8 +8,6 @@ import dexService from "../../backend/dex.service";
 import DexUnitEntry from "../../component/dex/DexUnitEntry";
 import DexUnitDetailedPage from "./DexUnitDetailedPage";
 import DexReturnLink from "../../component/dex/DexReturnLink";
-
-type DexUnits = DexEndpoint.UnitsResponse;
 
 const DexUnitsPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
