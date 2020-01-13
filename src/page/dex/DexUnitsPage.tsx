@@ -56,12 +56,8 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return "ERROR";
 
-        const { discoveredUnits, lastUnitIsDiscovered } = this.state.dexUnits;
-
-        let lastDiscoveredId = -1;
-
-        return <ol className="dex units">
-            {Object.entries(discoveredUnits)
+        return <ol className="dex">
+            {Object.entries(this.state.dexUnits.discoveredUnits)
                 .map(([id, unit]) => <DexUnitEntry key={id} id={id} unit={unit} />)}
         </ol>;
     };
