@@ -37,6 +37,7 @@ export interface DexItems {
 }
 
 export interface BaseItem {
+    id: number;
     friendlyName: string;
     img16: string;
     img32: string;

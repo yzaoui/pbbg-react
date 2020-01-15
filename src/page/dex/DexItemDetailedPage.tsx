@@ -57,8 +57,8 @@ class DexItemDetailedPage extends React.Component<Props, State> {
         const item = this.state.baseItem;
 
         return <>
-            <Helmet title={`${item.friendlyName} - Item Dex - PBBG`} />
-            <h1>{item.friendlyName}</h1>
+            <Helmet title={`#${item.id}: ${item.friendlyName} - Item Dex - PBBG`} />
+            <h1>#{item.id}: {item.friendlyName}</h1>
             <h2>Sprites</h2>
             <div className="body">
                 <img className="item-sprite" src={item.img16} alt={`${item.friendlyName} 16x16 sprite`} />

@@ -63,7 +63,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         const lastId = parseInt(Object.keys(discoveredItems).slice(-1).pop()!!);
 
         const allEntries: Record<number, BaseItem | null> = {};
-        for (let i = 0; i <= lastId; i++) {
+        for (let i = 1; i <= lastId; i++) {
             allEntries[i] = discoveredItems[i] || null;
         }
 
