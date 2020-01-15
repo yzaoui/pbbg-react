@@ -51,7 +51,7 @@ class DexPlantDetailedPage extends React.Component<Props, State> {
                 <Helmet title="Loading… - Plant Dex - PBBG" />
                 <div><LoadingSpinner /></div>
             </>;
-            case "error": return <div>"ERROR"</div>;
+            case "error": return <div>ERROR</div>;
         }
 
         const plant = this.state.basePlant;

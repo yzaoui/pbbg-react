@@ -6,6 +6,7 @@ import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 import DexReturnLink from "../../component/dex/DexReturnLink";
+import { Helmet } from "react-helmet";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
@@ -45,12 +46,18 @@ class DexItemDetailedPage extends React.Component<Props, State> {
     }
 
     renderContainer = () => {
-        if (this.state.status === "loading") return <div><LoadingSpinner /></div>;
-        else if (this.state.status === "error") return <div>"ERROR"</div>;
+        switch (this.state.status) {
+            case "loading": return <>
+                <Helmet title="Loading… - Item Dex - PBBG" />
+                <div><LoadingSpinner /></div>
+            </>;
+            case "error": return <div>ERROR</div>;
+        }
 
         const item = this.state.baseItem;
 
         return <>
+            <Helmet title={`${item.friendlyName} - Item Dex - PBBG`} />
             <h1>{item.friendlyName}</h1>
             <h2>Sprites</h2>
             <div className="body">
