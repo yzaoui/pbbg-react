@@ -1,5 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import "./DexDetailedPage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
@@ -46,13 +47,17 @@ class DexPlantDetailedPage extends React.Component<Props, State> {
 
     renderContainer = () => {
         switch (this.state.status) {
-            case "loading": return <div><LoadingSpinner /></div>;
+            case "loading": return <>
+                <Helmet title="Loading… - Plant Dex - PBBG" />
+                <div><LoadingSpinner /></div>
+            </>;
             case "error": return <div>"ERROR"</div>;
         }
 
         const plant = this.state.basePlant;
 
         return <>
+            <Helmet title={`#${plant.id}: ${plant.name} - Plant Dex - PBBG`} />
             <h1>#{plant.id}: {plant.name}</h1>
             <h2>Sprites</h2>
             <div className="body">
