@@ -33,7 +33,7 @@ export type PlantIndividualResponse = BasePlantJSON;
 
 export interface DexItems {
     discoveredItems: {[id: number]: BaseItem};
-    lastItemIsDiscovered: boolean;
+    lastItemId: number;
 }
 
 export interface BaseItem {
@@ -53,7 +53,7 @@ export const isGridPreviewable = (item: BaseItem): item is BaseItem & GridPrevie
 
 export interface DexUnits {
     discoveredUnits: Record<number, MyUnitEnum>;
-    lastUnitIsDiscovered: boolean;
+    lastUnitId: number;
 }
 
 export interface MyUnitEnum {
@@ -66,4 +66,5 @@ export interface MyUnitEnum {
 
 export interface DexPlants {
     discoveredPlants: Record<number, BasePlantJSON>;
+    lastPlantId: number;
 }

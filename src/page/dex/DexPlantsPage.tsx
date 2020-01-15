@@ -9,6 +9,8 @@ import DexPlantEntry from "../../component/dex/DexPlantEntry";
 import DexPlantDetailedPage from "./DexPlantDetailedPage";
 import DexReturnLink from "../../component/dex/DexReturnLink";
 import { DexPlants } from "../../backend/dex";
+import { BasePlant } from "../../model/farm";
+import DexUnknownEntry from "../../component/dex/DexUnknownEntry";
 
 const DexPlantsPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -55,11 +57,22 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return "ERROR";
 
+        const { discoveredPlants, lastPlantId } = this.state.dexPlants;
+
+        const allEntries: Record<number, BasePlant | null> = {};
+        for (let i = 1; i <= lastPlantId; i++) {
+            allEntries[i] = discoveredPlants[i] || null;
+        }
+
         return <>
             <Helmet title="Plant Dex - PBBG" />
-            <ol className="dex plants">
-                {Object.entries(this.state.dexPlants.discoveredPlants)
-                    .map(([id, plant]) => <DexPlantEntry key={id} id={id} plant={plant} />)}
+            <ol className="dex">
+                {Object.entries(allEntries)
+                    .map(([id, plant]) => (plant !== null) ?
+                        <DexPlantEntry key={id} id={id} plant={plant} />
+                    :
+                        <DexUnknownEntry key={id} id={id} />
+                    )}
             </ol>
         </>;
     };

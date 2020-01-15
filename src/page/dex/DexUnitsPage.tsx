@@ -2,13 +2,14 @@ import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
 import Helmet from "react-helmet";
 import { Subscription } from "rxjs";
-import { DexUnits } from "../../backend/dex";
+import { BaseItem, DexUnits, MyUnitEnum } from "../../backend/dex";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import dexService from "../../backend/dex.service";
 import DexUnitEntry from "../../component/dex/DexUnitEntry";
 import DexUnitDetailedPage from "./DexUnitDetailedPage";
 import DexReturnLink from "../../component/dex/DexReturnLink";
+import DexUnknownEntry from "../../component/dex/DexUnknownEntry";
 
 const DexUnitsPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -55,11 +56,22 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return "ERROR";
 
+        const { discoveredUnits, lastUnitId } = this.state.dexUnits;
+
+        const allEntries: Record<number, MyUnitEnum | null> = {};
+        for (let i = 1; i <= lastUnitId; i++) {
+            allEntries[i] = discoveredUnits[i] || null;
+        }
+
         return <>
             <Helmet title="Unit Dex - PBBG" />
             <ol className="dex">
-                {Object.entries(this.state.dexUnits.discoveredUnits)
-                    .map(([id, unit]) => <DexUnitEntry key={id} id={id} unit={unit} />)}
+                {Object.entries(allEntries)
+                    .map(([id, unit]) => (unit !== null) ?
+                        <DexUnitEntry key={id} id={id} unit={unit} />
+                    :
+                        <DexUnknownEntry key={id} id={id} />
+                    )}
             </ol>
         </>;
     };

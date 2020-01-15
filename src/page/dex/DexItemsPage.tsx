@@ -56,14 +56,12 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return "ERROR";
 
-        const { discoveredItems } = this.state.dexItems;
+        const { discoveredItems, lastItemId } = this.state.dexItems;
 
         if (Object.entries(discoveredItems).length === 0) return "No items discovered yet.";
 
-        const lastId = parseInt(Object.keys(discoveredItems).slice(-1).pop()!!);
-
         const allEntries: Record<number, BaseItem | null> = {};
-        for (let i = 1; i <= lastId; i++) {
+        for (let i = 1; i <= lastItemId; i++) {
             allEntries[i] = discoveredItems[i] || null;
         }
 
