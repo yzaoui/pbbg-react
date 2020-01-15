@@ -16,13 +16,18 @@ const DexItemsPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/:id"} component={DexItemDetailedPage} />
 </>;
 
-interface State {
-    state: "loading" | "error" | DexItems;
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    dexItems: DexItems;
 }
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        status: "loading"
     };
 
     request?: Subscription;
@@ -30,8 +35,8 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     componentDidMount() {
         this.request = dexService.getItems()
             .subscribe(
-                res => this.setState({ state: res.data }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "loaded", dexItems: res.data }),
+                error => this.setState({ status: "error" })
             )
     }
 
@@ -48,10 +53,10 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     }
 
     renderContainer = () => {
-        if (this.state.state === "loading") return <LoadingSpinner />;
-        else if (this.state.state === "error") return "ERROR";
+        if (this.state.status === "loading") return <LoadingSpinner />;
+        else if (this.state.status === "error") return "ERROR";
 
-        const { discoveredItems } = this.state.state;
+        const { discoveredItems } = this.state.dexItems;
 
         if (Object.entries(discoveredItems).length === 0) return "No items discovered yet.";
 
