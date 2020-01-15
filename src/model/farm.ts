@@ -1,32 +1,88 @@
-import { EmptyPlotJSON, OccupiedPlotJSON, MaterializedPlantJSON, PlotJSON } from "../backend/farm";
+import { MaterializedPlantJSON, MaturableBasePlantJSON, PlotJSON } from "../backend/farm";
 
-export type PlotData = (EmptyPlotData | OccupiedPlotData);
+export interface PlotData {
+    id: number;
+}
 
-export type EmptyPlotData = EmptyPlotJSON;
-
-export type OccupiedPlotData = OccupiedPlotJSON & {
+export interface OccupiedPlotData extends PlotData {
+    plant: MaterializedPlant;
     progress: PlantProgress;
-};
+}
 
-export type PlantProgress = {
+export const isOccupiedPlotData = (plot: PlotData): plot is OccupiedPlotData => "plant" in plot && "progress" in plot;
+
+export interface MaterializedPlant {
+    basePlant: BasePlant;
+    cycleStart: string;
+}
+
+export interface MaturableMaterializedPlant extends MaterializedPlant {
+    basePlant: MaturableBasePlant;
+    isMature: boolean;
+}
+
+export const isMaturableMaterializedPlant = (plant: MaterializedPlant): plant is MaturableMaterializedPlant => "isMature" in plant;
+
+export interface PlantProgress {
     percentage: number;
     remainingTime: string;
-};
+}
+
+export interface BasePlant {
+    growingPeriod: number;
+    growingSprite: string;
+}
+
+export interface MaturableBasePlant extends BasePlant {
+    maturePeriod: number;
+    matureSprite: string;
+}
+
+const isMaturableBasePlant = (plant: BasePlant): plant is MaturableBasePlant => "maturePeriod" in plant && "matureSprite" in plant;
 
 export const plotFromJSON = (plot: PlotJSON): PlotData => {
     if (plot.plant !== null) {
-        return {
-            ...plot,
+        return is<OccupiedPlotData>({
+            id: plot.id,
+            plant: materializedPlantFromJSON(plot.plant),
             progress: getPlantProgress(plot.plant, new Date())
-        }
+        })
     } else {
-        return plot;
+        return {
+            id: plot.id
+        };
     }
 };
 
-export const getPlantProgress = (plant: MaterializedPlantJSON, nowDate: Date): PlantProgress => {
+const is = <T>(x: T): T => x;
+
+const materializedPlantFromJSON = (plant: MaterializedPlantJSON): MaterializedPlant => {
+    if (plant.isMature !== null) {
+        return is<MaturableMaterializedPlant>({
+            basePlant: maturableBasePlantFromJSON(plant.basePlant),
+            cycleStart: plant.cycleStart,
+            isMature: plant.isMature
+        });
+    } else {
+        return {
+            basePlant: plant.basePlant,
+            cycleStart: plant.cycleStart
+        };
+    }
+};
+
+const maturableBasePlantFromJSON = (basePlant: MaturableBasePlantJSON): MaturableBasePlant => {
+    return {
+        growingPeriod: basePlant.growingPeriod,
+        growingSprite: basePlant.growingSprite,
+        maturePeriod: basePlant.maturePeriod,
+        matureSprite: basePlant.matureSprite
+    };
+};
+
+export const getPlantProgress = (plant: MaterializedPlant, nowDate: Date): PlantProgress => {
     const start = Date.parse(plant.cycleStart);
-    const period = plant.isMature === true ? plant.basePlant.maturePeriod! : plant.basePlant.growingPeriod;
+    const period = isMaturableMaterializedPlant(plant) && plant.isMature ? plant.basePlant.maturePeriod : plant.basePlant.growingPeriod;
     const end = start + period * 1000;
     const now = nowDate.getTime();
 

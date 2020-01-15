@@ -2,13 +2,13 @@ import React from "react";
 import PlotImage from "./PlotImage";
 import PlotFooter from "./PlotFooter";
 import LoadingSpinner from "../LoadingSpinner";
-import { EmptyPlotData, OccupiedPlotData } from "../../model/farm";
+import { isMaturableMaterializedPlant, OccupiedPlotData, PlotData } from "../../model/farm";
 
 type Props = {
     loading: boolean;
 } & (
     {
-        plot: EmptyPlotData;
+        plot: PlotData;
         onPlant: (plotId: number) => void;
     } | {
         plot: OccupiedPlotData;
@@ -26,7 +26,7 @@ const Plot: React.FC<Props> = (props: Props) => <div className="Plot">
         <PlotFooter
             loading={props.loading}
             progress={props.plot.progress}
-            isHarvestable={props.plot.plant!.isMature !== false && props.plot.progress.percentage === 1}
+            isHarvestable={!(isMaturableMaterializedPlant(props.plot.plant) && !props.plot.plant.isMature) && props.plot.progress.percentage === 1}
             onHarvest={() => props.onHarvest(props.plot.id)}
         />
     </> : <>

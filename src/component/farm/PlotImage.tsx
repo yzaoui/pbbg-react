@@ -1,10 +1,9 @@
 import React from "react";
 import ground from "../../img/ground.png";
-import { MaterializedPlantJSON } from "../../backend/farm";
-import { PlantProgress } from "../../model/farm";
+import { isMaturableMaterializedPlant, MaterializedPlant, PlantProgress } from "../../model/farm";
 
 type Props = {
-    plant: MaterializedPlantJSON;
+    plant: MaterializedPlant;
     progress: PlantProgress;
 } | {};
 
@@ -19,17 +18,17 @@ const PlotImage: React.FC<Props> = (props: Props) => {
     </div>;
 };
 
-const plantToImage = (plant: MaterializedPlantJSON, progress: PlantProgress) => {
+const plantToImage = (plant: MaterializedPlant, progress: PlantProgress) => {
     let src: string;
     let index: number = 0;
 
-    if (plant.basePlant.maturePeriod === null) {
+    if (!isMaturableMaterializedPlant(plant)) {
         /* Non-maturable plant */
         src = plant.basePlant.growingSprite;
         index = Math.floor(3 * progress.percentage);
     } else {
         /* Maturable plant */
-        if (plant.isMature!) {
+        if (plant.isMature) {
             src = plant.basePlant.matureSprite;
             index = Math.floor(3 * progress.percentage);
         } else {

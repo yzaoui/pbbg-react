@@ -40,18 +40,21 @@ export type OccupiedPlotJSON = {
 export type MaterializedPlantJSON = {
     basePlant: BasePlantJSON;
     cycleStart: string;
-    isMature: boolean | null;
+    isMature: null;
+} | {
+    basePlant: MaturableBasePlantJSON;
+    cycleStart: string;
+    isMature: boolean;
 };
 
-export type BasePlantJSON = {
+export interface BasePlantJSON {
     growingPeriod: number;
     growingSprite: string;
-} & (
-    {
-        maturePeriod: null;
-        matureSprite: null;
-    } | {
-        maturePeriod: number;
-        matureSprite: string;
-    }
-);
+    maturePeriod: number | null;
+    matureSprite: string | null;
+}
+
+export interface MaturableBasePlantJSON extends BasePlantJSON {
+    maturePeriod: number;
+    matureSprite: string;
+}
