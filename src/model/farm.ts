@@ -1,4 +1,4 @@
-import { MaterializedPlantJSON, MaturableBasePlantJSON, PlotJSON } from "../backend/farm";
+import { BasePlantJSON, isMaturableBasePlantJSON, MaterializedPlantJSON, MaturableBasePlantJSON, PlotJSON } from "../backend/farm";
 
 export interface PlotData {
     id: number;
@@ -29,6 +29,10 @@ export interface PlantProgress {
 }
 
 export interface BasePlant {
+    id: number;
+    name: string;
+    icon: string;
+    description: string;
     growingPeriod: number;
     growingSprite: string;
 }
@@ -38,7 +42,7 @@ export interface MaturableBasePlant extends BasePlant {
     matureSprite: string;
 }
 
-const isMaturableBasePlant = (plant: BasePlant): plant is MaturableBasePlant => "maturePeriod" in plant && "matureSprite" in plant;
+export const isMaturableBasePlant = (plant: BasePlant): plant is MaturableBasePlant => "maturePeriod" in plant && "matureSprite" in plant;
 
 export const plotFromJSON = (plot: PlotJSON): PlotData => {
     if (plot.plant !== null) {
@@ -65,20 +69,35 @@ const materializedPlantFromJSON = (plant: MaterializedPlantJSON): MaterializedPl
         });
     } else {
         return {
-            basePlant: plant.basePlant,
+            basePlant: basePlantFromJSON(plant.basePlant),
             cycleStart: plant.cycleStart
         };
     }
 };
 
-const maturableBasePlantFromJSON = (basePlant: MaturableBasePlantJSON): MaturableBasePlant => {
+export const basePlantFromJSON = (basePlant: BasePlantJSON): BasePlant => {
+    if (isMaturableBasePlantJSON(basePlant)) return maturableBasePlantFromJSON(basePlant);
+
     return {
+        id: basePlant.id,
+        name: basePlant.name,
+        icon: basePlant.icon,
+        description: basePlant.description,
         growingPeriod: basePlant.growingPeriod,
         growingSprite: basePlant.growingSprite,
-        maturePeriod: basePlant.maturePeriod,
-        matureSprite: basePlant.matureSprite
     };
 };
+
+export const maturableBasePlantFromJSON = (basePlant: MaturableBasePlantJSON): MaturableBasePlant => ({
+    id: basePlant.id,
+    name: basePlant.name,
+    icon: basePlant.icon,
+    description: basePlant.description,
+    growingPeriod: basePlant.growingPeriod,
+    growingSprite: basePlant.growingSprite,
+    maturePeriod: basePlant.maturePeriod,
+    matureSprite: basePlant.matureSprite
+});
 
 export const getPlantProgress = (plant: MaterializedPlant, nowDate: Date): PlantProgress => {
     const start = Date.parse(plant.cycleStart);

@@ -48,6 +48,10 @@ export type MaterializedPlantJSON = {
 };
 
 export interface BasePlantJSON {
+    id: number;
+    name: string;
+    icon: string;
+    description: string;
     growingPeriod: number;
     growingSprite: string;
     maturePeriod: number | null;
@@ -58,3 +62,6 @@ export interface MaturableBasePlantJSON extends BasePlantJSON {
     maturePeriod: number;
     matureSprite: string;
 }
+
+export const isMaturableBasePlantJSON = (basePlant: BasePlantJSON): basePlant is MaturableBasePlantJSON =>
+    basePlant.maturePeriod !== null && basePlant.matureSprite !== null;

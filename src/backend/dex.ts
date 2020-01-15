@@ -1,4 +1,5 @@
 import { Point } from "./inventory";
+import { BasePlantJSON } from "./farm";
 
 /**
  * /dex/items
@@ -19,6 +20,16 @@ export type UnitsResponse = DexUnits;
  * /dex/units/:id
  */
 export type UnitIndividualResponse = MyUnitEnum;
+
+/**
+ * /dex/plants
+ */
+export type PlantsResponse = DexPlants;
+
+/**
+ * /dex/plants/:id
+ */
+export type PlantIndividualResponse = BasePlantJSON;
 
 export interface DexItems {
     discoveredItems: {[id: number]: BaseItem};
@@ -50,4 +61,8 @@ export interface MyUnitEnum {
     description: string;
     iconURL: string;
     fullURL: string;
+}
+
+export interface DexPlants {
+    discoveredPlants: Record<number, BasePlantJSON>;
 }

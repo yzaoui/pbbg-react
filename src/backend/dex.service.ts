@@ -36,6 +36,22 @@ const dexService = {
         }).then(
             res => handleResponse<DexEndpoint.ItemIndividualResponse>(res)
         )
+    ),
+    getPlants: () => RxJS.from(
+        fetch(`${API_ROOT}/api/dex/plants`, {
+            method: "GET",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<DexEndpoint.PlantsResponse>(res)
+        )
+    ),
+    getPlant: (id: string) => RxJS.from(
+        fetch(`${API_ROOT}/api/dex/plants/${id}`, {
+            method: "GET",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<DexEndpoint.PlantIndividualResponse>(res)
+        )
     )
 };
 
