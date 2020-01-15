@@ -6,7 +6,8 @@ import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 import DexReturnLink from "../../component/dex/DexReturnLink";
-import { BasePlant, basePlantFromJSON, isMaturableBasePlant } from "../../model/farm";
+import { BasePlant, basePlantFromJSON } from "../../model/farm";
+import PlantPreview from "../../component/farm/PlantPreview";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
@@ -61,10 +62,7 @@ class DexPlantDetailedPage extends React.Component<Props, State> {
             <h1>#{plant.id}: {plant.name}</h1>
             <h2>Sprites</h2>
             <div className="body">
-                <img src={plant.growingSprite} alt={`${plant.name} growing phase`} />
-                {isMaturableBasePlant(plant) &&
-                    <img src={plant.matureSprite} alt={`${plant.name} mature phase`} />
-                }
+                <PlantPreview basePlant={plant} />
             </div>
             <h2>Description</h2>
             <div className="body">
