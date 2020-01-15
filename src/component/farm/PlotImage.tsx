@@ -1,6 +1,7 @@
 import React from "react";
 import ground from "../../img/ground.png";
 import { isMaturableMaterializedPlant, MaterializedPlant, PlantProgress } from "../../model/farm";
+import PlantImage from "./PlantImage";
 
 type Props = {
     plant: MaterializedPlant;
@@ -20,7 +21,7 @@ const PlotImage: React.FC<Props> = (props: Props) => {
 
 const plantToImage = (plant: MaterializedPlant, progress: PlantProgress) => {
     let src: string;
-    let index: number = 0;
+    let index: number;
 
     if (!isMaturableMaterializedPlant(plant)) {
         /* Non-maturable plant */
@@ -37,7 +38,7 @@ const plantToImage = (plant: MaterializedPlant, progress: PlantProgress) => {
         }
     }
 
-    return <img className="plant" src={src} style={{ ["--sprite-index" as any]: index}} alt="Plant sprite" />;
+    return <PlantImage src={src} spriteIndex={index} alt={plant.basePlant.name + " sprite"} />;
 };
 
 export default PlotImage;
