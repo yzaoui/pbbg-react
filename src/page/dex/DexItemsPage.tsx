@@ -1,10 +1,11 @@
 import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
+import Helmet from "react-helmet";
+import { Subscription } from "rxjs";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { BaseItem, DexItems } from "../../backend/dex";
 import DexItemEntry from "../../component/dex/DexItemEntry";
-import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 import DexUnknownEntry from "../../component/dex/DexUnknownEntry";
 import DexReturnLink from "../../component/dex/DexReturnLink";
@@ -27,8 +28,6 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     request?: Subscription;
 
     componentDidMount() {
-        document.title = "Items - Dex - PBBG";
-
         this.request = dexService.getItems()
             .subscribe(
                 res => this.setState({ state: res.data }),
@@ -52,7 +51,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.state === "loading") return <LoadingSpinner />;
         else if (this.state.state === "error") return "ERROR";
 
-        const { discoveredItems, lastItemIsDiscovered } = this.state.state;
+        const { discoveredItems } = this.state.state;
 
         if (Object.entries(discoveredItems).length === 0) return "No items discovered yet.";
 
@@ -63,11 +62,14 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
             allEntries[i] = discoveredItems[i] || null;
         }
 
-        return <ol className="dex">
-            {Object.entries(allEntries)
-                .map(([id, item]) => (item !== null) ? <DexItemEntry key={id} id={id} item={item} /> : <DexUnknownEntry key={id} id={id} />)
-            }
-        </ol>;
+        return <>
+            <Helmet title="Item Dex - PBBG" />
+            <ol className="dex">
+                {Object.entries(allEntries)
+                    .map(([id, item]) => (item !== null) ? <DexItemEntry key={id} id={id} item={item} /> : <DexUnknownEntry key={id} id={id} />)
+                }
+            </ol>
+        </>;
     };
 }
 

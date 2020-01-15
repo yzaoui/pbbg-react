@@ -1,9 +1,10 @@
 import React from "react";
-import { DexUnits } from "../../backend/dex";
 import { Route, RouteComponentProps } from "react-router-dom";
+import Helmet from "react-helmet";
+import { Subscription } from "rxjs";
+import { DexUnits } from "../../backend/dex";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
-import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 import DexUnitEntry from "../../component/dex/DexUnitEntry";
 import DexUnitDetailedPage from "./DexUnitDetailedPage";
@@ -31,8 +32,6 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     request?: Subscription;
 
     componentDidMount() {
-        document.title = "Units - Dex - PBBG";
-
         this.request = dexService.getUnits()
             .subscribe(
                 res => this.setState({ status: "loaded", dexUnits: res.data }),
@@ -56,10 +55,13 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return "ERROR";
 
-        return <ol className="dex">
-            {Object.entries(this.state.dexUnits.discoveredUnits)
-                .map(([id, unit]) => <DexUnitEntry key={id} id={id} unit={unit} />)}
-        </ol>;
+        return <>
+            <Helmet title="Unit Dex - PBBG" />
+            <ol className="dex">
+                {Object.entries(this.state.dexUnits.discoveredUnits)
+                    .map(([id, unit]) => <DexUnitEntry key={id} id={id} unit={unit} />)}
+            </ol>
+        </>;
     };
 }
 

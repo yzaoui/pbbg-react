@@ -1,8 +1,9 @@
 import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
+import Helmet from "react-helmet";
+import { Subscription } from "rxjs";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
-import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 import DexPlantEntry from "../../component/dex/DexPlantEntry";
 import DexPlantDetailedPage from "./DexPlantDetailedPage";
@@ -31,8 +32,6 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     request?: Subscription;
 
     componentDidMount() {
-        document.title = "Plant Dex - PBBG";
-
         this.request = dexService.getPlants()
             .subscribe(
                 res => this.setState({ status: "loaded", dexPlants: res.data }),
@@ -56,10 +55,13 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return "ERROR";
 
-        return <ol className="dex plants">
-            {Object.entries(this.state.dexPlants.discoveredPlants)
-                .map(([id, plant]) => <DexPlantEntry key={id} id={id} plant={plant} />)}
-        </ol>;
+        return <>
+            <Helmet title="Plant Dex - PBBG" />
+            <ol className="dex plants">
+                {Object.entries(this.state.dexPlants.discoveredPlants)
+                    .map(([id, plant]) => <DexPlantEntry key={id} id={id} plant={plant} />)}
+            </ol>
+        </>;
     };
 }
 
