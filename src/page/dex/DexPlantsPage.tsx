@@ -2,18 +2,19 @@ import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
 import Helmet from "react-helmet";
 import { Subscription } from "rxjs";
-import { BaseItem, DexUnits, MyUnitEnum } from "../../backend/dex";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import dexService from "../../backend/dex.service";
-import DexUnitEntry from "../../component/dex/DexUnitEntry";
-import DexUnitDetailedPage from "./DexUnitDetailedPage";
+import DexPlantEntry from "../../component/dex/DexPlantEntry";
+import DexPlantDetailedPage from "./DexPlantDetailedPage";
 import DexReturnLink from "../../component/dex/DexReturnLink";
+import { DexPlants } from "../../backend/dex";
+import { BasePlant } from "../../model/farm";
 import DexUnknownEntry from "../../component/dex/DexUnknownEntry";
 
-const DexUnitsPage: React.FC<RouteComponentProps> = ({ match }) => <>
+const DexPlantsPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
-    <Route path={match.url + "/:id"} component={DexUnitDetailedPage} />
+    <Route path={match.url + "/:id"} component={DexPlantDetailedPage} />
 </>;
 
 type State = {
@@ -22,7 +23,7 @@ type State = {
     status: "error";
 } | {
     status: "loaded";
-    dexUnits: DexUnits;
+    dexPlants: DexPlants;
 };
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
@@ -33,9 +34,9 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     request?: Subscription;
 
     componentDidMount() {
-        this.request = dexService.getUnits()
+        this.request = dexService.getPlants()
             .subscribe(
-                res => this.setState({ status: "loaded", dexUnits: res.data }),
+                res => this.setState({ status: "loaded", dexPlants: res.data }),
                 error => this.setState({ status: "error" })
             )
     }
@@ -47,7 +48,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     render() {
         return <>
             <DexReturnLink to="/dex" label="Return to Dex" />
-            <div className="dex-header"><h1>Unit Dex</h1></div>
+            <div className="dex-header"><h1>Plant Dex</h1></div>
             <div className="dex-container">{this.renderContainer()}</div>
         </>;
     }
@@ -56,19 +57,19 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
         if (this.state.status === "loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return "ERROR";
 
-        const { discoveredUnits, lastUnitId } = this.state.dexUnits;
+        const { discoveredPlants, lastPlantId } = this.state.dexPlants;
 
-        const allEntries: Record<number, MyUnitEnum | null> = {};
-        for (let i = 1; i <= lastUnitId; i++) {
-            allEntries[i] = discoveredUnits[i] || null;
+        const allEntries: Record<number, BasePlant | null> = {};
+        for (let i = 1; i <= lastPlantId; i++) {
+            allEntries[i] = discoveredPlants[i] || null;
         }
 
         return <>
-            <Helmet title="Unit Dex - PBBG" />
+            <Helmet title="Plant Dex - PBBG" />
             <ol className="dex">
                 {Object.entries(allEntries)
-                    .map(([id, unit]) => (unit !== null) ?
-                        <DexUnitEntry key={id} id={id} unit={unit} />
+                    .map(([id, plant]) => (plant !== null) ?
+                        <DexPlantEntry key={id} id={id} plant={plant} />
                     :
                         <DexUnknownEntry key={id} id={id} />
                     )}
@@ -77,4 +78,4 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 }
 
-export default DexUnitsPage;
+export default DexPlantsPage;

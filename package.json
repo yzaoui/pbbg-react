@@ -15,6 +15,7 @@
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-helmet": "^5.2.1",
     "react-micro-modal": "^1.7.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@types/classnames": "^2.2.9",
     "@types/howler": "^2.1.2",
+    "@types/react-helmet": "^5.0.15",
     "@types/react-router-dom": "^4.3.5"
   }
 }

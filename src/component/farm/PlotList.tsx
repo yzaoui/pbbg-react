@@ -1,6 +1,6 @@
 import React from "react";
 import Plot from "./Plot";
-import { PlotData } from "../../model/farm";
+import { isOccupiedPlotData, PlotData } from "../../model/farm";
 
 type Props = {
     plots: PlotData[];
@@ -31,7 +31,7 @@ class PlotList extends React.Component<Props> {
         return <ul className="PlotList">
             {plots.map(plot =>
                 <li key={plot.id}>
-                    {plot.plant !== null ?
+                    {isOccupiedPlotData(plot) ?
                         <Plot plot={plot} loading={loadingPlots.has(plot.id)} fetchingNextStage={fetchingNextStage.has(plot.id)} onHarvest={onHarvest} />
                     :
                         <Plot plot={plot} onPlant={onPlant} loading={loadingPlots.has(plot.id)} />

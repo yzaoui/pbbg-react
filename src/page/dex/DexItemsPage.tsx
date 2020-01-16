@@ -1,10 +1,11 @@
 import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
+import Helmet from "react-helmet";
+import { Subscription } from "rxjs";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import { BaseItem, DexItems } from "../../backend/dex";
 import DexItemEntry from "../../component/dex/DexItemEntry";
-import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 import DexUnknownEntry from "../../component/dex/DexUnknownEntry";
 import DexReturnLink from "../../component/dex/DexReturnLink";
@@ -15,24 +16,27 @@ const DexItemsPage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/:id"} component={DexItemDetailedPage} />
 </>;
 
-interface State {
-    state: "loading" | "error" | DexItems;
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    dexItems: DexItems;
 }
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        status: "loading"
     };
 
     request?: Subscription;
 
     componentDidMount() {
-        document.title = "Items - Dex - PBBG";
-
         this.request = dexService.getItems()
             .subscribe(
-                res => this.setState({ state: res.data }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "loaded", dexItems: res.data }),
+                error => this.setState({ status: "error" })
             )
     }
 
@@ -49,25 +53,26 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     }
 
     renderContainer = () => {
-        if (this.state.state === "loading") return <LoadingSpinner />;
-        else if (this.state.state === "error") return "ERROR";
+        if (this.state.status === "loading") return <LoadingSpinner />;
+        else if (this.state.status === "error") return "ERROR";
 
-        const { discoveredItems, lastItemIsDiscovered } = this.state.state;
+        const { discoveredItems, lastItemId } = this.state.dexItems;
 
         if (Object.entries(discoveredItems).length === 0) return "No items discovered yet.";
 
-        const lastId = parseInt(Object.keys(discoveredItems).slice(-1).pop()!!);
-
         const allEntries: Record<number, BaseItem | null> = {};
-        for (let i = 0; i <= lastId; i++) {
+        for (let i = 1; i <= lastItemId; i++) {
             allEntries[i] = discoveredItems[i] || null;
         }
 
-        return <ol className="dex">
-            {Object.entries(allEntries)
-                .map(([id, item]) => (item !== null) ? <DexItemEntry key={id} id={id} item={item} /> : <DexUnknownEntry key={id} id={id} />)
-            }
-        </ol>;
+        return <>
+            <Helmet title="Item Dex - PBBG" />
+            <ol className="dex">
+                {Object.entries(allEntries)
+                    .map(([id, item]) => (item !== null) ? <DexItemEntry key={id} id={id} item={item} /> : <DexUnknownEntry key={id} id={id} />)
+                }
+            </ol>
+        </>;
     };
 }
 
