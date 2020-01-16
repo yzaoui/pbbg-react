@@ -6,7 +6,7 @@ import LoadingSpinner from "../../component/LoadingSpinner";
 import { Subscription } from "rxjs";
 import dexService from "../../backend/dex.service";
 import DexReturnLink from "../../component/dex/DexReturnLink";
-import { BasePlant, basePlantFromJSON } from "../../model/farm";
+import { BasePlant, basePlantFromJSON, isMaturableBasePlant, secondsToDurationString } from "../../model/farm";
 import PlantPreview from "../../component/farm/PlantPreview";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
@@ -55,18 +55,27 @@ class DexPlantDetailedPage extends React.Component<Props, State> {
             case "error": return <div>ERROR</div>;
         }
 
-        const plant = this.state.basePlant;
+        const basePlant = this.state.basePlant;
 
         return <>
-            <Helmet title={`#${plant.id}: ${plant.name} - Plant Dex - PBBG`} />
-            <h1>#{plant.id}: {plant.name}</h1>
+            <Helmet title={`#${basePlant.id}: ${basePlant.name} - Plant Dex - PBBG`} />
+            <h1>#{basePlant.id}: {basePlant.name}</h1>
             <h2>Sprites</h2>
             <div className="body">
-                <PlantPreview basePlant={plant} />
+                <PlantPreview basePlant={basePlant} />
             </div>
             <h2>Description</h2>
             <div className="body">
-                <i>{plant.description}</i>
+                <i>{basePlant.description}</i>
+            </div>
+            <h2>Details</h2>
+            <div className="body">
+                {isMaturableBasePlant(basePlant) ? <>
+                    <div>Time to harvest (first time): {secondsToDurationString(basePlant.growingPeriod)}</div>
+                    <div>Time to harvest (mature): {secondsToDurationString(basePlant.maturePeriod)}</div>
+                </> : <>
+                    <div>Time to harvest: {secondsToDurationString(basePlant.growingPeriod)}</div>
+                </>}
             </div>
         </>;
     };

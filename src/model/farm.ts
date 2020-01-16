@@ -108,27 +108,29 @@ export const getPlantProgress = (plant: MaterializedPlant, nowDate: Date): Plant
     if (now > end) {
         return {
             percentage: 1,
-            remainingTime: millisecondsToHourMinuteSecond(0)
+            remainingTime: millisecondsToDurationString(0)
         };
     } else if (now < start) {
         return {
             percentage: 0,
-            remainingTime: millisecondsToHourMinuteSecond(end - start)
+            remainingTime: millisecondsToDurationString(end - start)
         };
     } else {
         return {
             percentage: ((now - start) / (end - start)),
-            remainingTime: millisecondsToHourMinuteSecond(end - now)
+            remainingTime: millisecondsToDurationString(end - now)
         };
     }
 };
 
-const millisecondsToHourMinuteSecond = (ms: number): string => {
-    const hours = Math.floor(ms / 1000 / 60 / 60);
-    const minutes = Math.floor((ms / 1000 / 60) % 60);
-    const seconds = Math.floor((ms / 1000) % 60);
+const millisecondsToDurationString = (ms: number): string => {
+    const hours = Math.floor(ms / 1000 / 60 / 60) + "h";
+    const minutes = Math.floor((ms / 1000 / 60) % 60) + "m";
+    const seconds = Math.floor((ms / 1000) % 60) + "s";
 
-    return [hours, minutes, seconds]
-        .map((num) => num < 10 ? `0${num}` : `${num}`)
-        .join(":");
+    return ms < 1000 * 60 ? seconds
+        : ms < 1000 * 60 * 60 ? minutes + seconds
+        : hours + minutes + seconds
 };
+
+export const secondsToDurationString = (s: number): string => millisecondsToDurationString(s * 1000);
