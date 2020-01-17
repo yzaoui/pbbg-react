@@ -1,6 +1,7 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
 import "../page/LoginRegisterPage.scss";
 import { USERNAME_REGEX, PASSWORD_REGEX } from "../helper/const";
+import LoadingButton from "./LoadingButton";
 
 interface Props {
     onSubmit: (username: string, password: string) => void;
@@ -45,11 +46,11 @@ class RegisterForm extends React.Component<Props, State> {
                 pattern={PASSWORD_REGEX.pattern}
                 title={PASSWORD_REGEX.description}
             />
-            <button
+            <LoadingButton
                 type="submit"
-                disabled={this.props.submitting}>
+                loading={this.props.submitting}>
                 Register
-            </button>
+            </LoadingButton>
         </form>;
     }
 
