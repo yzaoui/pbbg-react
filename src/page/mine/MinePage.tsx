@@ -39,6 +39,7 @@ import exitMineMP3 from "../../audio/enter_mine.mp3";
 // @ts-ignore
 import exitMineOGG from "../../audio/enter_mine.ogg";
 import { Link } from "react-router-dom";
+import LoadingButton from "../../component/LoadingButton";
 
 const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
     <Route path={match.url + "/"} exact component={IndexPage} />
@@ -46,11 +47,11 @@ const MinePage: React.FC<RouteComponentProps> = ({ match }) => <>
 </>;
 
 type State = {
-    status: "loading";
+    status: "initial loading";
 } | {
     status: "error";
 } | {
-    status: "loaded";
+    status: "loaded" | "exiting";
     mine: MineData;
     miningLvl: "loading" | LevelProgress;
     pickaxe: "loading" | InventoryEntry | null;
@@ -65,7 +66,7 @@ type State = {
 
 class IndexPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
-        status: "loading"
+        status: "initial loading"
     };
 
     mineRequest?: Subscription;
@@ -123,12 +124,12 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     }
 
     render() {
-        if (this.state.status === "loading") return <LoadingSpinner />;
+        if (this.state.status === "initial loading") return <LoadingSpinner />;
         else if (this.state.status === "error") return <>ERROR</>;
 
         return <>
-            {this.state.status === "loaded" ? <>
-                <button className="fancy" style={style} onClick={this.handleExitMineClick}>Exit mine</button>
+            {this.state.status === "loaded" || this.state.status === "exiting" ? <>
+                <LoadingButton loading={this.state.status === "exiting"} style={style} onClick={this.handleExitMineClick}>Exit mine</LoadingButton>
                 <Mine
                     mine={this.state.mine}
                     style={style}
@@ -239,6 +240,8 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     exitMine = () => {
+        this.setState({ status: "exiting" });
+
         this.mineRequest = mineService.exitMine()
             .subscribe(
                 res => {
