@@ -1,5 +1,6 @@
 import React, { ChangeEventHandler, FormEventHandler } from "react";
 import "../page/LoginRegisterPage.scss";
+import LoadingButton from "./LoadingButton";
 
 interface Props {
     onSubmit: (username: string, password: string) => void;
@@ -41,11 +42,11 @@ class LoginForm extends React.Component<Props, State> {
                 value={this.state.password}
                 disabled={this.props.submitting}
             />
-            <button
+            <LoadingButton
                 type="submit"
-                disabled={this.props.submitting}>
+                loading={this.props.submitting}>
                 Log in
-            </button>
+            </LoadingButton>
         </form>;
     }
 

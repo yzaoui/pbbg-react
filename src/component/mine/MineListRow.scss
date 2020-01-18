@@ -3,4 +3,8 @@
         color: white;
         text-shadow: 2px 2px black;
     }
+
+    > td:nth-child(3) > button {
+        width: 100%;
+    }
 }

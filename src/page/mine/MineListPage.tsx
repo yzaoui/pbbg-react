@@ -9,14 +9,24 @@ import enterMineMP3 from "../../audio/enter_mine.mp3";
 // @ts-ignore
 import enterMineOGG from "../../audio/enter_mine.ogg";
 import { Howl } from "howler";
+import Helmet from "react-helmet";
 
-interface State {
-    state: "loading" | "error" | MineTypeList;
-}
+type State = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    mineTypeList: MineTypeList;
+} | {
+    status: "entering mine";
+    mineTypeList: MineTypeList;
+    enteringMineId: number;
+};
 
 class MineListPage extends React.Component<RouteComponentProps, State> {
     readonly state: Readonly<State> = {
-        state: "loading"
+        status: "loading"
     };
 
     request?: Subscription;
@@ -27,12 +37,10 @@ class MineListPage extends React.Component<RouteComponentProps, State> {
     });
 
     componentDidMount() {
-        document.title = "Mine List - PBBG";
-
         this.request = mineService.getMineTypes()
             .subscribe(
-                res => this.setState({ state: res.data }),
-                error => this.setState({ state: "error" })
+                res => this.setState({ status: "loaded", mineTypeList: res.data }),
+                error => this.setState({ status: "error" })
             )
     }
 
@@ -41,17 +49,30 @@ class MineListPage extends React.Component<RouteComponentProps, State> {
     }
 
     render() {
-        return <MineList state={this.state.state} onEnterMine={this.handleEnterMine} />;
+        return <>
+            <Helmet title="Mine List - PBBG" />
+            {(() => {
+                switch (this.state.status) {
+                    case "loading": return <MineList status={this.state.status} />;
+                    case "error": return <MineList status={this.state.status} />;
+                    case "loaded": return <MineList status={this.state.status} mineTypeList={this.state.mineTypeList} onEnterMine={this.handleEnterMine} />;
+                    case "entering mine": return <MineList status={this.state.status} mineTypeList={this.state.mineTypeList} enteringMineId={this.state.enteringMineId} />;
+                }
+            })()}
+        </>;
     }
 
     handleEnterMine = (mineTypeId: number) => {
+        this.setState({ status: "entering mine", enteringMineId: mineTypeId });
+
         this.request = mineService.enterMine({ mineTypeId })
             .subscribe(
                 res => {
+                    this.setState({ status: "loaded" });
                     this.enterMineSound.play();
                     this.props.history.push({ pathname: "/mine", state: { mine: res.data } });
                 },
-                error => this.setState({ state: "error" })
+                error => this.setState({ status: "error" })
             )
     };
 }
