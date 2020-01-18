@@ -5,12 +5,21 @@ import { MineTypeList } from "../../backend/mine";
 import MineListRow from "./MineListRow";
 import MineListUnknownRow from "./MineListUnknownRow";
 
-interface Props {
-    state: "loading" | "error" | MineTypeList;
+type Props = {
+    status: "loading";
+} | {
+    status: "error";
+} | {
+    status: "loaded";
+    mineTypeList: MineTypeList;
     onEnterMine: (mineTypeId: number) => void;
-}
+} | {
+    status: "entering mine";
+    mineTypeList: MineTypeList;
+    enteringMineId: number;
+};
 
-const MineList: React.FC<Props> = ({ state, onEnterMine }) => <table className="MineList">
+const MineList: React.FC<Props> = (props) => <table className="MineList">
     <thead>
         <tr>
             <th>Mine name</th>
@@ -20,15 +29,24 @@ const MineList: React.FC<Props> = ({ state, onEnterMine }) => <table className="
     </thead>
     <tbody>
     {(() => {
-        if (state === "loading" || state === "error") return <tr>
+        if (props.status === "loading" || props.status === "error") return <tr>
             <td colSpan={3}>
-                <div style={{ display: "flex", justifyContent: "center" }}>{state === "loading" ? <LoadingSpinner /> : "ERROR"}</div>
+                <div style={{ display: "flex", justifyContent: "center" }}>{props.status === "loading" ? <LoadingSpinner /> : "ERROR"}</div>
             </td>
         </tr>;
 
         return <>
-            {state.types.map(mineType => <MineListRow key={mineType.id} mineType={mineType} onEnterMineClick={() => onEnterMine(mineType.id)} />)}
-            {state.nextUnlockLevel !== null && <MineListUnknownRow nextUnlockLevel={state.nextUnlockLevel} />}
+            {props.mineTypeList.types.map(mineType => props.status === "loaded" ?
+                <MineListRow key={mineType.id} status="default" mineType={mineType} onEnterMineClick={props.onEnterMine} />
+            :
+                props.enteringMineId === mineType.id ?
+                    <MineListRow key={mineType.id} status="entering this mine" mineType={mineType} />
+                :
+                    <MineListRow key={mineType.id} status="entering another mine" mineType={mineType} />
+            )}
+            {props.mineTypeList.nextUnlockLevel !== null &&
+                <MineListUnknownRow nextUnlockLevel={props.mineTypeList.nextUnlockLevel} />
+            }
         </>;
     })()}
     </tbody>
