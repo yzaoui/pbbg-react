@@ -4,7 +4,8 @@ import userService from "../backend/user.service";
 import { Subscription } from "rxjs";
 import LevelInfo from "../component/LevelInfo";
 import goldSrc from "../img/gold.png";
-import pickaxeSrc from "../img/pickaxe.png";
+import lvlMiningSrc from "../img/lvl-mining.png";
+import lvlFarmingSrc from "../img/lvl-farming.png";
 import LoadingSpinner from "../component/LoadingSpinner";
 
 type State = {
@@ -46,8 +47,12 @@ class IndexMemberPage extends React.Component<{}, State> {
                 Gold: {this.state.status === "loaded" ? this.state.stats.gold : <LoadingSpinner style={loadingStyle} /> }
             </div>
             <div>
-                <img src={pickaxeSrc} alt="Mining level icon" style={{ width: "16px", height: "16px" }} />
+                <img src={lvlMiningSrc} alt="Mining level icon" style={{ width: "16px", height: "16px" }} />
                 Mining: {this.state.status === "loaded" ? <LevelInfo levelProgress={this.state.stats.mining} /> : <LoadingSpinner style={loadingStyle} />}
+            </div>
+            <div>
+                <img src={lvlFarmingSrc} alt="Farming level icon" style={{ width: "16px", height: "16px" }} />
+                Farming: {this.state.status === "loaded" ? <LevelInfo levelProgress={this.state.stats.farming} /> : <LoadingSpinner style={loadingStyle} />}
             </div>
         </>;
     }

@@ -7,6 +7,7 @@ export interface UserStats {
     username: string;
     gold: number;
     mining: LevelProgress;
+    farming: LevelProgress;
 }
 
 export interface LevelProgress {
