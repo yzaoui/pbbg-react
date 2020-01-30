@@ -1,26 +1,36 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import { Subscription } from "rxjs";
 import LoadingSpinner from "../component/LoadingSpinner";
 import battleService from "../backend/battle.service";
 import { Battle as BattleData, BattleReward, MappedUnitEffects } from "../backend/battle";
 import Battle from "../component/battle/Battle";
+import LoadingButton from "../component/LoadingButton";
 
-type State = {
+interface LoadingState {
     status: "loading";
-} | {
-    status: "loaded";
+}
+
+interface InBattleState {
+    status: "in battle";
     battle: BattleData;
     performingAction: boolean;
     effectsList: MappedUnitEffects[];
     reward: BattleReward | null;
-} | {
-    status: "loaded";
-    battle: null;
-} | {
+}
+
+interface NoBattleState {
+    status: "no battle";
+}
+
+interface GeneratingBattleState {
     status: "generating battle";
-} | {
+}
+
+interface ErrorState {
     status: "error";
-};
+}
+
+type State = LoadingState | InBattleState | NoBattleState | GeneratingBattleState | ErrorState;
 
 class BattlePage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
@@ -34,7 +44,7 @@ class BattlePage extends React.Component<{}, State> {
 
         this.request = battleService.getBattle()
             .subscribe(
-                res => this.setState(res.data !== null ? this.stateLoadedInitialBattle(res.data) : this.stateLoadedNoBattle),
+                res => this.setState(res.data !== null ? this.stateInitialInBattle(res.data) : { status: "no battle" }),
                 error => this.setState({ status: "error" })
             );
     }
@@ -44,41 +54,35 @@ class BattlePage extends React.Component<{}, State> {
     }
 
     render() {
-        if (this.state.status === "loading") return <LoadingSpinner style={{ alignSelf: "center" }} />;
-        else if (this.state.status === "error") return <>ERROR</>;
-
-        else if (this.state.status === "loaded") {
-            if (this.state.battle === null) return <button className="fancy" style={{ alignSelf: "center" }} onClick={this.handleGenerateBattleClick}>
-                <span>Generate battle</span>
-            </button>;
-
-            else return <Battle
-                battle={this.state.battle}
-                performingAction={this.state.performingAction}
-                onAllyTurn={this.handleAllyTurn}
-                onEnemyTurn={this.handleEnemyTurn}
-                effects={this.state.effectsList}
-                reward={this.state.reward}
-            />;
+        switch (this.state.status) {
+            case "loading":
+                return <LoadingSpinner style={{ alignSelf: "center" }} />;
+            case "error":
+                return <>ERROR</>;
+            case "no battle":
+                return <button className="fancy" style={{ alignSelf: "center" }} onClick={this.handleGenerateBattleClick}>
+                    <span>Generate battle</span>
+                </button>;
+            case "generating battle":
+                return <LoadingButton loading={true} style={{ alignSelf: "center" }}>Generating battle…</LoadingButton>;
+            case "in battle":
+                return <Battle
+                    battle={this.state.battle}
+                    performingAction={this.state.performingAction}
+                    onAllyTurn={this.handleAllyTurn}
+                    onEnemyTurn={this.handleEnemyTurn}
+                    effects={this.state.effectsList}
+                    reward={this.state.reward}
+                />;
         }
-
-        else if (this.state.status === "generating battle") return <button className="fancy loading" disabled style={{ alignSelf: "center" }}>
-            <span>Generating battle</span>
-            <LoadingSpinner style={loadingStyle} />
-        </button>;
     }
 
-    stateLoadedInitialBattle = (battle: BattleData): State => ({
-        status: "loaded",
+    stateInitialInBattle = (battle: BattleData): InBattleState => ({
+        status: "in battle",
         battle: battle,
         performingAction: false,
         effectsList: [],
         reward: null
-    });
-
-    stateLoadedNoBattle = (): State => ({
-        status: "loaded",
-        battle: null
     });
 
     handleGenerateBattleClick = () => {
@@ -86,19 +90,20 @@ class BattlePage extends React.Component<{}, State> {
 
         this.request = battleService.generateBattle()
             .subscribe(
-                res => this.setState(this.stateLoadedInitialBattle(res.data)),
+                res => this.setState(this.stateInitialInBattle(res.data)),
                 error => this.setState({ status: "error" })
             );
     };
 
     handleAllyTurn = (targetUnitId: number) => {
-        if (this.state.status !== "loaded" || this.state.battle === null) throw Error();
+        if (this.state.status !== "in battle") throw Error();
 
         this.setState({ ...this.state, performingAction: true });
+
         this.request = battleService.allyTurn({ targetUnitId })
             .subscribe(
                 res => {
-                    if (this.state.status !== "loaded" || this.state.battle === null) throw Error();
+                    if (this.state.status !== "in battle") throw Error();
 
                     this.setState({ ...this.state,
                         battle: res.data.battle,
@@ -112,12 +117,14 @@ class BattlePage extends React.Component<{}, State> {
     };
 
     handleEnemyTurn = () => {
+        if (this.state.status !== "in battle") throw Error();
+
         this.setState({ ...this.state, performingAction: true });
 
         this.request = battleService.enemyTurn()
             .subscribe(
                 res => {
-                    if (this.state.status !== "loaded" || this.state.battle === null) throw Error();
+                    if (this.state.status !== "in battle") throw Error();
 
                     this.setState({ ...this.state,
                         battle: res.data.battle,
@@ -130,12 +137,5 @@ class BattlePage extends React.Component<{}, State> {
             );
     };
 }
-
-const loadingStyle: CSSProperties = {
-    width: "14px",
-    height: "14px",
-    borderWidth: "3px",
-    marginLeft: "5px"
-};
 
 export default BattlePage;
