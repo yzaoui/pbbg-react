@@ -58,25 +58,28 @@ class FarmPage extends React.Component<{}, State> {
     }
 
     render() {
-        if (this.state.status === "loading") return <LoadingSpinner />;
-
-        return <div className="FarmPage">
-            <ExpandablePlotList
-                plots={this.state.plots}
-                refreshPlantProgress={this.refreshPlantProgress}
-                fetchingNextStage={this.state.fetchingNextStage}
-                loadingPlots={this.state.loadingPlots}
-                expanding={this.state.expanding}
-                onPlant={this.handlePlant}
-                onHarvest={this.handleHarvest}
-                onExpand={this.handleExpand}
-            />
-            <PlantModal open={this.state.plantingPlotId !== null} onClose={this.handlePlantModalClose} onSelect={this.handlePlantModalSelect} />
-        </div>;
+        switch (this.state.status) {
+            case "loading":
+                return <LoadingSpinner />;
+            case "loaded":
+                return <div className="FarmPage">
+                    <ExpandablePlotList
+                        plots={this.state.plots}
+                        refreshPlantProgress={this.refreshPlantProgress}
+                        fetchingNextStage={this.state.fetchingNextStage}
+                        loadingPlots={this.state.loadingPlots}
+                        expanding={this.state.expanding}
+                        onPlant={this.handlePlant}
+                        onHarvest={this.handleHarvest}
+                        onExpand={this.handleExpand}
+                    />
+                    <PlantModal open={this.state.plantingPlotId !== null} onClose={this.handlePlantModalClose} onSelect={this.handlePlantModalSelect} />
+                </div>;
+        }
     }
 
     private refreshPlantProgress = () => {
-        if (this.state.status === "loading") return;
+        if (this.state.status !== "loaded") return;
 
         const updatedPlots: PlotData[] = cloneDeep(this.state.plots);
         const now = new Date();
@@ -106,14 +109,14 @@ class FarmPage extends React.Component<{}, State> {
     };
 
     private setPlots = (updatedPlotsJSON: PlotJSON[]) => {
-        if (this.state.status === "loading") return;
+        if (this.state.status !== "loaded") return;
 
         this.setState({ ...this.state, plots: updatedPlotsJSON.map(plotJSON => plotFromJSON(plotJSON)) });
         this.refreshPlantProgress();
     };
 
     private updatePlot = (updatedPlot: PlotJSON) => {
-        if (this.state.status === "loading") return;
+        if (this.state.status !== "loaded") return;
 
         const updatedPlots = this.state.plots.filter(plot => plot.id !== updatedPlot.id) // Remove plot to update
             .concat(plotFromJSON(updatedPlot))
@@ -127,13 +130,13 @@ class FarmPage extends React.Component<{}, State> {
     };
 
     private handlePlant = (plotId: number) => {
-        if (this.state.status === "loading") return;
+        if (this.state.status !== "loaded") return;
 
         this.setState({ ...this.state, plantingPlotId: plotId });
     };
 
     private handleHarvest = (plotId: number) => {
-        if (this.state.status === "loading") return;
+        if (this.state.status !== "loaded") return;
 
         const existingRequest = this.harvestRequests.get(plotId);
         if (existingRequest) {
@@ -153,7 +156,7 @@ class FarmPage extends React.Component<{}, State> {
     };
 
     private handleExpand = () => {
-        if (this.state.status === "loading") return;
+        if (this.state.status !== "loaded") return;
 
         if (this.expandingRequest !== null) this.expandingRequest.unsubscribe();
 
@@ -168,7 +171,7 @@ class FarmPage extends React.Component<{}, State> {
     };
 
     private handlePlantModalSelect = (itemId: number) => {
-        if (this.state.status === "loading") return;
+        if (this.state.status !== "loaded") return;
 
         const plotId = this.state.plantingPlotId!;
 
@@ -194,7 +197,7 @@ class FarmPage extends React.Component<{}, State> {
     };
 
     private handlePlantModalClose = () => {
-        if (this.state.status === "loading") return;
+        if (this.state.status !== "loaded") return;
 
         this.setState({ ...this.state, plantingPlotId: null });
     };
