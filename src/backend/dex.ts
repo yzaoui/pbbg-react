@@ -9,7 +9,7 @@ export type ItemsResponse = DexItems;
 /**
  * /dex/items/:id
  */
-export type ItemIndividualResponse = BaseItem;
+export type ItemIndividualResponse = DexItem;
 
 /**
  * /dex/units
@@ -34,6 +34,18 @@ export type PlantIndividualResponse = BasePlantJSON;
 export interface DexItems {
     discoveredItems: {[id: number]: BaseItem};
     lastItemId: number;
+}
+
+export type DexItem = DiscoveredDexItem | UndiscoveredDexItem;
+
+export interface DiscoveredDexItem {
+    type: "discovered";
+    baseItem: BaseItem;
+}
+
+export interface UndiscoveredDexItem {
+    type: "undiscovered";
+    id: number;
 }
 
 export interface BaseItem {
