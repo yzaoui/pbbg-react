@@ -7,6 +7,7 @@ import goldSrc from "../img/gold.png";
 import lvlMiningSrc from "../img/lvl-mining.png";
 import lvlFarmingSrc from "../img/lvl-farming.png";
 import LoadingSpinner from "../component/LoadingSpinner";
+import HomeUserStats from "../component/HomeUserStats";
 
 type State = {
     status: "loading";
@@ -39,29 +40,12 @@ class IndexMemberPage extends React.Component<{}, State> {
     }
 
     render() {
-        if (this.state.status === "error") return "ERROR";
-
-        return <>
-            <div>
-                <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />
-                Gold: {this.state.status === "loaded" ? this.state.stats.gold : <LoadingSpinner style={loadingStyle} /> }
-            </div>
-            <div>
-                <img src={lvlMiningSrc} alt="Mining level icon" style={{ width: "16px", height: "16px" }} />
-                Mining: {this.state.status === "loaded" ? <LevelInfo levelProgress={this.state.stats.mining} /> : <LoadingSpinner style={loadingStyle} />}
-            </div>
-            <div>
-                <img src={lvlFarmingSrc} alt="Farming level icon" style={{ width: "16px", height: "16px" }} />
-                Farming: {this.state.status === "loaded" ? <LevelInfo levelProgress={this.state.stats.farming} /> : <LoadingSpinner style={loadingStyle} />}
-            </div>
-        </>;
+        switch (this.state.status) {
+            case "error": return <div>ERROR</div>;
+            case "loading": return <HomeUserStats status="loading" />;
+            case "loaded": return <HomeUserStats status="loaded" userStats={this.state.stats} />;
+        }
     }
 }
-
-const loadingStyle: CSSProperties = {
-    width: "18px",
-    height: "18px",
-    borderWidth: "4px"
-};
 
 export default IndexMemberPage;
