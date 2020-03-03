@@ -17,14 +17,20 @@ const navItems = [
     { to: "/settings", emoji: "⚙️", label: "Settings", exact: true }
 ];
 
-type State = {
+interface LoadingState {
     status: "loading";
-} | {
+}
+
+interface ErrorState {
     status: "error";
-} | {
+}
+
+interface LoadedState {
     status: "loaded";
     username: string;
-};
+}
+
+type State = LoadingState | ErrorState | LoadedState;
 
 class MemberNav extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
@@ -55,8 +61,6 @@ class MemberNav extends React.Component<{}, State> {
                         <span>{label}</span>
                     </NavLink>
                 )}
-            </div>
-            <div className="sidebar-logout">
                 <button className="fancy" onClick={handleLogoutClick}>Log out</button>
             </div>
         </nav>;
