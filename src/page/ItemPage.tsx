@@ -5,6 +5,7 @@ import { Subscription } from "rxjs";
 import itemService from "../backend/item.service";
 import { ItemDetails, ItemHistoryInfo } from "../backend/item";
 import "./ItemPage.scss";
+import Helmet from "react-helmet";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
@@ -25,8 +26,6 @@ class ItemPage extends React.Component<Props, State> {
     request?: Subscription;
 
     componentDidMount() {
-        document.title = "Item - PBBG";
-
         this.request = itemService.getItem(this.props.match.params.id)
             .subscribe(
                 res => this.setState({ status: "loaded", itemDetails: res.data }),
@@ -35,31 +34,39 @@ class ItemPage extends React.Component<Props, State> {
     }
 
     render() {
-        if (this.state.status === "loading") return <LoadingSpinner />;
-        else if (this.state.status === "error") return "ERROR";
+        switch (this.state.status) {
+            case "loading": return <>
+                <Helmet title="Loading… - Item - PBBG" />
+                <div><LoadingSpinner /></div>
+            </>;
+            case "error": return <div>ERROR</div>;
+        }
 
         const { item, history, linkedUserInfo } = this.state.itemDetails;
 
-        return <div className="ItemPage">
-            <div>
-                <h2>{item.baseItem.friendlyName}</h2>
-                <img src={item.baseItem.img64} alt={item.baseItem.friendlyName + " sprite"} />
+        return <>
+            <Helmet title={`${item.baseItem.friendlyName} - Item - PBBG`} />
+            <div className="ItemPage">
+                <div>
+                    <h2>{item.baseItem.friendlyName}</h2>
+                    <img src={item.baseItem.img64} alt={item.baseItem.friendlyName + " sprite"} />
+                </div>
+                <div>
+                    <h4>History</h4>
+                    <ol>
+                        {history
+                            .sort((a, b) => b.date - a.date) // Sort by descending
+                            .map((entry, index) =>
+                                    <li key={index}>
+                                        <ItemHistoryEntryDescription info={entry.info} userDetails={linkedUserInfo} />
+                                        <ItemHistoryEntryDate date={entry.date} />
+                                    </li>
+                            )
+                        }
+                    </ol>
+                </div>
             </div>
-            <div>
-                <h4>History</h4>
-                <ol>
-                    {history
-                        .sort((a, b) => b.date - a.date) // Sort by descending
-                        .map((entry, index) =>
-                                <li key={index}>
-                                    <ItemHistoryEntryDescription info={entry.info} userDetails={linkedUserInfo} />
-                                    <ItemHistoryEntryDate date={entry.date} />
-                                </li>
-                        )
-                    }
-                </ol>
-            </div>
-        </div>;
+        </>;
     }
 }
 
