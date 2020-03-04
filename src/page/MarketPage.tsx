@@ -13,17 +13,26 @@ import transactionMP3 from "../audio/transaction.mp3";
 // @ts-ignore
 import transactionOGG from "../audio/transaction.ogg";
 
-interface State {
-    markets: "loading" | UserAndGameMarkets;
+interface LoadingState {
+    status: "loading";
+}
+
+interface LoadedState {
+    status: "loaded";
+    markets: UserAndGameMarkets;
     buying: boolean;
     selling: boolean;
 }
 
+interface ErrorState {
+    status: "error";
+}
+
+type State = LoadingState | LoadedState | ErrorState;
+
 class MarketPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        markets: "loading",
-        buying: false,
-        selling: false
+        status: "loading"
     };
 
     request?: Subscription;
@@ -38,8 +47,8 @@ class MarketPage extends React.Component<{}, State> {
 
         this.request = marketService.getMarkets()
             .subscribe(
-                res => this.setState({ markets: res.data }),
-                error => console.log("error")
+                res => this.setState(this.stateInitialLoaded(res.data)),
+                error => this.setState({ status: "error" })
             );
     }
 
@@ -48,10 +57,12 @@ class MarketPage extends React.Component<{}, State> {
     }
 
     render() {
+        if (this.state.status === "error") return "ERROR";
+
         return <div className="Market">
             <h1>Market</h1>
             <div className="gold">
-                You have: {goldImg}{this.state.markets === "loading" ?
+                You have: {goldImg}{this.state.status === "loading" ?
                     <LoadingSpinner style={{ width: "18px", height: "18px", borderWidth: "4px" }} />
                 :
                     this.state.markets.gold
@@ -59,7 +70,7 @@ class MarketPage extends React.Component<{}, State> {
             </div>
             <div className="for-sale">
                 <h2>For sale</h2>
-                {this.state.markets === "loading" ?
+                {this.state.status === "loading" ?
                     <LoadingSpinner />
                 :
                     <GameMarket
@@ -72,7 +83,7 @@ class MarketPage extends React.Component<{}, State> {
             </div>
             <div className="inventory">
                 <h2>Your inventory</h2>
-                {this.state.markets === "loading" ?
+                {this.state.status === "loading" ?
                     <LoadingSpinner />
                     :
                     <UserMarket
@@ -86,7 +97,9 @@ class MarketPage extends React.Component<{}, State> {
     }
 
     handleBuy = (orders: Map<number, number | undefined>) => {
-        this.setState({ buying: true });
+        if (this.state.status !== "loaded") return;
+
+        this.setState({ ...this.state, buying: true });
 
         const ordersArray = Array.from(orders, ([id, quantity]) => ({ id, quantity }));
 
@@ -94,14 +107,16 @@ class MarketPage extends React.Component<{}, State> {
             .subscribe(
                 res => {
                     this.transactionSound.play();
-                    this.setState({ buying: false, markets: res.data });
+                    this.setState({ ...this.state, buying: false, markets: res.data });
                 },
-                error => {}
+                error => this.setState({ status: "error" })
             );
     };
 
     handleSell = (orders: Map<number, number | undefined>) => {
-        this.setState({ selling: true });
+        if (this.state.status !== "loaded") return;
+
+        this.setState({ ...this.state, selling: true });
 
         const ordersArray = Array.from(orders, ([id, quantity]) => ({ id, quantity }));
 
@@ -109,11 +124,18 @@ class MarketPage extends React.Component<{}, State> {
             .subscribe(
                 res => {
                     this.transactionSound.play();
-                    this.setState({ selling: false, markets: res.data });
+                    this.setState({ ...this.state, selling: false, markets: res.data });
                 },
                 error => {}
             );
     };
+
+    private stateInitialLoaded = (markets: UserAndGameMarkets): LoadedState => ({
+        status: "loaded",
+        markets: markets,
+        buying: false,
+        selling: false
+    });
 }
 
 const goldImg = <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />;

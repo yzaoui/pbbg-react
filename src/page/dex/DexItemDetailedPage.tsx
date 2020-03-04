@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseItem } from "../../backend/dex";
+import { DexItem } from "../../backend/dex";
 import { RouteComponentProps } from "react-router-dom";
 import "./DexDetailedPage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
@@ -16,7 +16,7 @@ type State = {
     status: "error";
 } | {
     status: "loaded";
-    baseItem: BaseItem;
+    dexItem: DexItem;
 };
 
 class DexItemDetailedPage extends React.Component<Props, State> {
@@ -29,7 +29,7 @@ class DexItemDetailedPage extends React.Component<Props, State> {
     componentDidMount() {
         this.request = dexService.getItem(this.props.match.params.id)
             .subscribe(
-                res => this.setState({ status: "loaded", baseItem: res.data }),
+                res => this.setState({ status: "loaded", dexItem: res.data }),
                 error => this.setState({ status: "error" })
             )
     }
@@ -54,20 +54,30 @@ class DexItemDetailedPage extends React.Component<Props, State> {
             case "error": return <div>ERROR</div>;
         }
 
-        const item = this.state.baseItem;
+        const item = this.state.dexItem;
+
+        const title = item.type === "discovered" ? `#${item.baseItem.id}: ${item.baseItem.friendlyName}` : `#${item.id}: ???`;
 
         return <>
-            <Helmet title={`#${item.id}: ${item.friendlyName} - Item Dex - PBBG`} />
-            <h1>#{item.id}: {item.friendlyName}</h1>
+            <Helmet title={`${title} - Item Dex - PBBG`} />
+            <h1>{title}</h1>
             <h2>Sprites</h2>
             <div className="body">
-                <img className="item-sprite" src={item.img16} alt={`${item.friendlyName} 16x16 sprite`} />
-                <img className="item-sprite" src={item.img32} alt={`${item.friendlyName} 32x32 sprite`} />
-                <img className="item-sprite" src={item.img64} alt={`${item.friendlyName} 64x64 sprite`} />
+                {item.type === "discovered" ? <>
+                    <img className="item-sprite" src={item.baseItem.img16} alt={`${item.baseItem.friendlyName} 16x16 sprite`} />
+                    <img className="item-sprite" src={item.baseItem.img32} alt={`${item.baseItem.friendlyName} 32x32 sprite`} />
+                    <img className="item-sprite" src={item.baseItem.img64} alt={`${item.baseItem.friendlyName} 64x64 sprite`} />
+                </> :
+                    <span>???</span>
+                }
             </div>
             <h2>Description</h2>
             <div className="body">
-                <i>{item.description}</i>
+                {item.type === "discovered" ?
+                    <i>{item.baseItem.description}</i>
+                :
+                    <span>???</span>
+                }
             </div>
         </>;
     };

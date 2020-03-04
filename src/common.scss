@@ -34,7 +34,7 @@ main.pbbg-main {
     flex-direction: column;
     flex: 1;
     max-width: 840px;
-    min-height: 100%;
+    min-height: 660px;
     border: 1px solid black;
     padding: 6px;
     box-sizing: border-box;
@@ -45,8 +45,7 @@ main.pbbg-main {
     display: flex;
     flex-direction: column;
     width: 150px;
-    height: 660px;
-    max-height: 660px;
+    height: fit-content;
     flex-shrink: 0;
     flex-basis: 150px;
     border: 1px solid black;
@@ -96,15 +95,6 @@ a.current-site-section {
 
 a.current-site-section.sidebar-item:hover {
     background-color: #0487ec;
-}
-
-.sidebar-logout {
-    margin-top: auto;
-    margin-bottom: 0;
-
-    > button {
-        width: 100%;
-    }
 }
 
 .sidebar-login-form > * {
