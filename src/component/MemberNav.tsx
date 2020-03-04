@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import authenticationService from "./../authentication.service";
 import { Subscription } from "rxjs";
-import userService from "./../backend/user.service";
+import userStatsService from "../backend/user-stats.service";
 import LoadingSpinner from "./LoadingSpinner";
 
 const navItems = [
@@ -40,7 +40,7 @@ class MemberNav extends React.Component<{}, State> {
     request?: Subscription;
 
     componentDidMount(): void {
-        this.request = userService.get()
+        this.request = userStatsService.get()
             .subscribe(
                 res => this.setState({ status: "loaded", username: res.data.username }),
                 error => this.setState({ status: "error" })

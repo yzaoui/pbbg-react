@@ -2,7 +2,7 @@
  * /mine
  */
 import { MaterializedItem } from "./inventory";
-import { LevelProgress } from "./user";
+import { LevelProgress } from "./user-stats";
 
 export type MineResponse = Mine | null;
 

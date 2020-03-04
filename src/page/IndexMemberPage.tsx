@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
-import { UserStats } from "../backend/user";
-import userService from "../backend/user.service";
+import { UserStats } from "../backend/user-stats";
+import userStatsService from "../backend/user-stats.service";
 import { Subscription } from "rxjs";
 import LevelInfo from "../component/LevelInfo";
 import goldSrc from "../img/gold.png";
@@ -28,7 +28,7 @@ class IndexMemberPage extends React.Component<{}, State> {
     componentDidMount() {
         document.title = "Home - PBBG";
 
-        this.request = userService.get()
+        this.request = userStatsService.get()
             .subscribe(
                 res => this.setState({ status: "loaded", stats: res.data }),
                 error => this.setState({ status: "error" })

@@ -4,7 +4,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import lvlMiningSrc from "../img/lvl-mining.png";
 import LevelInfo from "./LevelInfo";
 import lvlFarmingSrc from "../img/lvl-farming.png";
-import { UserStats } from "../backend/user";
+import { UserStats } from "../backend/user-stats";
 import "./HomeUserStats.scss";
 
 interface LoadingProps {

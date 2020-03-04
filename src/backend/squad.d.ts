@@ -1,4 +1,4 @@
-import { LevelProgress } from "./user";
+import { LevelProgress } from "./user-stats";
 
 /**
  * /squad
