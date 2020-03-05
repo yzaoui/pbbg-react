@@ -1,6 +1,7 @@
 import React from "react";
 import { Friends } from "../../backend/friends";
-import { Link } from "react-router-dom";
+import FriendsSectionHeader from "./FriendsSectionHeader";
+import FriendUL from "./FriendUL";
 
 interface Props {
     friends: Friends;
@@ -11,17 +12,23 @@ const PendingFriendsContent: React.FC<Props> = ({ friends }) => {
     const sentInvites = friends.friendInfos.filter(user => user.friendship === "request-sent");
 
     return <div className="PendingFriendsContent">
-        <header>Received Invites</header>
+        <FriendsSectionHeader>
+            <span>RECEIVED INVITES</span>
+        </FriendsSectionHeader>
         {receivedInvites.length > 0 ?
-            <ul>{receivedInvites.map(user => <li key={user.userId}><Link to={`/user/${user.userId}`}>{user.username}</Link></li>)}</ul>
+            <FriendUL friendInfos={receivedInvites} />
             :
-            <i>You have no pending friend invites.</i>
+            <div><i>You have no pending friend invites.</i></div>
         }
-        <header>Sent Invites</header>
+        <FriendsSectionHeader>
+            <span>SENT INVITES</span>
+        </FriendsSectionHeader>
         {sentInvites.length > 0 ?
-            <ul>{sentInvites.map(user => <li key={user.userId}><Link to={`/user/${user.userId}`}>{user.username}</Link></li>)}</ul>
+            <FriendUL friendInfos={sentInvites} />
             :
-            <i>You have no pending sent invites.</i>
+            <div>
+                <i>You have no pending sent invites.</i>
+            </div>
         }
     </div>;
 };

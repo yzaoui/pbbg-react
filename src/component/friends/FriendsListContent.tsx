@@ -1,6 +1,7 @@
 import React from "react";
 import { Friends } from "../../backend/friends";
-import { Link } from "react-router-dom";
+import FriendsSectionHeader from "./FriendsSectionHeader";
+import FriendUL from "./FriendUL";
 
 interface Props {
     friends: Friends;
@@ -10,10 +11,13 @@ const FriendsListContent: React.FC<Props> = ({ friends }) => {
     const confirmedFriends = friends.friendInfos.filter(user => user.friendship === "confirmed");
 
     return <div className="FriendsListContent">
+        <FriendsSectionHeader>
+            <span>YOUR FRIENDS</span>
+        </FriendsSectionHeader>
         {confirmedFriends.length > 0 ?
-            <ul>{confirmedFriends.map(user => <li key={user.userId}><Link to={`/user/${user.userId}`}>{user.username}</Link></li>)}</ul>
+            <FriendUL friendInfos={confirmedFriends} />
         :
-            <i>You have no friends.</i>
+            <div><i>You have no friends.</i></div>
         }
     </div>;
 };
