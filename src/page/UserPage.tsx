@@ -6,6 +6,9 @@ import { UserProfile } from "../backend/user";
 import Helmet from "react-helmet";
 import LoadingSpinner from "../component/LoadingSpinner";
 import UserProfileComponent from "../component/UserProfileComponent";
+import "./UserPage.scss";
+import { Friendship } from "../backend/friends";
+import friendsService from "../backend/friends.service";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
@@ -16,6 +19,7 @@ interface LoadingState {
 interface LoadedState {
     status: "loaded";
     userProfile: UserProfile;
+    changingFriendship: boolean;
 }
 
 interface ErrorState {
@@ -34,7 +38,7 @@ class UserPage extends React.Component<Props, State> {
     componentDidMount() {
         this.request = userService.getUserProfile(this.props.match.params.id)
             .subscribe(
-                res => this.setState({ status: "loaded", userProfile: res.data }),
+                res => this.setState({ status: "loaded", userProfile: res.data, changingFriendship: false }),
                 error => this.setState({ status: "error" })
             )
     }
@@ -51,11 +55,36 @@ class UserPage extends React.Component<Props, State> {
             </>;
             case "loaded": return <>
                 <Helmet title={`${this.state.userProfile.username} - User - PBBG`} />
-                <UserProfileComponent userProfile={this.state.userProfile} />
+                <UserProfileComponent userProfile={this.state.userProfile} onChangeFriendship={this.handleChangeFriendship} changingFriendship={this.state.changingFriendship} />
             </>;
             case "error": return <div>ERROR</div>;
         }
     }
+
+    private handleChangeFriendship = (currentFriendship: Friendship) => {
+        if (this.state.status !== "loaded") return;
+
+        this.setState({ ...this.state, changingFriendship: true });
+
+        this.request = friendsService.changeFriendship(friendshipToAction(currentFriendship), { userId: this.state.userProfile.id } )
+            .subscribe(res => this.setState(prevState => {
+                if (prevState.status !== "loaded") return prevState;
+
+                const updatedUserProfile = Object.assign({}, prevState.userProfile);
+                updatedUserProfile.friendship = res.data;
+
+                return { ...prevState, changingFriendship: false, userProfile: updatedUserProfile };
+            }))
+    };
 }
+
+const friendshipToAction = (friendship: Friendship) => {
+    switch (friendship) {
+        case "confirmed": return "remove-friend";
+        case "request-received": return "accept-request";
+        case "request-sent": return "cancel-request";
+        case "none": return "add-friend";
+    }
+};
 
 export default UserPage;

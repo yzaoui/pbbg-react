@@ -1,5 +1,11 @@
 export type FriendsResponse = Friends;
 
+export type ChangeFriendshipRequest = {
+    userId: number;
+}
+
+export type ChangeFriendshipResponse = Friendship;
+
 export interface Friends {
     friendInfos: FriendInfo[];
 }
