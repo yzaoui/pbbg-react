@@ -2,7 +2,7 @@ import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
 import Helmet from "react-helmet";
 import { Subscription } from "rxjs";
-import { BaseItem, DexUnits, MyUnitEnum } from "../../backend/dex";
+import { DexUnits, MyUnitEnum } from "../../backend/dex";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import dexService from "../../backend/dex.service";

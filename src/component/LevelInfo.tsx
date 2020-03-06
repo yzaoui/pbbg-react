@@ -1,7 +1,7 @@
 import React, { HTMLAttributes } from "react";
 import PBBGLevelProgress from "./PBBGLevelProgress";
 import "./LevelInfo.scss";
-import { LevelProgress } from "../backend/user";
+import { LevelProgress } from "../backend/user-stats";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     levelProgress: LevelProgress;

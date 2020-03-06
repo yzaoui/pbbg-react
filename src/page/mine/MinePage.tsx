@@ -6,8 +6,8 @@ import mineService from "../../backend/mine.service";
 import { LevelUp, Mine as MineData, MinedItemResult } from "../../backend/mine";
 import LoadingSpinner from "../../component/LoadingSpinner";
 import Mine from "../../component/mine/Mine";
-import userService from "../../backend/user.service";
-import { LevelProgress } from "../../backend/user";
+import userStatsService from "../../backend/user-stats.service";
+import { LevelProgress } from "../../backend/user-stats";
 import LevelInfo from "../../component/LevelInfo";
 import MineLog from "../../component/mine/MineLog";
 import inventoryService from "../../backend/inventory.service";
@@ -70,7 +70,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     mineRequest?: Subscription;
-    userRequest?: Subscription;
+    userStatsRequest?: Subscription;
     inventoryRequest?: Subscription;
 
     pickaxeSounds = [
@@ -119,7 +119,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
     componentWillUnmount() {
         this.mineRequest && this.mineRequest.unsubscribe();
-        this.userRequest && this.userRequest.unsubscribe();
+        this.userStatsRequest && this.userStatsRequest.unsubscribe();
         this.inventoryRequest && this.inventoryRequest.unsubscribe();
     }
 
@@ -188,7 +188,7 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     };
 
     loadMiningLevel = () => {
-        this.userRequest = userService.get()
+        this.userStatsRequest = userStatsService.get()
             .subscribe(
                 res => {
                     if (this.state.status !== "loaded") throw Error();

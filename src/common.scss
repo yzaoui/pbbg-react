@@ -9,6 +9,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+button, input, optgroup, select, textarea {
+    line-height: 1.25;
+}
+
 a {
     color: #0070ff;
 }
