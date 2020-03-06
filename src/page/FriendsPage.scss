@@ -82,4 +82,21 @@
             }
         }
     }
+
+    .AddFriendsContentBody {
+        display: flex;
+        flex-direction: column;
+
+        > *:not(:first-child) {
+            margin-top: 12px;
+        }
+
+        input {
+            padding: 8px;
+
+            &::placeholder {
+                font-style: italic;
+            }
+        }
+    }
 }

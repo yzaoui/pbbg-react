@@ -1,6 +1,8 @@
-import { Friendship } from "./friends";
+import { FriendInfo, Friendship } from "./friends";
 
 export type UserResponse = UserProfile;
+
+export type UserSearchResponse = FriendInfo[];
 
 export interface UserProfile {
     id: number;

@@ -3,34 +3,44 @@ import { Friends } from "../../backend/friends";
 import FriendsSectionHeader from "./FriendsSectionHeader";
 import FriendUL from "./FriendUL";
 
-interface Props {
+interface LoadingProps {
+    loading: true;
+}
+
+interface LoadedProps {
+    loading?: false;
     friends: Friends;
 }
 
-const PendingFriendsContent: React.FC<Props> = ({ friends }) => {
-    const receivedInvites = friends.friendInfos.filter(user => user.friendship === "request-received");
-    const sentInvites = friends.friendInfos.filter(user => user.friendship === "request-sent");
+type Props = LoadingProps | LoadedProps;
 
-    return <div className="PendingFriendsContent">
-        <FriendsSectionHeader>
-            <span>RECEIVED INVITES</span>
-        </FriendsSectionHeader>
-        {receivedInvites.length > 0 ?
+const PendingFriendsContent: React.FC<Props> = (props) => <div className="PendingFriendsContent">
+    <FriendsSectionHeader>
+        <span>RECEIVED INVITES</span>
+    </FriendsSectionHeader>
+    {props.loading ?
+        <FriendUL loading />
+    : (() => {
+        const receivedInvites = props.friends.friendInfos.filter(user => user.friendship === "request-received");
+
+        return receivedInvites.length > 0 ?
             <FriendUL friendInfos={receivedInvites} />
-            :
-            <div><i>You have no pending friend invites.</i></div>
-        }
-        <FriendsSectionHeader>
-            <span>SENT INVITES</span>
-        </FriendsSectionHeader>
-        {sentInvites.length > 0 ?
+        :
+            <div><i>You have no pending friend invites.</i></div>;
+    })()}
+    <FriendsSectionHeader>
+        <span>SENT INVITES</span>
+    </FriendsSectionHeader>
+    {props.loading ?
+        <FriendUL loading />
+    : (() => {
+        const sentInvites = props.friends.friendInfos.filter(user => user.friendship === "request-sent");
+
+        return sentInvites.length > 0 ?
             <FriendUL friendInfos={sentInvites} />
-            :
-            <div>
-                <i>You have no pending sent invites.</i>
-            </div>
-        }
-    </div>;
-};
+        :
+            <div><i>You have no pending sent invites.</i></div>;
+    })()}
+</div>;
 
 export default PendingFriendsContent;

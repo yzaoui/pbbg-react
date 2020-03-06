@@ -12,6 +12,14 @@ const userService = {
         }).then(
             res => handleResponse<UserEndpoint.UserResponse>(res)
         )
+    ),
+    searchUser: (text: string) => RxJS.from(
+        fetch(`${API_ROOT}/api/user/search?${new URLSearchParams({ text: text })}`, {
+            method: "GET",
+            headers: authHeader()
+        }).then(
+            res => handleResponse<UserEndpoint.UserSearchResponse>(res)
+        )
     )
 };
 
