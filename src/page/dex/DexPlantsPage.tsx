@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, RouteComponentProps } from "react-router-dom";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import { Subscription } from "rxjs";
 import "./DexSubpage.scss";
 import LoadingSpinner from "../../component/LoadingSpinner";

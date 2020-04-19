@@ -5,7 +5,7 @@ import { Subscription } from "rxjs";
 import itemService from "../backend/item.service";
 import { ItemDetails, ItemHistoryInfo } from "../backend/item";
 import "./ItemPage.scss";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 

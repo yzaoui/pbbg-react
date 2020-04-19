@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router";
 import { Subscription } from "rxjs";
 import userService from "../backend/user.service";
 import { UserProfile } from "../backend/user";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import LoadingSpinner from "../component/LoadingSpinner";
 import UserProfileComponent from "../component/UserProfileComponent";
 import "./UserPage.scss";

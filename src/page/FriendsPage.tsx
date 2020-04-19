@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router";
 import { Subscription } from "rxjs";
 import friendsService from "../backend/friends.service";
 import { FriendInfo, Friends } from "../backend/friends";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import FriendsContainer from "../component/friends/FriendsContainer";
 import "./FriendsPage.scss";
 import userService from "../backend/user.service";
