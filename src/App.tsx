@@ -23,6 +23,7 @@ import BattlePage from "./page/BattlePage";
 import MarketPage from "./page/MarketPage";
 import UserPage from "./page/UserPage";
 import FriendsPage from "./page/FriendsPage";
+import AboutPage from "./page/AboutPage";
 
 interface State {
     currentUserToken: string | null;
@@ -57,6 +58,7 @@ class App extends React.Component<{}, State> {
                         <MemberRoute path="/farm" component={FarmPage} />
                         <MemberRoute path="/dex" component={DexPage} />
                         <MemberRoute path="/friends" component={FriendsPage} />
+                        <MemberRoute path="/about" component={AboutPage} />
                         <MemberRoute path="/settings" component={SettingsPage} />
                         <Route path="/user/:id" exact component={UserPage} />
                         <Redirect to="/" />

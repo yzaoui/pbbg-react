@@ -15,6 +15,7 @@ const navItems = [
     { to: "/farm", emoji: "🌱", label: "Farm", exact: true },
     { to: "/dex", emoji: "📚", label: "Dex", exact: false },
     { to: "/friends", emoji: "🎉", label: "Friends", exact: false },
+    { to: "/about", emoji: "❓", label: "About", exact: true },
     { to: "/settings", emoji: "⚙️", label: "Settings", exact: true }
 ];
 
