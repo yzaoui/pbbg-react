@@ -1,8 +1,9 @@
 import React from "react";
 import goldSrc from "../img/gold.png";
 
-export const API_ROOT = process.env.NODE_ENV === "development" ? "http://localhost:8080" :
-    process.env.NODE_ENV === "production" ? "https://pbbg-api.bitwiserain.com" : "";
+const DEV_ROOT = "http://localhost:8080";
+const PROD_ROOT = "https://pbbg-api.bitwiserain.com";
+export const API_ROOT = process.env.NODE_ENV === "development" ? DEV_ROOT : process.env.NODE_ENV === "production" ? PROD_ROOT : "";
 
 export const USERNAME_REGEX = {
     pattern: "[A-Za-z0-9_]{1,15}",
@@ -15,3 +16,8 @@ export const PASSWORD_REGEX = {
 };
 
 export const goldImg = <img src={goldSrc} alt="Gold icon" style={{ width: "16px", height: "16px" }} />;
+
+export const APP_VERSION: string = process.env.REACT_APP_VERSION!;
+export const APP_VERSIONS: string[] = [
+    APP_VERSION
+];

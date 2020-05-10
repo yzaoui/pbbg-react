@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { Route, RouteComponentProps } from "react-router";
+import { Route, RouteComponentProps, StaticContext } from "react-router";
 import MineListPage from "./MineListPage";
 import { Subscription } from "rxjs";
 import mineService from "../../backend/mine.service";
@@ -64,7 +64,7 @@ type State = {
     results: (MinedItemResult | LevelUp)[];
 };
 
-class IndexPage extends React.Component<RouteComponentProps, State> {
+class IndexPage extends React.Component<RouteComponentProps<{}, StaticContext, { mine?: MineData }>, State> {
     readonly state: Readonly<State> = {
         status: "initial loading"
     };
@@ -105,9 +105,10 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
     });
 
     componentDidMount() {
+        // User may have come from mine list, so check if location contains mine to avoid having to fetch it again
         const locationState = this.props.location.state;
 
-        if (locationState && locationState.mine) {
+        if (locationState?.mine !== undefined) {
             this.props.history.replace({ pathname: this.props.location.pathname });
             this.setMineStateAndStartLoadingOtherState(locationState.mine);
 

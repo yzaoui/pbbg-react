@@ -10,7 +10,7 @@ const MemberRoute: React.FC<RouteProps> = ({ component: Component, ...rest }) =>
     return <Route
         {...rest}
         render={props =>
-            authenticationService.currentUserValue !== null ? <Component {...props} /> : <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
+            authenticationService.currentUserValue !== null ? <Component {...props} /> : <Redirect to={{ pathname: "/login", state: { destination: props.location } }} />
         }
     />;
 };

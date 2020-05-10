@@ -1,7 +1,6 @@
 import React, { ChangeEventHandler } from "react";
 import FriendsSectionHeader from "./FriendsSectionHeader";
 import { FriendInfo } from "../../backend/friends";
-import FriendUL from "./FriendUL";
 import LoadingSpinner from "../LoadingSpinner";
 import AddFriendsContentBody from "./AddFriendsContentBody";
 

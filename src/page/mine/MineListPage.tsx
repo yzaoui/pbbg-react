@@ -9,7 +9,7 @@ import enterMineMP3 from "../../audio/enter_mine.mp3";
 // @ts-ignore
 import enterMineOGG from "../../audio/enter_mine.ogg";
 import { Howl } from "howler";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 type State = {
     status: "loading";

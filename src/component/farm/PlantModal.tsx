@@ -24,13 +24,13 @@ const initialState: State = {
     inventory: "loading"
 };
 
-class PlantModal extends React.Component<Props> {
+class PlantModal extends React.Component<Props, State> {
     readonly state: Readonly<State> = initialState;
 
     private inventoryRequest: Subscription | null = null;
 
     componentWillUnmount() {
-        this.inventoryRequest !== null && this.inventoryRequest.unsubscribe();
+        this.inventoryRequest?.unsubscribe();
     }
 
     componentDidUpdate(prevProps: Readonly<Props>) {
