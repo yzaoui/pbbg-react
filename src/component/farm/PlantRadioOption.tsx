@@ -12,6 +12,7 @@ type Props = {
 const PlantRadioOption: React.FC<Props> = ({ inventoryEntry, checked, onChange }) => <div className={styles.PlantRadioOption}>
     <input type="radio" name="plant" value={inventoryEntry.item.id} checked={checked} onChange={onChange} />
     <InventoryItem inventoryEntry={inventoryEntry} />
+    <span>{inventoryEntry.item.baseItem.friendlyName}</span>
 </div>;
 
 export default PlantRadioOption;
