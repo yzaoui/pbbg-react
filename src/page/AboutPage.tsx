@@ -3,6 +3,7 @@ import "./AboutPage.scss";
 import aboutService from "../backend/about.service";
 import { Subscription } from "rxjs";
 import LoadingSpinner from "../component/LoadingSpinner";
+import PatchNotesModal from "../component/about/PatchNotesModal";
 
 interface LoadingState {
     status: "loading";
@@ -13,11 +14,14 @@ interface LoadedState {
     backendVersion: string;
 }
 
-type State = LoadingState | LoadedState;
+type State = (LoadingState | LoadedState) & {
+    patchNotesOpen: "backend" | "frontend" | null;
+};
 
 class AboutPage extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        status: "loading"
+        status: "loading",
+        patchNotesOpen: null
     };
 
     private request: Subscription | null = null;
@@ -28,7 +32,8 @@ class AboutPage extends React.Component<{}, State> {
         this.request = aboutService.getBackendVersion().subscribe(res =>
             this.setState({
                 status: "loaded",
-                backendVersion: res.data
+                backendVersion: res.data,
+                patchNotesOpen: null
             }));
     }
 
@@ -38,8 +43,31 @@ class AboutPage extends React.Component<{}, State> {
 
     render() {
         return <div className="AboutPage">
-            <div>Frontend version: <span className="version">{process.env.REACT_APP_VERSION}</span></div>
-            <div>Backend version: {this.backendVersion()}</div>
+            <table>
+                <tr>
+                    <td>
+                        Client version:
+                    </td>
+                    <td className="version">
+                        {aboutService.getFrontendVersion()}
+                    </td>
+                    <td>
+                        <button onClick={this.handleFrontendPatchNotesOpen}>Patch notes</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Server version:
+                    </td>
+                    <td className="version">
+                        {this.backendVersion()}
+                    </td>
+                    <td>
+                        <button onClick={this.handleBackendPatchNotesOpen}>Patch notes</button>
+                    </td>
+                </tr>
+            </table>
+            <PatchNotesModal patchNotesOpen={this.state.patchNotesOpen} onClose={this.handlePatchNotesClose} />
         </div>;
     }
 
@@ -50,6 +78,18 @@ class AboutPage extends React.Component<{}, State> {
             case "loaded":
                 return <span className="version">{this.state.backendVersion}</span>;
         }
+    }
+
+    private handleFrontendPatchNotesOpen = () => {
+        this.setState({ patchNotesOpen: "frontend" });
+    }
+
+    private handleBackendPatchNotesOpen = () => {
+        this.setState({ patchNotesOpen: "backend" });
+    }
+
+    private handlePatchNotesClose = () => {
+        this.setState({ patchNotesOpen: null });
     }
 }
 
