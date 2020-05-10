@@ -3,7 +3,14 @@
     flex-direction: row;
     align-items: center;
 
-    > *:not(:first-child) {
+    label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
         margin-left: 8px;
+
+        > *:not(:first-child) {
+            margin-left: 8px;
+        }
     }
 }
