@@ -68,6 +68,29 @@ class DexUnitDetailedPage extends React.Component<Props, State> {
             <div className="body">
                 <i>{unit.description}</i>
             </div>
+            <h2>Base Stats</h2>
+            <div className="body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>HP</th>
+                            <th>ATK</th>
+                            <th>DEF</th>
+                            <th>INT</th>
+                            <th>RES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{unit.baseHP}</td>
+                            <td>{unit.baseAtk}</td>
+                            <td>{unit.baseDef}</td>
+                            <td>{unit.baseInt}</td>
+                            <td>{unit.baseRes}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </>;
     };
 }

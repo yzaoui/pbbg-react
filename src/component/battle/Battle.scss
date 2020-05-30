@@ -7,7 +7,7 @@
         grid-template-areas: "allies enemies" "log log";
 
         > .BattleLog {
-            height: 289px;
+            height: 337px;
         }
     }
 
@@ -32,7 +32,7 @@
     }
 
     > .BattleLog {
-        height: 202px;
+        height: 257px;
         grid-area: log;
     }
 
