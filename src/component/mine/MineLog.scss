@@ -1,7 +1,7 @@
 .MineLog {
     font-size: 13px;
     min-height: 140px;
-    max-height: 176px;
+    max-height: 222px;
     overflow-y: scroll;
     flex: 1;
     list-style: none;
@@ -10,7 +10,7 @@
     background-color: #d6d9f7cf;
 
     &.expanded {
-        max-height: 542px;
+        max-height: 590px;
     }
 
     > .ItemResult, > .LevelUp {
