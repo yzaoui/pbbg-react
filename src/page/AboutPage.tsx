@@ -44,28 +44,30 @@ class AboutPage extends React.Component<{}, State> {
     render() {
         return <div className="AboutPage">
             <table>
-                <tr>
-                    <td>
-                        Client version:
-                    </td>
-                    <td className="version">
-                        {aboutService.getFrontendVersion()}
-                    </td>
-                    <td>
-                        <button onClick={this.handleFrontendPatchNotesOpen}>Patch notes</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Server version:
-                    </td>
-                    <td className="version">
-                        {this.backendVersion()}
-                    </td>
-                    <td>
-                        <button onClick={this.handleBackendPatchNotesOpen}>Patch notes</button>
-                    </td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <td>
+                            Client version:
+                        </td>
+                        <td className="version">
+                            {aboutService.getFrontendVersion()}
+                        </td>
+                        <td>
+                            <button onClick={this.handleFrontendPatchNotesOpen}>Patch notes</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Server version:
+                        </td>
+                        <td className="version">
+                            {this.backendVersion()}
+                        </td>
+                        <td>
+                            <button onClick={this.handleBackendPatchNotesOpen}>Patch notes</button>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             <PatchNotesModal patchNotesOpen={this.state.patchNotesOpen} onClose={this.handlePatchNotesClose} />
         </div>;
