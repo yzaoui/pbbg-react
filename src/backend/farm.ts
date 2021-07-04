@@ -41,10 +41,12 @@ export type MaterializedPlantJSON = {
     basePlant: BasePlantJSON;
     cycleStart: string;
     isMature: null;
+    harvests: null;
 } | {
     basePlant: MaturableBasePlantJSON;
     cycleStart: string;
     isMature: boolean;
+    harvests: number;
 };
 
 export interface BasePlantJSON {
