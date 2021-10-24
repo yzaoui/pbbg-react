@@ -61,7 +61,8 @@ export interface GridPreviewable {
     grid: Point[];
 }
 
-export const isGridPreviewable = (item: BaseItem): item is BaseItem & GridPreviewable => "grid" in item && typeof(item["grid"]) === "object" && item["grid"] !== null;
+export const isGridPreviewable = (item: BaseItem | (BaseItem & GridPreviewable)): item is BaseItem & GridPreviewable =>
+    "grid" in item && typeof(item["grid"]) === "object" && item["grid"] !== null;
 
 export interface DexUnits {
     discoveredUnits: Record<number, MyUnitEnum>;
