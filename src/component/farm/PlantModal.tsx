@@ -77,7 +77,11 @@ class PlantModal extends React.Component<Props, State> {
                         </footer>
                     </div>
                 }
-                containerStyles={{ padding: 0 }}
+                overrides={{
+                    Dialog: {
+                        style: { padding: 0 }
+                    }
+                }}
             />
     }
 
