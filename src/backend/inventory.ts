@@ -44,4 +44,5 @@ export interface Point {
 }
 
 export const isStackable = (item: MaterializedItem): item is MaterializedItem & Stackable => "quantity" in item && typeof(item["quantity"]) === "number";
-export const isEquippable = (item: InventoryEntry): item is InventoryEntry & Equippable => "equipped" in item && typeof(item["equipped"]) === "boolean";
+export const isEquippable = (item: InventoryEntry | (InventoryEntry & Equippable)): item is InventoryEntry & Equippable =>
+    "equipped" in item && typeof(item["equipped"]) === "boolean";

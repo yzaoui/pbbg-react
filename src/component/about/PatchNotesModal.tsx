@@ -54,7 +54,11 @@ class PatchNotesModal extends React.Component<Props> {
                     </footer>
                 </div>
             }
-            containerStyles={{ padding: "16px", maxWidth: "600px" }}
+            overrides={{
+                Dialog: {
+                    style: { padding: "16px", maxWidth: "600px" }
+                }
+            }}
         />
     }
 }
