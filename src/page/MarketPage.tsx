@@ -46,10 +46,10 @@ class MarketPage extends React.Component<{}, State> {
         document.title = "Market - PBBG";
 
         this.request = marketService.getMarkets()
-            .subscribe(
-                res => this.setState(this.stateInitialLoaded(res.data)),
-                error => this.setState({ status: "error" })
-            );
+            .subscribe({
+                next: value => this.setState(this.stateInitialLoaded(value.data)),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {
@@ -104,13 +104,13 @@ class MarketPage extends React.Component<{}, State> {
         const ordersArray = Array.from(orders, ([id, quantity]) => ({ id, quantity }));
 
         marketService.buy({ orders: ordersArray })
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     this.transactionSound.play();
-                    this.setState({ ...this.state, buying: false, markets: res.data });
+                    this.setState({ ...this.state, buying: false, markets: value.data });
                 },
-                error => this.setState({ status: "error" })
-            );
+                error: err => this.setState({ status: "error" })
+            });
     };
 
     handleSell = (orders: Map<number, number | undefined>) => {
@@ -121,13 +121,13 @@ class MarketPage extends React.Component<{}, State> {
         const ordersArray = Array.from(orders, ([id, quantity]) => ({ id, quantity }));
 
         marketService.sell({ orders: ordersArray })
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     this.transactionSound.play();
-                    this.setState({ ...this.state, selling: false, markets: res.data });
+                    this.setState({ ...this.state, selling: false, markets: value.data });
                 },
-                error => {}
-            );
+                error: err => {}
+            });
     };
 
     private stateInitialLoaded = (markets: UserAndGameMarkets): LoadedState => ({

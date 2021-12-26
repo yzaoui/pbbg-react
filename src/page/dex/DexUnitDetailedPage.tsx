@@ -28,10 +28,10 @@ class DexUnitDetailedPage extends React.Component<Props, State> {
 
     componentDidMount() {
         this.request = dexService.getUnit(this.props.match.params.id)
-            .subscribe(
-                res => this.setState({ status: "loaded", unitEnum: res.data }),
-                error => this.setState({ status: "error" })
-            )
+            .subscribe({
+                next: value => this.setState({ status: "loaded", unitEnum: value.data }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {

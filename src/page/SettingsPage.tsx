@@ -27,10 +27,10 @@ class SettingsPage extends React.Component<{}, State> {
         this.setState({ submittingChangePassword: true });
 
         settingsService.changePassword( { currentPassword, newPassword, confirmNewPassword })
-            .subscribe(
-                res => this.setState({ submittingChangePassword: false }),
-                error => this.setState({ submittingChangePassword: false })
-            );
+            .subscribe({
+                next: value => this.setState({ submittingChangePassword: false }),
+                error: err => this.setState({ submittingChangePassword: false })
+            });
     };
 }
 

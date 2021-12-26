@@ -41,10 +41,10 @@ class InventoryPage extends React.Component<{}, State> {
         document.title = "Inventory - PBBG";
 
         this.request = inventoryService.getInventory()
-            .subscribe(
-                res => this.setState({ status: "loaded", inventory: res.data, equipmentChanging: false }),
-                error => this.setState({ status: "error" })
-            )
+            .subscribe({
+                next: value => this.setState({ status: "loaded", inventory: value.data, equipmentChanging: false }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {
@@ -87,15 +87,15 @@ class InventoryPage extends React.Component<{}, State> {
         this.setState({ ...this.state, equipmentChanging: true });
 
         this.request = inventoryService.equipUnequip(action, { inventoryItemId })
-            .subscribe(
-                res => {
+            .subscribe({
+                next: res => {
                     if (this.state.status !== "loaded") throw Error();
 
                     this.equipSound.play();
                     this.setState({ ...this.state, inventory: res.data, equipmentChanging: false });
                 },
-                error => this.setState({ status: "error" })
-            );
+                error: err => this.setState({ status: "error" })
+            });
     }
 }
 

@@ -24,10 +24,10 @@ class IndexMemberPage extends React.Component<{}, State> {
         document.title = "Home - PBBG";
 
         this.request = userStatsService.get()
-            .subscribe(
-                res => this.setState({ status: "loaded", stats: res.data }),
-                error => this.setState({ status: "error" })
-            )
+            .subscribe({
+                next: value => this.setState({ status: "loaded", stats: value.data }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {

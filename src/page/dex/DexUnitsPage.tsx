@@ -34,10 +34,10 @@ class IndexPage extends React.Component<RouteComponentProps, State> {
 
     componentDidMount() {
         this.request = dexService.getUnits()
-            .subscribe(
-                res => this.setState({ status: "loaded", dexUnits: res.data }),
-                error => this.setState({ status: "error" })
-            )
+            .subscribe({
+                next: value => this.setState({ status: "loaded", dexUnits: value.data }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {
