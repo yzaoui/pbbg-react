@@ -23,7 +23,7 @@ class LoginPage extends React.Component<Props, State> {
     }
 
     render() {
-        const error = this.state.error || (this.props.location.state && this.props.location.state.error);
+        const error = this.state.error || this.props.location.state?.error;
 
         return <>
             <LoginForm onSubmit={this.handleSubmit} submitting={this.state.submitting} error={error} />
@@ -36,9 +36,7 @@ class LoginPage extends React.Component<Props, State> {
 
         authenticationService.login(username, password)
             .then(
-                token => {
-                    this.props.history.push({ pathname: this.props.location.state.destination?.pathname ?? "/" });
-                },
+                token => this.props.history.push({ pathname: this.props.location.state?.destination?.pathname ?? "/" }),
                 error => this.setState({ submitting: false, error: new IncorrectCredentialsError(username) })
             );
     };

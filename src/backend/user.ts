@@ -7,5 +7,6 @@ export type UserSearchResponse = FriendInfo[];
 export interface UserProfile {
     id: number;
     username: string;
+    joinedDate: string;
     friendship: Friendship | null;
 }
