@@ -9,8 +9,9 @@ interface Props {
     changingFriendship: boolean;
 }
 
-const UserProfileComponent: React.FC<Props> = ({ userProfile: { username, friendship }, onChangeFriendship, changingFriendship }) => <div className="UserProfileComponent">
+const UserProfileComponent: React.FC<Props> = ({ userProfile: { username, joinedDate, friendship }, onChangeFriendship, changingFriendship }) => <div className="UserProfileComponent">
     <h1>{username}</h1>
+    <div>Joined on {(new Date(joinedDate)).toDateString()}</div>
     {friendship !== null && <>
         <span>{spanText(friendship)}</span>
         <LoadingButton loading={changingFriendship} onClick={() => onChangeFriendship(friendship)}>{buttonText(friendship)}</LoadingButton>
