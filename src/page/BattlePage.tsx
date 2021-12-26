@@ -43,10 +43,10 @@ class BattlePage extends React.Component<{}, State> {
         document.title = "Battle - PBBG";
 
         this.request = battleService.getBattle()
-            .subscribe(
-                res => this.setState(res.data !== null ? this.stateInitialInBattle(res.data) : { status: "no battle" }),
-                error => this.setState({ status: "error" })
-            );
+            .subscribe({
+                next: value => this.setState(value.data !== null ? this.stateInitialInBattle(value.data) : { status: "no battle" }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {
@@ -89,10 +89,10 @@ class BattlePage extends React.Component<{}, State> {
         this.setState({ status: "generating battle" });
 
         this.request = battleService.generateBattle()
-            .subscribe(
-                res => this.setState(this.stateInitialInBattle(res.data)),
-                error => this.setState({ status: "error" })
-            );
+            .subscribe({
+                next: value => this.setState(this.stateInitialInBattle(value.data)),
+                error: err => this.setState({ status: "error" })
+            });
     };
 
     handleAllyTurn = (targetUnitId: number) => {
@@ -101,19 +101,19 @@ class BattlePage extends React.Component<{}, State> {
         this.setState({ ...this.state, performingAction: true });
 
         this.request = battleService.allyTurn({ targetUnitId })
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     if (this.state.status !== "in battle") throw Error();
 
                     this.setState({ ...this.state,
-                        battle: res.data.battle,
+                        battle: value.data.battle,
                         performingAction: false,
-                        effectsList: this.state.effectsList.concat(res.data.unitEffects),
-                        reward: res.data.reward
+                        effectsList: this.state.effectsList.concat(value.data.unitEffects),
+                        reward: value.data.reward
                     });
                 },
-                error => this.setState({ status: "error" })
-            );
+                error: err => this.setState({ status: "error" })
+            });
     };
 
     handleEnemyTurn = () => {
@@ -122,19 +122,19 @@ class BattlePage extends React.Component<{}, State> {
         this.setState({ ...this.state, performingAction: true });
 
         this.request = battleService.enemyTurn()
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     if (this.state.status !== "in battle") throw Error();
 
                     this.setState({ ...this.state,
-                        battle: res.data.battle,
+                        battle: value.data.battle,
                         performingAction: false,
-                        effectsList: this.state.effectsList.concat(res.data.unitEffects),
-                        reward: res.data.reward
+                        effectsList: this.state.effectsList.concat(value.data.unitEffects),
+                        reward: value.data.reward
                     });
                 },
-                error => this.setState({ status: "error" })
-            );
+                error: err => this.setState({ status: "error" })
+            });
     };
 }
 

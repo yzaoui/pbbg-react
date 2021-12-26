@@ -37,10 +37,10 @@ class UserPage extends React.Component<Props, State> {
 
     componentDidMount() {
         this.request = userService.getUserProfile(this.props.match.params.id)
-            .subscribe(
-                res => this.setState({ status: "loaded", userProfile: res.data, changingFriendship: false }),
-                error => this.setState({ status: "error" })
-            )
+            .subscribe({
+                next: value => this.setState({ status: "loaded", userProfile: value.data, changingFriendship: false }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {
@@ -74,7 +74,7 @@ class UserPage extends React.Component<Props, State> {
                 updatedUserProfile.friendship = res.data;
 
                 return { ...prevState, changingFriendship: false, userProfile: updatedUserProfile };
-            }))
+            }));
     };
 }
 

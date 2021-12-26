@@ -38,10 +38,10 @@ class MineListPage extends React.Component<RouteComponentProps, State> {
 
     componentDidMount() {
         this.request = mineService.getMineTypes()
-            .subscribe(
-                res => this.setState({ status: "loaded", mineTypeList: res.data }),
-                error => this.setState({ status: "error" })
-            )
+            .subscribe({
+                next: value => this.setState({ status: "loaded", mineTypeList: value.data }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {
@@ -66,14 +66,14 @@ class MineListPage extends React.Component<RouteComponentProps, State> {
         this.setState({ status: "entering mine", enteringMineId: mineTypeId });
 
         this.request = mineService.enterMine({ mineTypeId })
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     this.setState({ status: "loaded" });
                     this.enterMineSound.play();
-                    this.props.history.push({ pathname: "/mine", state: { mine: res.data } });
+                    this.props.history.push({ pathname: "/mine", state: { mine: value.data } });
                 },
-                error => this.setState({ status: "error" })
-            )
+                error: err => this.setState({ status: "error" })
+            });
     };
 }
 

@@ -178,79 +178,79 @@ class IndexPage extends React.Component<RouteComponentProps<{}, StaticContext, {
 
     loadMine = () => {
         this.mineRequest = mineService.getMine()
-            .subscribe(
-                res => {
-                    if (res.data === null) return this.props.history.push("/mine/list");
+            .subscribe({
+                next: value => {
+                    if (value.data === null) return this.props.history.push("/mine/list");
 
-                    this.setMineStateAndStartLoadingOtherState(res.data)
+                    this.setMineStateAndStartLoadingOtherState(value.data)
                 },
-                error => this.setState({ status: "error" })
-            )
+                error: err => this.setState({ status: "error" })
+            });
     };
 
     loadMiningLevel = () => {
         this.userStatsRequest = userStatsService.get()
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     if (this.state.status !== "loaded") throw Error();
-                    const miningLvl = res.data.mining;
+                    const miningLvl = value.data.mining;
 
                     this.setState({ ...this.state, miningLvl });
                 },
-                error => this.setState({ status: "error" })
-            )
+                error: err => this.setState({ status: "error" })
+            });
     };
 
     loadPickaxe = () => {
         this.inventoryRequest = inventoryService.getInventory()
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     if (this.state.status !== "loaded") throw Error();
-                    const pickaxe = res.data.equipment.pickaxe;
+                    const pickaxe = value.data.equipment.pickaxe;
 
                     this.setState({ ...this.state, pickaxe });
                 },
-                error => this.setState({ status: "error" })
-            )
+                error: err => this.setState({ status: "error" })
+            });
     };
 
     performMineAction = (x: number, y: number) => {
         this.setState({ ...this.state, submittingAction: { x, y } });
 
         this.mineRequest = mineService.performMineAction({ x, y })
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     if (this.state.status !== "loaded") throw Error();
 
                     this.playPickaxeSound();
 
-                    if (res.data.levelUps.length > 0) {
+                    if (value.data.levelUps.length > 0) {
                         this.levelUpSound.play();
                     }
 
                     this.setState({
                         ...this.state,
-                        mine: res.data.mine,
-                        miningLvl: res.data.miningLvl,
+                        mine: value.data.mine,
+                        miningLvl: value.data.miningLvl,
                         submittingAction: null,
-                        results: this.state.results.concat(res.data.minedItemResults).concat(res.data.levelUps)
+                        results: this.state.results.concat(value.data.minedItemResults).concat(value.data.levelUps)
                     });
                 },
-                error => this.setState({ status: "error" })
-            )
+                error: err => this.setState({ status: "error" })
+            });
     };
 
     exitMine = () => {
         this.setState({ status: "exiting" });
 
         this.mineRequest = mineService.exitMine()
-            .subscribe(
-                res => {
+            .subscribe({
+                next: value => {
                     this.exitSound.play();
                     this.setState({ status: "exited" });
                 },
-                error => this.setState({ status: "error" })
-            )
+                error: err => this.setState({ status: "error" })
+            });
     };
 
     playPickaxeSound = () => {

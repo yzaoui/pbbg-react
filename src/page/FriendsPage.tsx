@@ -34,10 +34,10 @@ class FriendsPage extends React.Component<RouteComponentProps, State> {
 
     componentDidMount() {
         this.request = friendsService.getFriends()
-            .subscribe(
-                res => this.setState({ status: "loaded", friends: res.data, searchResults: null }),
-                error => this.setState({ status: "error" })
-            );
+            .subscribe({
+                next: value => this.setState({ status: "loaded", friends: value.data, searchResults: null }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     render = () => <div className="FriendsPage">

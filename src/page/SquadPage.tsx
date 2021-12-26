@@ -36,10 +36,10 @@ class SquadPage extends React.Component<{}, State> {
     componentDidMount() {
         document.title = "Squad - PBBG";
 
-        this.request = squadService.getSquad().subscribe(
-            res => this.setState({ status: "loaded", squad: res.data, healing: false }),
-            error => this.setState({ status: "error" })
-        );
+        this.request = squadService.getSquad().subscribe({
+            next: value => this.setState({ status: "loaded", squad: value.data, healing: false }),
+            error: err => this.setState({ status: "error" })
+        });
     }
 
     componentWillUnmount() {
@@ -67,15 +67,15 @@ class SquadPage extends React.Component<{}, State> {
         if (this.state.status !== "loaded") throw Error();
         this.setState({ ...this.state, healing: true });
 
-        this.request = squadService.healSquad().subscribe(
-            res => {
+        this.request = squadService.healSquad().subscribe({
+            next: value => {
                 if (this.state.status !== "loaded") throw Error();
 
-                this.setState({ ...this.state, healing: false, squad: res.data });
+                this.setState({ ...this.state, healing: false, squad: value.data });
                 this.healingSound.play();
             },
-            error => this.setState({ status: "error" })
-        );
+            error: err => this.setState({ status: "error" })
+        });
     };
 }
 

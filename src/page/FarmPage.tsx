@@ -167,7 +167,7 @@ class FarmPage extends React.Component<{}, State> {
                 this.expandingRequest = null;
                 this.setState({ ...this.state, expanding: false });
                 this.updatePlot(res.data);
-            })
+            });
     };
 
     private handlePlantModalSelect = (itemId: number) => {

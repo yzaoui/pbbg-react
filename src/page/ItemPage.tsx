@@ -27,10 +27,10 @@ class ItemPage extends React.Component<Props, State> {
 
     componentDidMount() {
         this.request = itemService.getItem(this.props.match.params.id)
-            .subscribe(
-                res => this.setState({ status: "loaded", itemDetails: res.data }),
-                error => this.setState({ status: "error" })
-            )
+            .subscribe({
+                next: value => this.setState({ status: "loaded", itemDetails: value.data }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     render() {

@@ -43,10 +43,10 @@ class MemberNav extends React.Component<{}, State> {
 
     componentDidMount(): void {
         this.request = userStatsService.get()
-            .subscribe(
-                res => this.setState({ status: "loaded", username: res.data.username }),
-                error => this.setState({ status: "error" })
-            )
+            .subscribe({
+                next: value => this.setState({ status: "loaded", username: value.data.username }),
+                error: err => this.setState({ status: "error" })
+            });
     }
 
     componentWillUnmount() {
