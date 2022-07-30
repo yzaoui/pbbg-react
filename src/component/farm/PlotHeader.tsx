@@ -1,7 +1,5 @@
 import React from "react";
-import PlotProgress from "./PlotProgress";
-import { MaterializedPlant, OccupiedPlotData, PlantProgress } from "../../model/farm";
-import PlotProgressButton from "./PlotProgressButton";
+import { OccupiedPlotData} from "../../model/farm";
 
 type Props = {
     loading: boolean;
