@@ -118,11 +118,12 @@ class FarmPage extends React.Component<{}, State> {
     private updatePlot = (updatedPlot: PlotJSON) => {
         if (this.state.status !== "loaded") return;
 
-        const updatedPlots = this.state.plots.filter(plot => plot.id !== updatedPlot.id) // Remove plot to update
-            .concat(plotFromJSON(updatedPlot))
-            .sort((a, b) => a.id - b.id);
+        const updatedPlots = Array.from(this.state.plots);
+        const updatedPlotIndex = updatedPlots.findIndex(plot => plot.id === updatedPlot.id);
 
-        const updatedLoadingPlots = (new Set(this.state.loadingPlots));
+        updatedPlots[updatedPlotIndex] = plotFromJSON(updatedPlot);
+
+        const updatedLoadingPlots = new Set(this.state.loadingPlots);
         updatedLoadingPlots.delete(updatedPlot.id);
 
         this.setState({ ...this.state, plots: updatedPlots, loadingPlots: updatedLoadingPlots });
