@@ -165,8 +165,11 @@ class FarmPage extends React.Component<{}, State> {
         this.expandingRequest = farmService.expand()
             .subscribe(res => {
                 this.expandingRequest = null;
-                this.setState({ ...this.state, expanding: false });
-                this.updatePlot(res.data);
+                this.setState((prevState) => {
+                    if (prevState.status !== "loaded") return prevState;
+
+                    return { ...prevState, expanding: false, plots: prevState.plots.concat(plotFromJSON(res.data)) };
+                });
             });
     };
 
