@@ -8,6 +8,7 @@ import { getPlantProgress, isMaturableMaterializedPlant, isOccupiedPlotData, Plo
 import LoadingSpinner from "../component/LoadingSpinner";
 import ExpandablePlotList from "../component/farm/ExpandablePlotList";
 import PlantModal from "../component/farm/PlantModal";
+import { arrayReorder } from "../helper/array";
 
 interface LoadingState {
     status: "loading";
@@ -71,6 +72,7 @@ class FarmPage extends React.Component<{}, State> {
                         expanding={this.state.expanding}
                         onPlant={this.handlePlant}
                         onHarvest={this.handleHarvest}
+                        onReorder={this.handleReorder}
                         onExpand={this.handleExpand}
                     />
                     <PlantModal open={this.state.plantingPlotId !== null} onClose={this.handlePlantModalClose} onSelect={this.handlePlantModalSelect} />
@@ -155,6 +157,23 @@ class FarmPage extends React.Component<{}, State> {
 
         this.harvestRequests.set(plotId, newRequest);
     };
+
+    private handleReorder = (plotId: number, targetIndex: number) => {
+        // TODO: Show loading UI while reordering
+        this.setState(prevState => {
+            if (prevState.status !== "loaded") throw Error();
+
+            const sourceIndex = prevState.plots.findIndex(plot => plot.id === plotId);
+
+            if (sourceIndex === -1) throw Error();
+
+            if (sourceIndex === targetIndex) return null;
+
+            return { ...prevState, plots: arrayReorder(prevState.plots, sourceIndex, targetIndex) };
+        }, () => {
+            farmService.reorder({ plotId: plotId, targetIndex: targetIndex });
+        });
+    }
 
     private handleExpand = () => {
         if (this.state.status !== "loaded") return;

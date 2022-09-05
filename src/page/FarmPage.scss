@@ -11,12 +11,26 @@
             padding: 0;
 
             .Plot {
+                $borderWidth: 1px;
+                $margin: 8px;
                 display: flex;
                 flex-direction: column;
                 position: relative;
-                border: 1px solid black;
+                border: $borderWidth solid black;
                 border-radius: 4px;
-                margin: 8px;
+                margin: $margin;
+                cursor: move;
+
+                &.is-drop-target {
+                    border: ($borderWidth + 1px) dashed green;
+                    opacity: 0.5;
+                    margin: $margin - 1px;
+
+                    &.is-over {
+                        opacity: 1;
+                        border-style: solid;
+                    }
+                }
             }
         }
 
