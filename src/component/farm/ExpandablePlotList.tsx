@@ -11,6 +11,7 @@ type Props = {
     expanding: boolean;
     onPlant: (plotId: number) => void;
     onHarvest: (plotId: number) => void;
+    onReorder: (plotId: number, index: number) => void;
     onExpand: () => void;
 };
 
@@ -22,6 +23,7 @@ const ExpandablePlotList: React.FC<Props> = (props) => <div className="Expandabl
         loadingPlots={props.loadingPlots}
         onPlant={props.onPlant}
         onHarvest={props.onHarvest}
+        onReorder={props.onReorder}
     />
     <ExpandPlots loading={props.expanding} onExpand={props.onExpand} />
 </div>;

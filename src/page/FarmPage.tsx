@@ -8,6 +8,7 @@ import { getPlantProgress, isMaturableMaterializedPlant, isOccupiedPlotData, Plo
 import LoadingSpinner from "../component/LoadingSpinner";
 import ExpandablePlotList from "../component/farm/ExpandablePlotList";
 import PlantModal from "../component/farm/PlantModal";
+import { arrayReorder } from "../helper/array";
 
 interface LoadingState {
     status: "loading";
@@ -71,6 +72,7 @@ class FarmPage extends React.Component<{}, State> {
                         expanding={this.state.expanding}
                         onPlant={this.handlePlant}
                         onHarvest={this.handleHarvest}
+                        onReorder={this.handleReorder}
                         onExpand={this.handleExpand}
                     />
                     <PlantModal open={this.state.plantingPlotId !== null} onClose={this.handlePlantModalClose} onSelect={this.handlePlantModalSelect} />
@@ -118,11 +120,12 @@ class FarmPage extends React.Component<{}, State> {
     private updatePlot = (updatedPlot: PlotJSON) => {
         if (this.state.status !== "loaded") return;
 
-        const updatedPlots = this.state.plots.filter(plot => plot.id !== updatedPlot.id) // Remove plot to update
-            .concat(plotFromJSON(updatedPlot))
-            .sort((a, b) => a.id - b.id);
+        const updatedPlots = Array.from(this.state.plots);
+        const updatedPlotIndex = updatedPlots.findIndex(plot => plot.id === updatedPlot.id);
 
-        const updatedLoadingPlots = (new Set(this.state.loadingPlots));
+        updatedPlots[updatedPlotIndex] = plotFromJSON(updatedPlot);
+
+        const updatedLoadingPlots = new Set(this.state.loadingPlots);
         updatedLoadingPlots.delete(updatedPlot.id);
 
         this.setState({ ...this.state, plots: updatedPlots, loadingPlots: updatedLoadingPlots });
@@ -155,6 +158,23 @@ class FarmPage extends React.Component<{}, State> {
         this.harvestRequests.set(plotId, newRequest);
     };
 
+    private handleReorder = (plotId: number, targetIndex: number) => {
+        // TODO: Show loading UI while reordering
+        this.setState(prevState => {
+            if (prevState.status !== "loaded") throw Error();
+
+            const sourceIndex = prevState.plots.findIndex(plot => plot.id === plotId);
+
+            if (sourceIndex === -1) throw Error();
+
+            if (sourceIndex === targetIndex) return null;
+
+            return { ...prevState, plots: arrayReorder(prevState.plots, sourceIndex, targetIndex) };
+        }, () => {
+            farmService.reorder({ plotId: plotId, targetIndex: targetIndex });
+        });
+    }
+
     private handleExpand = () => {
         if (this.state.status !== "loaded") return;
 
@@ -165,8 +185,11 @@ class FarmPage extends React.Component<{}, State> {
         this.expandingRequest = farmService.expand()
             .subscribe(res => {
                 this.expandingRequest = null;
-                this.setState({ ...this.state, expanding: false });
-                this.updatePlot(res.data);
+                this.setState((prevState) => {
+                    if (prevState.status !== "loaded") return prevState;
+
+                    return { ...prevState, expanding: false, plots: prevState.plots.concat(plotFromJSON(res.data)) };
+                });
             });
     };
 

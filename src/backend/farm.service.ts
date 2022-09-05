@@ -39,6 +39,15 @@ const farmService = {
         }).then(
             res => handleResponse<FarmEndpoint.ExpandResponse>(res)
         )
+    ),
+    reorder: (req: FarmEndpoint.ReorderRequest) => RxJS.from(
+        fetch(`${API_ROOT}/api/farm/reorder`, {
+            method: "POST",
+            headers: {...jsonHeader(), ...authHeader()},
+            body: JSON.stringify(req)
+        }).then(
+            res => handleResponse<FarmEndpoint.ReorderResponse>(res)
+        )
     )
 };
 

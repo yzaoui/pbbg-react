@@ -1,9 +1,10 @@
-import React from "react";
+import React, { DragEventHandler } from "react";
 import PlotImage from "./PlotImage";
 import PlotFooter from "./PlotFooter";
 import LoadingSpinner from "../LoadingSpinner";
 import { isMaturableMaterializedPlant, OccupiedPlotData, PlotData } from "../../model/farm";
 import PlotHeader from "./PlotHeader";
+import classNames from "classnames";
 
 interface EmptyPlotProps {
     plot: PlotData;
@@ -16,11 +17,28 @@ interface OccupiedPlotProps {
     onHarvest: (plotId: number) => void;
 }
 
-type Props = {
+export type Props = {
     loading: boolean;
+    dragged: boolean;
+    isDropTarget: boolean;
+    isOverDropTarget: boolean;
+    onDragStart: DragEventHandler<HTMLElement>;
+    onDragEnter: DragEventHandler<HTMLElement>;
+    onDragLeave: DragEventHandler<HTMLElement>;
+    onDragEnd: DragEventHandler<HTMLElement>;
+    onDrop: DragEventHandler<HTMLElement>;
 } & (EmptyPlotProps | OccupiedPlotProps);
 
-const Plot: React.FC<Props> = (props: Props) => <div className="Plot">
+const Plot: React.FC<Props> = (props: Props) => <div
+    className={classNames("Plot", { "dragged": props.dragged }, { "is-drop-target": props.isDropTarget }, { "is-over": props.isOverDropTarget })}
+    draggable="true"
+    onDragStart={props.onDragStart}
+    onDragEnter={props.onDragEnter}
+    onDragOver={(e) => e.preventDefault()}
+    onDragLeave={props.onDragLeave}
+    onDragEnd={props.onDragEnd}
+    onDrop={props.onDrop}
+>
     {"fetchingNextStage" in props ? <>
         {(props.fetchingNextStage || props.loading) &&
             overlay

@@ -25,6 +25,12 @@ export type HarvestResponse = PlotJSON;
  */
 export type ExpandResponse = PlotJSON;
 
+export type ReorderRequest = {
+    plotId: number;
+    targetIndex: number;
+}
+export type ReorderResponse = PlotJSON[];
+
 export type PlotJSON = EmptyPlotJSON | OccupiedPlotJSON;
 
 export type EmptyPlotJSON = {
