@@ -23,7 +23,7 @@ img {
     image-rendering: crisp-edges;
 }
 
-.container {
+.App {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -198,7 +198,7 @@ button.loading, button.loading.fancy, button.loading.fancy:disabled {
 }
 
 @media screen and (max-width: 600px) {
-    .container {
+    .App {
         flex-direction: column;
         margin: 0;
     }

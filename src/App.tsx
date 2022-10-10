@@ -42,7 +42,7 @@ class App extends React.Component<{}, State> {
         const isLoggedIn = this.state.currentUserToken !== null;
 
         return <Router history={history}>
-            <div className="container">
+            <div className="App">
                 {isLoggedIn ? <MemberNav /> : <GuestNav />}
                 <main className="pbbg-main">
                     <Switch>
