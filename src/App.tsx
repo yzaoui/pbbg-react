@@ -1,7 +1,8 @@
 import React from 'react';
 import "normalize.css"
 import "./common.scss"
-import { Route, Router, Switch, Redirect } from "react-router-dom";
+import { Redirect, Route, Router, Switch } from "react-router-dom";
+import AppHeader from "./component/AppHeader";
 import GuestNav from "./component/GuestNav";
 import MemberNav from "./component/MemberNav";
 import GuestRoute from "./GuestRoute";
@@ -43,27 +44,30 @@ class App extends React.Component<{}, State> {
 
         return <Router history={history}>
             <div className="App">
-                {isLoggedIn ? <MemberNav /> : <GuestNav />}
-                <main className="pbbg-main">
-                    <Switch>
-                        <Route path="/" exact render={() => isLoggedIn ? <IndexMemberPage /> : <IndexGuestPage />} />
-                        <GuestRoute path="/register" component={RegisterPage} />
-                        <GuestRoute path="/login" component={LoginPage} />
-                        <MemberRoute path="/squad" component={SquadPage} />
-                        <MemberRoute path="/inventory" component={InventoryPage} />
-                        <Route path="/item/:id" exact component={ItemPage} />
-                        <MemberRoute path="/market" component={MarketPage} />
-                        <MemberRoute path="/battle" component={BattlePage} />
-                        <MemberRoute path="/mine" component={MinePage} />
-                        <MemberRoute path="/farm" component={FarmPage} />
-                        <MemberRoute path="/dex" component={DexPage} />
-                        <MemberRoute path="/friends" component={FriendsPage} />
-                        <MemberRoute path="/about" component={AboutPage} />
-                        <MemberRoute path="/settings" component={SettingsPage} />
-                        <Route path="/user/:id" exact component={UserPage} />
-                        <Redirect to="/" />
-                    </Switch>
-                </main>
+                <AppHeader />
+                <div className="AppBody">
+                    {isLoggedIn ? <MemberNav /> : <GuestNav />}
+                    <main className="pbbg-main">
+                        <Switch>
+                            <Route path="/" exact component={isLoggedIn ? IndexMemberPage : IndexGuestPage} />
+                            <GuestRoute path="/register" component={RegisterPage} />
+                            <GuestRoute path="/login" component={LoginPage} />
+                            <MemberRoute path="/squad" component={SquadPage} />
+                            <MemberRoute path="/inventory" component={InventoryPage} />
+                            <Route path="/item/:id" exact component={ItemPage} />
+                            <MemberRoute path="/market" component={MarketPage} />
+                            <MemberRoute path="/battle" component={BattlePage} />
+                            <MemberRoute path="/mine" component={MinePage} />
+                            <MemberRoute path="/farm" component={FarmPage} />
+                            <MemberRoute path="/dex" component={DexPage} />
+                            <MemberRoute path="/friends" component={FriendsPage} />
+                            <MemberRoute path="/about" component={AboutPage} />
+                            <MemberRoute path="/settings" component={SettingsPage} />
+                            <Route path="/user/:id" exact component={UserPage} />
+                            <Redirect to="/" />
+                        </Switch>
+                    </main>
+                </div>
             </div>
         </Router>;
     }
