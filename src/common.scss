@@ -40,6 +40,10 @@ img {
     height: 100%;
 }
 
+#nav-menu-toggle {
+    display: none;
+}
+
 .AppBody {
     display: flex;
     flex-direction: row;
@@ -224,5 +228,9 @@ button.loading, button.loading.fancy, button.loading.fancy:disabled {
         &.open {
             transform: translateX(0);
         }
+    }
+
+    #nav-menu-toggle {
+        display: unset;
     }
 }

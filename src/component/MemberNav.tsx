@@ -4,6 +4,7 @@ import authenticationService from "./../authentication.service";
 import { Subscription } from "rxjs";
 import userStatsService from "../backend/user-stats.service";
 import LoadingSpinner from "./LoadingSpinner";
+import classNames from "classnames";
 
 const navItems = [
     { to: "/", emoji: "🏠", label: "Home", exact: true },
@@ -18,6 +19,11 @@ const navItems = [
     { to: "/about", emoji: "❓", label: "About", exact: true },
     { to: "/settings", emoji: "⚙️", label: "Settings", exact: true }
 ];
+
+interface Props {
+    menuOpen: boolean;
+    onClickItem: () => void;
+}
 
 interface LoadingState {
     status: "loading";
@@ -34,7 +40,7 @@ interface LoadedState {
 
 type State = LoadingState | ErrorState | LoadedState;
 
-class MemberNav extends React.Component<{}, State> {
+class MemberNav extends React.Component<Props, State> {
     readonly state: Readonly<State> = {
         status: "loading"
     };
@@ -54,11 +60,11 @@ class MemberNav extends React.Component<{}, State> {
     }
 
     render() {
-        return <nav className="sidebar">
+        return <nav className={classNames("sidebar", { "open" : this.props.menuOpen })}>
             <div className="username">{this.renderUsername()}</div>
             <div className="navigation">
                 {navItems.map(({ to, emoji, label, exact }) =>
-                    <NavLink key={to} to={to} exact={exact} className="sidebar-item" activeClassName="current-site-section">
+                    <NavLink key={to} to={to} exact={exact} className="sidebar-item" activeClassName="current-site-section" onClick={this.props.onClickItem}>
                         <span className="sidebar-item-icon" role="img" aria-label="Home">{emoji}</span>
                         <span>{label}</span>
                     </NavLink>

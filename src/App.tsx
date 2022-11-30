@@ -28,25 +28,27 @@ import AboutPage from "./page/AboutPage";
 
 interface State {
     currentUserToken: string | null;
+    menuOpen: boolean;
 }
 
 class App extends React.Component<{}, State> {
     readonly state: Readonly<State> = {
-        currentUserToken: null
+        currentUserToken: null,
+        menuOpen: false
     };
 
     componentDidMount() {
         authenticationService.currentUser.subscribe(token => this.setState({ currentUserToken: token }));
     }
 
-    render () {
+    render() {
         const isLoggedIn = this.state.currentUserToken !== null;
 
         return <Router history={history}>
             <div className="App">
-                <AppHeader />
+                <AppHeader onClickMenu={this.handleToggleMenu} />
                 <div className="AppBody">
-                    {isLoggedIn ? <MemberNav /> : <GuestNav />}
+                    {isLoggedIn ? <MemberNav menuOpen={this.state.menuOpen} onClickItem={this.handleClickNavItem} /> : <GuestNav />}
                     <main className="pbbg-main">
                         <Switch>
                             <Route path="/" exact component={isLoggedIn ? IndexMemberPage : IndexGuestPage} />
@@ -70,6 +72,14 @@ class App extends React.Component<{}, State> {
                 </div>
             </div>
         </Router>;
+    }
+
+    private handleToggleMenu = () => {
+        this.setState((prevState) => ({ ...prevState, menuOpen: !prevState.menuOpen }));
+    }
+
+    private handleClickNavItem = () => {
+        this.setState((prevState) => ({ ...prevState, menuOpen: false }));
     }
 }
 
