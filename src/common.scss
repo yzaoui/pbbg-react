@@ -9,6 +9,16 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+}
+
 button, input, optgroup, select, textarea {
     line-height: 1.25;
 }
@@ -25,31 +35,37 @@ img {
 
 .App {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
-    max-width: 1092px;
-    margin-top: 100px;
-    margin-left: auto;
-    margin-right: auto;
+    height: 100%;
+}
+
+.AppBody {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 main.pbbg-main {
     display: flex;
     flex-direction: column;
     flex: 1;
-    max-width: 940px;
-    min-height: 710px;
-    border: 1px solid black;
+    border-top: 1px solid black;
     padding: 6px;
     box-sizing: border-box;
     background: #e1e4ffcf;
+    overflow: auto;
 }
 
 .sidebar {
     display: flex;
     flex-direction: column;
     width: 150px;
-    height: fit-content;
+    height: 100%;
+    overflow: auto;
     flex-shrink: 0;
     flex-basis: 150px;
     border: 1px solid black;
@@ -198,20 +214,15 @@ button.loading, button.loading.fancy, button.loading.fancy:disabled {
 }
 
 @media screen and (max-width: 600px) {
-    .App {
-        flex-direction: column;
-        margin: 0;
-    }
-
     .sidebar {
-        width: unset;
-        height: unset;
-        max-height: unset;
-        flex-basis: unset;
-    }
+        position: absolute;
+        background-color: white;
+        z-index: 1;
+        transform: translateX(-100%);
+        transition: transform .2s ease-in-out;
 
-    .navigation {
-        flex-direction: row;
-        flex-wrap: wrap;
+        &.open {
+            transform: translateX(0);
+        }
     }
 }
