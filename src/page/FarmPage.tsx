@@ -1,7 +1,7 @@
 import React from "react";
 import "./FarmPage.scss";
 import { PlotJSON } from "../backend/farm";
-import cloneDeep from "lodash/cloneDeep";
+import cloneDeep from "lodash-es/cloneDeep";
 import farmService from "../backend/farm.service";
 import { Subscription } from "rxjs";
 import { getPlantProgress, isMaturableMaterializedPlant, isOccupiedPlotData, PlotData, plotFromJSON } from "../model/farm";
