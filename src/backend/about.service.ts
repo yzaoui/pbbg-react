@@ -9,7 +9,7 @@ const aboutService = {
     getFrontendPatchNotes: () => RxJS.from(
         // Get all patch note markdown files from /patch-notes directory
         Promise.all(
-            [...APP_VERSIONS].reverse().map(ver => fetch(require(`../patch-notes/${ver}.md`)).then(res => res.text()))
+            [...APP_VERSIONS].reverse().map(ver => fetch((new URL(`../patch-notes/${ver}.md`, import.meta.url)).href).then(res => res.text()))
         )
     ),
     getBackendVersion: () => RxJS.from(

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/jest": "^26.0.24",
-    "@types/lodash": "^4.14.171",
+    "@types/lodash-es": "^4.17.7",
     "@types/node": "^16.4.10",
     "@types/react": "^17.0.15",
     "@types/react-dom": "^17.0.9",
@@ -19,16 +19,14 @@
     "react-helmet": "^6.1.0",
     "react-micro-modal": "^2.0.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^5.0.1",
     "rxjs": "^7.4.0",
     "sass": "^1.37.0",
     "typescript": "^4.9.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -51,6 +49,8 @@
     "@types/howler": "^2.1.2",
     "@types/marked": "^4.0.3",
     "@types/react-helmet": "^5.0.15",
-    "@types/react-router-dom": "^5.1.4"
+    "@types/react-router-dom": "^5.1.4",
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^4.3.8"
   }
 }
